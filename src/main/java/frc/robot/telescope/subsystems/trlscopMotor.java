@@ -15,7 +15,6 @@ public class trlscopMotor {
             Canbus.Rio,
             "trlscopMotor"
         );
-
         trlscopMotor = new TalonMotor(TalonConfig);
     }
 }
