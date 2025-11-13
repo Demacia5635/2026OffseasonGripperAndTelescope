@@ -4,23 +4,21 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.ConstantsTelescop;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
-import frc.robot.Constants;
 
 public class telescop extends SubsystemBase {
-  /** Creates a new telescop. */
-  public telescop() {
 
-  }
+  ConstantsTelescop constants = new ConstantsTelescop();
+  /** Creates a new telescop. */
+  public telescop() {}
 
   private TalonMotor telescopMotor;
-  final double maxJerk;  
+  
 
   private void subsystemsTelescope(){
     TalonConfig config = new TalonConfig(0, Canbus.Rio, "telescopMotor")
@@ -28,7 +26,7 @@ public class telescop extends SubsystemBase {
     .withVolts(12)
     .withDegreesMotor(14)
     .withPID(0, 0, 0, 0, 0, 0, 0)
-    .withMotionParam(ConstantsTelescop.maxVelocity, ConstantsTelescop.maxAcceleration);
+    .withMotionParam(ConstantsTelescop.maxVelocity, constants.getMaxAcceleration(), constants.getJerk());
     
 
     telescopMotor = new TalonMotor(config);

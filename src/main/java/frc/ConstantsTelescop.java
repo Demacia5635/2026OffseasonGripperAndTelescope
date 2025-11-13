@@ -24,18 +24,20 @@ public class ConstantsTelescop {
         double deltaV = currentVelocity - lastVelocity;
         double deltaT = currentTime - lastTime;
 
-        double acceleration = deltaV / deltaT;
-        jerk = (acceleration - lastAcceleration) / deltaT;
+        
+            double acceleration = deltaV / deltaT;
+            jerk = (acceleration - lastAcceleration) / deltaT;
 
-        if(acceleration > maxAcceleration){
-            maxAcceleration = acceleration;
+            if(acceleration > maxAcceleration){
+                maxAcceleration = acceleration;
+            }
+
+
+            lastVelocity = currentVelocity;
+            lastTime = currentTime;
+            lastAcceleration = acceleration;
         }
-
- 
-        lastVelocity = currentVelocity;
-        lastTime = currentTime;
-        lastAcceleration = acceleration;
-    }
+    
 
     public double getMaxAcceleration() {
         return maxAcceleration;
