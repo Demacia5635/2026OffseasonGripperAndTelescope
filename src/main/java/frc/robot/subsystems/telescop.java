@@ -26,7 +26,7 @@ public class telescop extends SubsystemBase {
     .withVolts(12)
     .withDegreesMotor(14)
     .withPID(0, 0, 0, 0, 0, 0, 0)
-    .withMotionParam(ConstantsTelescop.maxVelocity, constants.getMaxAcceleration(), constants.getJerk());
+    .withMotionParam(constants.getMaxVelocity(), constants.getMaxAcceleration(), constants.getMaxJerk());
     
 
     telescopMotor = new TalonMotor(config);

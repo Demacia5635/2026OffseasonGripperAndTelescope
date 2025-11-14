@@ -16,6 +16,7 @@ public class ConstantsTelescop {
 
     private double maxAcceleration = 0;
     private double jerk = 0;
+    private double maxJerk = 0;
 
     public void update() {
         double currentTime = Timer.getFPGATimestamp();
@@ -28,6 +29,8 @@ public class ConstantsTelescop {
             double acceleration = deltaV / deltaT;
             jerk = (acceleration - lastAcceleration) / deltaT;
 
+            maxJerk = maxAcceleration / deltaV;
+
             if(acceleration > maxAcceleration){
                 maxAcceleration = acceleration;
             }
@@ -36,14 +39,18 @@ public class ConstantsTelescop {
             lastVelocity = currentVelocity;
             lastTime = currentTime;
             lastAcceleration = acceleration;
-        }
+ }       
     
 
     public double getMaxAcceleration() {
         return maxAcceleration;
     }
 
-    public double getJerk() {
-        return jerk;
+    public double getMaxVelocity(){
+        return maxVelocity;
+    }
+
+    public double getMaxJerk(){
+        return maxJerk;
     }
 }
