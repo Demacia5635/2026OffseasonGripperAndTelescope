@@ -5,7 +5,7 @@ import frc.Telescop.ConstantsTelescop;
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
-import frc.Telescop.Constants;
+import frc.robot.Constants;
 
 public class telescop extends SubsystemBase {
 

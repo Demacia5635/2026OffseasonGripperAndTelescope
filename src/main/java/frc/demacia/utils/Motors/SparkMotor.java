@@ -12,10 +12,10 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.Telescop.RobotContainer;
 import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Utilities;
 import frc.demacia.utils.Log.LogManager;
+import frc.robot.RobotContainer;
 
 public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
