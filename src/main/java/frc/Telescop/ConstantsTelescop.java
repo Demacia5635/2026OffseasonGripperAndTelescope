@@ -1,7 +1,7 @@
-package frc;
+package frc.Telescop;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.subsystems.telescop;
+import frc.Telescop.subsystems.telescop;
 
 public class ConstantsTelescop {
 

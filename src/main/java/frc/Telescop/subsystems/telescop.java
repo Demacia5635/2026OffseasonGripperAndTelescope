@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.Telescop.subsystems;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Telescop.ConstantsTelescop;
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Motors.TalonMotor;
-import frc.ConstantsTelescop;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 public class telescop extends SubsystemBase {
@@ -41,7 +41,17 @@ public class telescop extends SubsystemBase {
     telescopMotor.setMotion(1.35);
   }
 
+  public void l1(){
 
+  }
+
+  public void l2(){
+
+  }
+
+  public void l3(){
+    
+  }
   public double currentVelocity(){
     double currentVelocity = telescopMotor.getCurrentVelocity();
     return currentVelocity;

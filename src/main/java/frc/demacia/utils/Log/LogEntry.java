@@ -26,7 +26,7 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
 import edu.wpi.first.util.datalog.FloatLogEntry;
 import edu.wpi.first.util.datalog.StringArrayLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
-import frc.robot.RobotContainer;
+import frc.Telescop.RobotContainer;
 
 public class LogEntry<T> {
 
