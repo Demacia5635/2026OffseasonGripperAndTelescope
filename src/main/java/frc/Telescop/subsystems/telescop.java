@@ -11,7 +11,7 @@ public class telescop extends SubsystemBase {
 
   ConstantsTelescop constants = new ConstantsTelescop();
   Constants mainConstants = new Constants();
-  telescopEncoder encoder = new telescopEncoder();
+  limateSwichTelescope limateSawich = new limateSwichTelescope();
 
     private TalonMotor telescopMotor;
 
@@ -35,10 +35,12 @@ public class telescop extends SubsystemBase {
     public void updateState() {
         switch (mainConstants.getState()) {
             case "open":
-                telescopMotor.setMotion(constants.open);
+                while(limateSawich.getLimateSwitch() == false){
+                    telescopMotor.setDuty(0.5);
+                }
             case "close":
-                telescopMotor.setMotion(constants.close);
-                encoder.resetEncoder();
+                telescopMotor.setMotion(constants.getClose());
+                telescopMotor.setPosition(0);
             case "L1":
                 telescopMotor.setMotion(constants.getL1());
             case "L2":

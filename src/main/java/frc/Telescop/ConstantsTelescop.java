@@ -2,17 +2,14 @@ package frc.Telescop;
 
 import edu.wpi.first.wpilibj.Timer;
 import frc.Telescop.subsystems.telescop;
-import frc.Telescop.subsystems.telescopEncoder;
 
 public class ConstantsTelescop {
 
     telescop telescop = new telescop();
-    telescopEncoder encoder = new telescopEncoder(); 
 
     public static final double RPM = 6000;
     public static final double maxVelocity = (Math.PI * 2) * RPM;
 
-    public static final double open = 1.35;
     public static final int close = 0;
     
     double L1;
@@ -27,8 +24,6 @@ public class ConstantsTelescop {
     private double maxAcceleration = 0;
     private double jerk = 0;
     private double maxJerk = 0;
-
-    private double encoderPosition = encoder.getEncoderPosition();
 
     public void update() {
         double currentTime = Timer.getFPGATimestamp();
@@ -66,8 +61,13 @@ public class ConstantsTelescop {
         return maxJerk;
     }
 
-    public double getEncoderPosition(){
-        return encoderPosition;
+    public double getJerk(){
+        return jerk;
+    }
+
+
+    public int getClose(){
+        return close;
     }
 
     public double getL1(){
