@@ -17,4 +17,9 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
 
   }
+  String state;
+
+  public String getState(){
+    return state;
+  }
 }

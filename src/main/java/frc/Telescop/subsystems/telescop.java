@@ -10,15 +10,16 @@ import frc.Telescop.ConstantsTelescop;
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
+import frc.Telescop.Constants;
 
 public class telescop extends SubsystemBase {
 
   ConstantsTelescop constants = new ConstantsTelescop();
+  Constants mainConstants = new Constants();
   /** Creates a new telescop. */
   public telescop() {}
 
   private TalonMotor telescopMotor;
-  
 
   private void subsystemsTelescope(){
     TalonConfig config = new TalonConfig(0, Canbus.Rio, "telescopMotor")
@@ -33,25 +34,21 @@ public class telescop extends SubsystemBase {
   }
 
 
-  public void close(){
-    telescopMotor.setMotion(0);
+  if (mainConstants.getState() == "open"){
+    telescopMotor.setMotion(constants.open);
+  }else if(mainConstants.getState() == "close"){
+    telescopMotor.setMotion(constants.close);
+  }else if(mainConstants.getState() == "L1"){
+    telescopMotor.setMotion(constants.getL1());
+  }else if(mainConstants.getState() == "L2"){
+    telescopMotor.setMotion(constants.getL2());
+  }else if(mainConstants.getState() == "L3"){
+    telescopMotor.setMotion(constants.getL3());
+  }else if(mainConstants.getState() == "L4"){
+    telescopMotor.setMotion(constants.getL4());
   }
 
-  public void open(){
-    telescopMotor.setMotion(1.35);
-  }
-
-  public void l1(){
-
-  }
-
-  public void l2(){
-
-  }
-
-  public void l3(){
-    
-  }
+  
   public double currentVelocity(){
     double currentVelocity = telescopMotor.getCurrentVelocity();
     return currentVelocity;
