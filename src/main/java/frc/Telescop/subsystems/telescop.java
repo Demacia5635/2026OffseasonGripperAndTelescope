@@ -9,8 +9,9 @@ import frc.Telescop.Constants;
 
 public class telescop extends SubsystemBase {
 
-    ConstantsTelescop constants = new ConstantsTelescop();
-    Constants mainConstants = new Constants();
+  ConstantsTelescop constants = new ConstantsTelescop();
+  Constants mainConstants = new Constants();
+  telescopEncoder encoder = new telescopEncoder();
 
     private TalonMotor telescopMotor;
 
@@ -37,6 +38,7 @@ public class telescop extends SubsystemBase {
                 telescopMotor.setMotion(constants.open);
             case "close":
                 telescopMotor.setMotion(constants.close);
+                encoder.resetEncoder();
             case "L1":
                 telescopMotor.setMotion(constants.getL1());
             case "L2":
