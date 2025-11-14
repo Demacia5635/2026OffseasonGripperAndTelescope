@@ -32,6 +32,11 @@ public class telescop extends SubsystemBase {
     }
 
 
+    public void startPozisan(){
+        telescopMotor.setMotion(0);
+        telescopMotor.setPosition(0);
+    }
+
     public void updateState() {
         switch (mainConstants.getState()) {
             case "open":

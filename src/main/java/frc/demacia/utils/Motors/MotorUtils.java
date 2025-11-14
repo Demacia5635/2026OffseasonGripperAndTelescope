@@ -1,7 +1,6 @@
 package frc.demacia.utils.Motors;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class MotorUtils {
     public static double getPositionForAngle(double position, double angle, boolean isRadians) {
