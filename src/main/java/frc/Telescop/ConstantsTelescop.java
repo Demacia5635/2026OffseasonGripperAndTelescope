@@ -1,88 +1,70 @@
 package frc.Telescop;
 
-import edu.wpi.first.wpilibj.Timer;
-import frc.Telescop.subsystems.telescop;
+import frc.demacia.utils.Motors.TalonConfig;
+import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
+import frc.demacia.utils.Sensors.LimitSwitchConfig;
 
-public class ConstantsTelescop {
+public class ConstantsTelescop {    
 
-    telescop telescop = new telescop();
-
-    public static final double RPM = 6000;
-    public static final double maxVelocity = (Math.PI * 2) * RPM;
 
     public static final int close = 0;
-    
-    double L1;
-    double L2;
-    double L3;
-    double L4;
 
-    private double lastVelocity = 0;
-    private double lastTime = Timer.getFPGATimestamp();
-    private double lastAcceleration = 0;
-
-    private double maxAcceleration = 0;
-    private double jerk = 0;
-    private double maxJerk = 0;
-
-    public void update() {
-        double currentTime = Timer.getFPGATimestamp();
-        double currentVelocity = telescop.currentVelocity();
-
-        double deltaV = currentVelocity - lastVelocity;
-        double deltaT = currentTime - lastTime;
-
+    public enum STATE{
+        L1(0,0),
+        L2(0,0),
+        L3(0,0),
+        L4(0,0),
+        HOME(0,0),
+        TESTING(-1, -1),
+        IDLE(-1, -1),
+        peckUp(0,0);
         
-            double acceleration = deltaV / deltaT;
-            jerk = (acceleration - lastAcceleration) / deltaT;
 
-            maxJerk = maxAcceleration / deltaV;
+        double angle;
+        double length;
+        STATE(double angle, double length){
+            this.angle = angle;
+            this.length = length;
+        }
+    }
 
-            if(acceleration > maxAcceleration){
-                maxAcceleration = acceleration;
-            }
-
-
-            lastVelocity = currentVelocity;
-            lastTime = currentTime;
-            lastAcceleration = acceleration;
- }       
+    public static final double MAX_VELOCITY = 3;
+    public static final double MAX_ACCELERATION = 0;
+    public static final double MAX_JERK = 0;
     
+    public static final double L1 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double L2 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double L3 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double L4 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double HOME = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double TESTING = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double IDLE = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
+    public static final double peckUp = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
 
-    public double getMaxAcceleration() {
-        return maxAcceleration;
-    }
+    public static final int ID = -1;
+    public static final Canbus CANBUS = Canbus.CANIvore;
+    public static final double GEAR_RATIO = 16; //TODO: speke with yerdan abote the gear ratio
+    public static final double DIAMETER = 0; // TODO: speke with yerdan what is the diameter
+    public static final double MAX_CURRENT = -1; //TODO: CEAKE WHAT THE PID
 
-    public double getMaxVelocity(){
-        return maxVelocity;
-    }
-
-    public double getMaxJerk(){
-        return maxJerk;
-    }
-
-    public double getJerk(){
-        return jerk;
-    }
-
-
-    public int getClose(){
-        return close;
-    }
-
-    public double getL1(){
-        return L1;
-    }
-
-    public double getL2(){
-        return L2;
-    }
+    public static final double kp = -1; //TODO: CEAKE WHAT THE PID
+    public static final double ks = -1; //TODO: CEAKE WHAT THE PID
+    public static final double kv = -1; //TODO: CEAKE WHAT THE PID
+    public static final double ka = -1; //TODO: CEAKE WHAT THE PID
+    public static final double kg = -1; //TODO: CEAKE WHAT THE PID
     
-    public double getL3(){
-        return L3;
-    }
+    
+    public static final int UP_CHANNEL = -1;
+    public static final int DOWN_CHANNEL = -1;
 
-    public double getL4(){
-        return L4;
-    }
+    public static final TalonConfig MOTOR_CONFIG = new TalonConfig(ID, CANBUS, "telescopMotor")
+    .withBrake(true)
+    .withMeterMotor(GEAR_RATIO, DIAMETER)
+    .withPID(kp, 0, 0, ks, kv, ka, kg)
+    .withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)
+    .withCurrent(MAX_CURRENT);
+
+    public static final LimitSwitchConfig CONFIG_UP = new LimitSwitchConfig(UP_CHANNEL, "up limit switch");
+    
+    public static final LimitSwitchConfig CONFIG_DOWN = new LimitSwitchConfig(DOWN_CHANNEL, "down limit switch");
 }

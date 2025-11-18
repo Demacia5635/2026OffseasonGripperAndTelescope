@@ -1,68 +1,56 @@
 package frc.Telescop.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2 .command.SubsystemBase;
+
 import frc.Telescop.ConstantsTelescop;
-import frc.demacia.utils.Motors.TalonConfig;
+
 import frc.demacia.utils.Motors.TalonMotor;
-import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
-import frc.robot.Constants;
+import frc.demacia.utils.Sensors.LimitSwitch;
 
-public class telescop extends SubsystemBase {
+public class Telescop extends SubsystemBase {
 
-  ConstantsTelescop constants = new ConstantsTelescop();
-  Constants mainConstants = new Constants();
-  limateSwichTelescope limateSawich = new limateSwichTelescope();
-
+    LimitSwitch limitSwitchUp;
+    
+    LimitSwitch limitSwitchDown;
     private TalonMotor telescopMotor;
 
     /** Creates a new telescop. */
-    public telescop() {
-        subsystemsTelescope();
-    }
-
-    private void subsystemsTelescope() {
-        TalonConfig config = new TalonConfig(0, Canbus.Rio, "telescopMotor")
-            .withBrake(false)
-            .withVolts(12)
-            .withDegreesMotor(14)
-            .withPID(0, 0, 0, 0, 0, 0, 0)
-            .withMotionParam(constants.getMaxVelocity(), constants.getMaxAcceleration(), constants.getMaxJerk());
-
-        telescopMotor = new TalonMotor(config);
+    public Telescop() {
+        limitSwitchUp = new LimitSwitch(ConstantsTelescop.CONFIG_UP);
+        limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
+        telescopMotor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
 
-    public void startPozisan(){
-        telescopMotor.setMotion(0);
-        telescopMotor.setPosition(0);
+    public void moveToPeckUp(){
+        telescopMotor.setMotion(ConstantsTelescop.peckUp);
     }
 
-    public void updateState() {
-        switch (mainConstants.getState()) {
-            case "open":
-                while(limateSawich.getLimateSwitch() == false){
-                    telescopMotor.setDuty(0.5);
-                }
-            case "close":
-                telescopMotor.setMotion(constants.getClose());
-                telescopMotor.setPosition(0);
-            case "L1":
-                telescopMotor.setMotion(constants.getL1());
-            case "L2":
-                telescopMotor.setMotion(constants.getL2());
-            case "L3":
-                telescopMotor.setMotion(constants.getL3());
-            case "L4":
-                telescopMotor.setMotion(constants.getL4());
-        }
+    public void MoveToL1(){
+        telescopMotor.setMotion(ConstantsTelescop.L1);
     }
 
-    public double currentVelocity() {
-        return telescopMotor.getCurrentVelocity();
+    public void MoveToL2(){
+        telescopMotor.setMotion(ConstantsTelescop.L2);
     }
 
-    @Override
-    public void periodic() {
-        updateState();
+    public void MoveToL3(){
+        telescopMotor.setMotion(ConstantsTelescop.L3);
+    }
+
+    public void MoveTOL4(){
+        telescopMotor.setMotion(ConstantsTelescop.L4);
+    }
+
+    public void MoveToHOME(){
+        telescopMotor.setMotion(ConstantsTelescop.HOME);
+    }
+
+    public void MoveToTESTING(){
+        telescopMotor.setMotion(ConstantsTelescop.TESTING);
+    }
+
+    public void MoveToIDLE(){
+        telescopMotor.setMotion(ConstantsTelescop.IDLE);
     }
 }

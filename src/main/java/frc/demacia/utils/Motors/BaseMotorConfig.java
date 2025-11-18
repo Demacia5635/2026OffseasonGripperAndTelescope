@@ -198,7 +198,7 @@ public abstract class BaseMotorConfig<T extends BaseMotorConfig<T>> {
 
     /** 
      * Set pid
-     * @param kp
+     * @param w
      * @param ki
      * @param kd
      * @param ks
