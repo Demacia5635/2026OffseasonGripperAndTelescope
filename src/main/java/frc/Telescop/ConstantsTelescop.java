@@ -20,8 +20,8 @@ public class ConstantsTelescop {
         peckUp(0,0);
         
 
-        double angle;
-        double length;
+        public double angle;
+        public double length;
         STATE(double angle, double length){
             this.angle = angle;
             this.length = length;

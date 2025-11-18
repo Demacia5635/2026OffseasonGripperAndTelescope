@@ -34,27 +34,25 @@ public class telescopCommands extends Command {
   public void execute() {
     switch (currentState) {
       case L1:
-        telescopSubSystem.MoveToL1();
+        telescopSubSystem.extendTelescope(currentState.length);
         break;
       case L2:
-        telescopSubSystem.MoveToL2();
+        telescopSubSystem.extendTelescope(currentState.length);
         break;
       case L3:
-        telescopSubSystem.MoveToL3();
-        break;
+      telescopSubSystem.extendTelescope(currentState.length);
+      break;
       case L4:
-        telescopSubSystem.MoveTOL4();
-        break;
+      telescopSubSystem.extendTelescope(currentState.length);
       case peckUp:
-        telescopSubSystem.moveToPeckUp();
+        telescopSubSystem.extendTelescope(currentState.length);
+        break;
       case HOME:
-        telescopSubSystem.MoveToHOME();
+        telescopSubSystem.extendTelescope(currentState.length);
         break;
       case IDLE:
-        telescopSubSystem.MoveToIDLE();
         break;
       case TESTING:
-        telescopSubSystem.MoveToTESTING();
         break;
     }
   }
