@@ -33,7 +33,7 @@ public class telescopCommands extends Command {
   @Override
   public void execute() {
     switch (currentState) {
-      case L1:
+      case L1, L2, L3, L4, :
         telescopSubSystem.extendTelescope(currentState.length);
         break;
       case L2:
@@ -51,6 +51,7 @@ public class telescopCommands extends Command {
         telescopSubSystem.extendTelescope(currentState.length);
         break;
       case IDLE:
+        telescopSubSystem.stop();
         break;
       case TESTING:
         break;
