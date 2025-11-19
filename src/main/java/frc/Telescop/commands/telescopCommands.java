@@ -9,17 +9,17 @@ import frc.Telescop.ConstantsTelescop;
 import static frc.Telescop.ConstantsTelescop.STATE;
 import frc.Telescop.subsystems.Telescop;
 
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class telescopCommands extends Command {
   /** Creates a new telescopCommands. */
 
   private Telescop SubSystem;
-  private ConstantsTelescop Constants;
   
   STATE currentState = STATE.HOME;
     
-  public telescopCommands() {
+  public telescopCommands(Telescop subSystem) {
+    this.SubSystem = subSystem;
+    addRequirements(subSystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -41,7 +41,7 @@ public class telescopCommands extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    SubSystem.Stop();
   }
 
   // Returns true when the command should end.
