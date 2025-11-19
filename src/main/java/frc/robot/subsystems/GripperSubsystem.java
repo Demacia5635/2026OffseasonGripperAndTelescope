@@ -3,29 +3,33 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
-import com.ctre.phoenix6.hardware.TalonFX;
-
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.demacia.utils.Sensors.LimitSwitch;
-
+import frc.demacia.utils.Motors.TalonMotor;
+import frc.demacia.utils.Sensors.UltraSonicSensor;
+import frc.robot.GripperConstants;
 public class GripperSubsystem extends SubsystemBase {
   /** Creates a new GripperSubsystem. */
-  private final TalonFX leftmotor;
-  private final TalonFX rightmotor;
-  private final Ultrasonic ultrasonicSensor;
-  private final LimitSwitch limitSwitch;
-  
+  private final TalonMotor motor;
+  private final UltraSonicSensor ultrasonicSensor;
+
   public GripperSubsystem() {
-    leftmotor = new TalonFX(0);
-    rightmotor = new TalonFX(0);
-    ultrasonicSensor = new Ultrasonic(0, 0);
-    limitSwitch = new LimitSwitch(null);
+    motor = new TalonMotor(GripperConstants.TALON_CONFIG);
+    ultrasonicSensor = new UltraSonicSensor(GripperConstants.ULTRA_SONIC_SENSOR_CONFIG);
+  }
+  public double getRange() {
+return ultrasonicSensor.getRangeMeters();
+  }
     
+
+    public boolean isCoralIn() {
+      if (getRange() <0.10 ) return true;
+      else return false;
+    }
+      public boolean isCubeIn() {
+        if (getRange() <0.10 ) return true;
+        else return false;
   }
   
-
 
 
   @Override
