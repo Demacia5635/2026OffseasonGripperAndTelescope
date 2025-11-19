@@ -22,8 +22,8 @@ public class Telescop extends SubsystemBase {
     }
 
 
-    public void moveToPeckUp(){
-        telescopMotor.setMotion(ConstantsTelescop.peckUp);
+    public void stop(){
+        telescopMotor.stopMotor();
     }
 
     public void extendTelescope(double value) {

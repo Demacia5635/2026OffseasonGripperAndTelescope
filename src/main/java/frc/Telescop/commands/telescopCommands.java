@@ -14,9 +14,8 @@ import frc.Telescop.subsystems.Telescop;
 public class telescopCommands extends Command {
   /** Creates a new telescopCommands. */
 
-  Telescop telescopSubSystem;
-
-  ConstantsTelescop constantsTelescop;
+  private Telescop SubSystem;
+  private ConstantsTelescop Constants;
   
   STATE currentState = STATE.HOME;
     
@@ -34,14 +33,16 @@ public class telescopCommands extends Command {
   public void execute() {
     switch (currentState) {
       case L1, L2, L3, L4, peckUp, HOME, IDLE, TESTING :
-        telescopSubSystem.extendTelescope(currentState.length);
+      SubSystem.extendTelescope(currentState.length);
         break;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    
+  }
 
   // Returns true when the command should end.
   @Override
