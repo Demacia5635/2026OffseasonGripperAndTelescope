@@ -5,7 +5,6 @@
 package frc.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.Telescop.ConstantsTelescop;
 import static frc.Telescop.ConstantsTelescop.STATE;
 import frc.Telescop.subsystems.Telescop;
 
@@ -26,6 +25,7 @@ public class telescopCommands extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SubSystem.startPozesan();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
