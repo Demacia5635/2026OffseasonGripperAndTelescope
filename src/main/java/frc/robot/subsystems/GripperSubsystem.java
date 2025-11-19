@@ -17,18 +17,20 @@ public class GripperSubsystem extends SubsystemBase {
     ultrasonicSensor = new UltraSonicSensor(GripperConstants.ULTRA_SONIC_SENSOR_CONFIG);
   }
   public double getRange() {
-return ultrasonicSensor.getRangeMeters();
+  return ultrasonicSensor.getRangeMeters();
   }
     
 
     public boolean isCoralIn() {
-      if (getRange() <0.10 ) return true;
+      if (getRange() <= 0.03 ) return true;
       else return false;
     }
-      public boolean isCubeIn() {
-        if (getRange() <0.10 ) return true;
-        else return false;
-  }
+    public boolean isCubeIn() {
+      if (!isCoralIn() && getRange() <=0.3) return true;
+       else return false;
+        }
+  
+  
   
 
 
