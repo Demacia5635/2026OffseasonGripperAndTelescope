@@ -17,7 +17,7 @@ public class ConstantsTelescop {
         IDLE(-1, -1),
         peckUp(0,0),
         close(-1,0),
-        open(-1,-1);
+        open(-1, -1);
 
         
 

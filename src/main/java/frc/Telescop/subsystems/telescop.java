@@ -25,9 +25,11 @@ public class Telescop extends SubsystemBase {
     }
 
     public void open(){
+        if (limitSwitchUp.get() == false){
         while(limitSwitchUp.get() == false){
             motor.setDuty(0.5);
         }
+        }else(){motor.setDuty(0)}
     }
 
     public void startPozesan(){
