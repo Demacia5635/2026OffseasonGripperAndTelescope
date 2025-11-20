@@ -7,8 +7,6 @@ import frc.demacia.utils.Sensors.LimitSwitchConfig;
 public class ConstantsTelescop {    
 
 
-    public static final int close = 0;
-
     public enum STATE{
         L1(0,0),
         L2(0,0),
@@ -18,6 +16,7 @@ public class ConstantsTelescop {
         TESTING(-1, -1),
         IDLE(-1, -1),
         peckUp(0,0);
+
         
 
         public double angle;

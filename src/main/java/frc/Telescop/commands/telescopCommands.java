@@ -5,28 +5,27 @@
 package frc.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.Telescop.ConstantsTelescop;
 import static frc.Telescop.ConstantsTelescop.STATE;
 import frc.Telescop.subsystems.Telescop;
 
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class telescopCommands extends Command {
+public class TelescopCommands extends Command {
   /** Creates a new telescopCommands. */
 
-  Telescop telescopSubSystem;
-
-  ConstantsTelescop constantsTelescop;
+  private Telescop SubSystem;
   
   STATE currentState = STATE.HOME;
     
-  public telescopCommands() {
+  public TelescopCommands(Telescop subSystem) {
+    this.SubSystem = subSystem;
+    addRequirements(subSystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SubSystem.startPozesan();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,14 +33,16 @@ public class telescopCommands extends Command {
   public void execute() {
     switch (currentState) {
       case L1, L2, L3, L4, peckUp, HOME, IDLE, TESTING :
-        telescopSubSystem.extendTelescope(currentState.length);
+      SubSystem.extendTelescope(currentState.length);
         break;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    SubSystem.Stop();
+  }
 
   // Returns true when the command should end.
   @Override

@@ -9,23 +9,45 @@ import frc.demacia.utils.Sensors.LimitSwitch;
 
 public class Telescop extends SubsystemBase {
 
-    LimitSwitch limitSwitchUp;
-    
-    LimitSwitch limitSwitchDown;
-    private TalonMotor telescopMotor;
+    private LimitSwitch limitSwitchUp;
+    private LimitSwitch limitSwitchDown;
+    private TalonMotor motor;
 
     /** Creates a new telescop. */
     public Telescop() {
         limitSwitchUp = new LimitSwitch(ConstantsTelescop.CONFIG_UP);
         limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
-        telescopMotor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
+        motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
-    public void stop(){
-        telescopMotor.stopMotor();
+    public void startPozesan(){
+        if (limitSwitchDown.get() == false){
+            while(limitSwitchDown.get() != true){
+                motor.setDuty(-0.2);
+            }
+            motor.setEncoderPosition(0);
+        }else{
+            motor.setEncoderPosition(0);
+        }
+    }
+
+    public void open(){
+        while(limitSwitchUp.get() == false){
+            motor.setDuty(0.5);
+        }
+    }
+
+    public void close(){
+        while(limitSwitchDown.get() == false){
+            motor.setDuty(-0.5);
+        }
+    }
+
+    public void Stop(){
+        motor.setDuty(0);
     }
 
     public void extendTelescope(double length) {
-        telescopMotor.setMotion(length);
+        motor.setMotion(length);
     }
 }
