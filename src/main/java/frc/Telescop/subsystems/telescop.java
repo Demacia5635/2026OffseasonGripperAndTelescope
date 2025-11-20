@@ -31,9 +31,10 @@ public class Telescop extends SubsystemBase {
     }
 
     public void startPozesan(){
-        while(limitSwitchDown.get() = folse){
+        while(limitSwitchDown.get() == false){
             motor.setDuty(-0.2);
         }
+        if (limitSwitchDown.get() == true)
         motor.setEncoderPosition(0);
     }
 

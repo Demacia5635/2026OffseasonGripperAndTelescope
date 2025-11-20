@@ -40,7 +40,7 @@ public class TelescopCommands extends Command {
       SubSystem.extendTelescope(currentState.length);
         break;
       case close:
-        SubSystem.extendTelescope(currentState.length)
+        SubSystem.extendTelescope(currentState.length);
         SubSystem.rsetEncoder();
       case open:
         SubSystem.open();
