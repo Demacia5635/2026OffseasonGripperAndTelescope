@@ -16,7 +16,7 @@ import frc.Telescop.subsystems.Telescop;
 public class TelescopCommands extends Command {
   /** Creates a new telescopCommands. */
 
-  private Telescop SubSystem;
+  private Telescop SubSystem; 
   
   STATE currentState = STATE.HOME;
     
