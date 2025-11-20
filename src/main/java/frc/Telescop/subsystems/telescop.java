@@ -20,15 +20,8 @@ public class Telescop extends SubsystemBase {
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
-    public void startPozesan(){
-        if (limitSwitchDown.get() == false){
-            while(limitSwitchDown.get() != true){
-                motor.setDuty(-0.2);
-            }
-            motor.setEncoderPosition(0);
-        }else{
-            motor.setEncoderPosition(0);
-        }
+    public void rsetEncoder(){
+        motor.setEncoderPosition(0);
     }
 
     public void open(){
@@ -37,10 +30,11 @@ public class Telescop extends SubsystemBase {
         }
     }
 
-    public void close(){
-        while(limitSwitchDown.get() == false){
-            motor.setDuty(-0.5);
+    public void startPozesan(){
+        while(limitSwitchDown.get() = folse){
+            motor.setDuty(-0.2);
         }
+        motor.setEncoderPosition(0);
     }
 
     public void Stop(){

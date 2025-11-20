@@ -15,7 +15,9 @@ public class ConstantsTelescop {
         HOME(0,0),
         TESTING(-1, -1),
         IDLE(-1, -1),
-        peckUp(0,0);
+        peckUp(0,0),
+        close(-1,0),
+        open(-1,-1);
 
         
 
