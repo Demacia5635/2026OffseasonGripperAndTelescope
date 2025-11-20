@@ -44,9 +44,9 @@ public class ConstantsTelescop {
 
     public static final int ID = -1;
     public static final Canbus CANBUS = Canbus.CANIvore;
-    public static final double GEAR_RATIO = 16; //TODO: speke with yerdan abote the gear ratio
-    public static final double DIAMETER = 0; // TODO: speke with yerdan what is the diameter
-    public static final double MAX_CURRENT = -1; //TODO: CEAKE WHAT THE PID
+    public static final double GEAR_RATIO = 16; //mabe need to cange
+    public static final double DIAMETER = 30;
+    public static final double MAX_CURRENT = -1; //speak whit omer electornecs
 
     public static final double kp = -1; //TODO: CEAKE WHAT THE PID
     public static final double ks = -1; //TODO: CEAKE WHAT THE PID
