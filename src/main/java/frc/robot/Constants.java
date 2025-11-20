@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,6 +15,25 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+    public enum STATE{
+        Idle(0),
+        GetCoral(0.3),
+        GetCube(0.3),
+        Out(-0.3);
+
+      
+
+        public double power;
+        STATE(double power){
+          this.power = power;
+        }
+    }
+
+
+
+
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }

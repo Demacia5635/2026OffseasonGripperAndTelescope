@@ -29,13 +29,43 @@ public class GripperSubsystem extends SubsystemBase {
     public boolean isCubeIn() {
       if (!isCoralIn() && getRange() <=0.3) return true;
        else return false;
+    }
+
+    public void setPower(double power){
+      motor.setDuty(power);
+    }
+
+    public void stop (){
+      motor.stopMotor();
+    }
+
+    public void getCoral(){
+      while (!isCoralIn()) {
+          setPower(0.3);
         }
+        stop();
+    }
+    public void getCube(){
+      while (!isCubeIn()) {
+          setPower(0.3);
+        }
+        stop();
+    }
+    public void Out(){
+      while (isCoralIn()|| isCubeIn()) {
+          setPower(-0.3);
+        }
+        stop();
+    }
   
   
   
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
+    builder.addBooleanProperty("Is Coral In", ()-> isCoralIn(), null);
+    builder.addBooleanProperty("Is Cube In", ()-> isCubeIn(), null);
+    builder.addDoubleProperty("Get Range", ()-> getRange(), null);
   }
   @Override
   public void periodic() {
