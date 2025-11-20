@@ -33,27 +33,8 @@ public class telescopCommands extends Command {
   @Override
   public void execute() {
     switch (currentState) {
-      case L1, L2, L3, L4, :
+      case L1, L2, L3, L4, peckUp, HOME, IDLE, TESTING :
         telescopSubSystem.extendTelescope(currentState.length);
-        break;
-      case L2:
-        telescopSubSystem.extendTelescope(currentState.length);
-        break;
-      case L3:
-      telescopSubSystem.extendTelescope(currentState.length);
-      break;
-      case L4:
-      telescopSubSystem.extendTelescope(currentState.length);
-      case peckUp:
-        telescopSubSystem.extendTelescope(currentState.length);
-        break;
-      case HOME:
-        telescopSubSystem.extendTelescope(currentState.length);
-        break;
-      case IDLE:
-        telescopSubSystem.stop();
-        break;
-      case TESTING:
         break;
     }
   }

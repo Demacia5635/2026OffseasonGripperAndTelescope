@@ -21,12 +21,11 @@ public class Telescop extends SubsystemBase {
         telescopMotor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
-
-    public void moveToPeckUp(){
-        telescopMotor.setMotion(ConstantsTelescop.peckUp);
+    public void stop(){
+        telescopMotor.stopMotor();
     }
 
-    public void extendTelescope(double value) {
-        telescopMotor.setMotion(value);
+    public void extendTelescope(double length) {
+        telescopMotor.setMotion(length);
     }
 }
