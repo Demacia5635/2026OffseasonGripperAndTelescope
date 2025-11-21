@@ -40,6 +40,8 @@ public class ConstantsTelescop {
     public static final double MAX_CURRENT = 12; 
 
     public static final double kp = -1; //TODO: CEAKE WHAT THE PID
+    public static final double KI = 0;
+    public static final double KD = 0;
     public static final double ks = -1; //TODO: CEAKE WHAT THE PID
     public static final double kv = -1; //TODO: CEAKE WHAT THE PID
     public static final double ka = -1; //TODO: CEAKE WHAT THE PID
@@ -52,7 +54,7 @@ public class ConstantsTelescop {
     public static final TalonConfig MOTOR_CONFIG = new TalonConfig(ID, CANBUS, "telescopMotor")
     .withBrake(true)
     .withMeterMotor(GEAR_RATIO, DIAMETER)
-    .withPID(kp, 0, 0, ks, kv, ka, kg)
+    .withPID(kp, KI, KD, ks, kv, ka, kg)
     .withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)
     .withCurrent(MAX_CURRENT);
 
