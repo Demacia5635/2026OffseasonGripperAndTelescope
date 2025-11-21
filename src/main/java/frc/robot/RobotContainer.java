@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import frc.Telescop.commands.TelescopCommands;
+import frc.Telescop.subsystems.Telescop;
 import frc.demacia.utils.Log.LogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,14 +27,17 @@ public class RobotContainer {
 
   
   // The robot's subsystems and commands are defined here...
-
-
+  public static Telescop subsystemsTelescope;
+  public static TelescopCommands commandTelescop;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
     new LogManager();
+
+    subsystemsTelescope = new Telescop();
+    commandTelescop = new TelescopCommands(subsystemsTelescope);
 
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););

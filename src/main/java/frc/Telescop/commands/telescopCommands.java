@@ -5,10 +5,6 @@
 package frc.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import static frc.Telescop.ConstantsTelescop.STATE;
-
-import frc.Telescop.ConstantsTelescop.STATE;
-
 import frc.Telescop.ConstantsTelescop.STATE;
 import frc.Telescop.subsystems.Telescop;
 
