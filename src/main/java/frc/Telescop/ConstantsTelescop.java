@@ -32,21 +32,12 @@ public class ConstantsTelescop {
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_JERK = 0;
-    
-    public static final double L1 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double L2 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double L3 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double L4 = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double HOME = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double TESTING = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double IDLE = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
-    public static final double peckUp = -1; //TODO:CANGE TO WHAT THE LONG YOU NEED FROM THE TELSCOP
 
     public static final int ID = -1;
     public static final Canbus CANBUS = Canbus.CANIvore;
     public static final double GEAR_RATIO = 16; //mabe need to cange
     public static final double DIAMETER = 30;
-    public static final double MAX_CURRENT = -1; //speak whit omer electornecs
+    public static final double MAX_CURRENT = 12; 
 
     public static final double kp = -1; //TODO: CEAKE WHAT THE PID
     public static final double ks = -1; //TODO: CEAKE WHAT THE PID
