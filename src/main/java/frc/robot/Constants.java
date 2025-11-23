@@ -16,18 +16,20 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
  */
 public final class Constants {
 
-    public enum STATE{
+    public enum GRIPPER_STATE{
         Idle(0),
-        GetCoral(0.3),
-        GetCube(0.3),
-        Out(-0.3);
+        GET_CORAL(0.3),
+        GET_CUBE(0.3),
+        HAS_GAME_PIECE(0),
+        EJECT(0.3);
+
 
       
 
         public double power;
-        STATE(double power){
+        GRIPPER_STATE (double power){
           this.power = power;
-        }
+        } 
     }
 
 
