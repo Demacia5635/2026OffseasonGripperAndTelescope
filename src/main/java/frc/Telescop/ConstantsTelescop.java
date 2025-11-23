@@ -29,7 +29,7 @@ public class ConstantsTelescop {
         }
     }
 
-    public static final int reset = 0;
+    public static final int zero = 0;
     public static final double lowSpeed = 0.2;
     public static final double lowSpeedMinas = -0.2;
 

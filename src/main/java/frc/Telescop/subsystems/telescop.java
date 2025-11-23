@@ -20,14 +20,14 @@ public class Telescop extends SubsystemBase {
 
 
     public void rsetEncoder(){
-        motor.setEncoderPosition(ConstantsTelescop.reset);
+        motor.setEncoderPosition(ConstantsTelescop.zero);
     }
 
     public void open(){
         if(limitSwitchUp.get() == false){
             motor.setDuty(ConstantsTelescop.lowSpeed);
         }else{
-            motor.setDuty(ConstantsTelescop.reset);
+            Stop();
         }
     }
 
@@ -35,13 +35,13 @@ public class Telescop extends SubsystemBase {
         if(limitSwitchDown.get() == false){
             motor.setDuty(ConstantsTelescop.lowSpeedMinas);
         }else{
-            motor.setDuty(ConstantsTelescop.reset);
-            motor.setEncoderPosition(ConstantsTelescop.reset);
+            Stop();
+            rsetEncoder();
         }
     }
 
     public void Stop(){
-        motor.setDuty(ConstantsTelescop.reset);
+        motor.setDuty(ConstantsTelescop.zero);
     }
 
     public void extendTelescope(double length) {
