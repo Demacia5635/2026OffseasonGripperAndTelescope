@@ -18,27 +18,30 @@ public class Telescop extends SubsystemBase {
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
+
     public void rsetEncoder(){
-        motor.setEncoderPosition(0);
+        motor.setEncoderPosition(ConstantsTelescop.reset);
     }
 
     public void open(){
-        while(limitSwitchUp.get() == false){
-            motor.setDuty(0.5);
+        if(limitSwitchUp.get() == false){
+            motor.setDuty(ConstantsTelescop.lowSpeed);
+        }else{
+            motor.setDuty(ConstantsTelescop.reset);
         }
-        motor.setDuty(0);
     }
 
     public void startPozesan(){
-        while(limitSwitchDown.get() == false){
-            motor.setDuty(-0.2);
+        if(limitSwitchDown.get() == false){
+            motor.setDuty(ConstantsTelescop.lowSpeedMinas);
+        }else{
+            motor.setDuty(ConstantsTelescop.reset);
+            motor.setEncoderPosition(ConstantsTelescop.reset);
         }
-        if (limitSwitchDown.get() == true)
-        motor.setEncoderPosition(0);
     }
 
     public void Stop(){
-        motor.setDuty(0);
+        motor.setDuty(ConstantsTelescop.reset);
     }
 
     public void extendTelescope(double length) {
