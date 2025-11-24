@@ -42,9 +42,6 @@ public class TelescopCommands extends Command {
       case open:
         SubSystem.open();
         break;
-      default:
-        SubSystem.stopSpeed();
-        break;
     }
   }
 
