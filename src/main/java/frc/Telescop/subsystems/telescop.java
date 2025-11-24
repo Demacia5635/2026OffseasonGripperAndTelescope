@@ -18,7 +18,6 @@ public class Telescop extends SubsystemBase {
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
-
     public void rsetEncoder(){
         motor.setEncoderPosition(0);
     }

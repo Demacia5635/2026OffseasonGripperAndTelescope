@@ -29,7 +29,6 @@ public class ConstantsTelescop {
         }
     }
 
-
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_JERK = 0;
