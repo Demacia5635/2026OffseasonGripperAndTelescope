@@ -33,13 +33,13 @@ public class Telescop extends SubsystemBase {
         SmartDashboard.getString("get State", currentState.name());
     }
 
-    public void log(){
-        LogManager.addEntry("trlescope",length,3,"length");
-        LogManager.addEntry("state", currentState, 3, "State");
-        LogManager.addEntry("vylosty", motor.getCurrentVelocity(),3,"vylosty");
-        LogManager.addEntry("pozesan", motor.getCurrentPosition(),3,"pozesan");
-        LogManager.AddEntry("acsloresan", motor.getCurrentAcceleration(),3,"acsloresan");
-    }
+    // public void log(){
+    //     LogManager.addEntry("trlescope",length,3,"length");
+    //     LogManager.addEntry("state", currentState, 3, "State");
+    //     LogManager.addEntry("vylosty", motor.getCurrentVelocity(),3,"vylosty");
+    //     LogManager.addEntry("pozesan", motor.getCurrentPosition(),3,"pozesan");
+    //     LogManager.AddEntry("acsloresan", motor.getCurrentAcceleration(),3,"acsloresan");
+    // }
 
     public void rsetEncoder(){
         motor.setEncoderPosition(0);
