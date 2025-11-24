@@ -1,13 +1,13 @@
 package frc.Telescop.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
+//import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2 .command.SubsystemBase;
 import frc.Telescop.ConstantsTelescop;
 import frc.Telescop.ConstantsTelescop.STATE;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
-import frc.demacia.utils.Log.LogManager;
+//import frc.demacia.utils.Log.LogManager;
 
 public class Telescop extends SubsystemBase {
 
@@ -62,13 +62,12 @@ public class Telescop extends SubsystemBase {
         }
     }
 
-    public void startPozesan(){
+    public void Calbresan(){
+        motor.setMotion(3);
         if(limitSwitchDown.get() == false){
-            motor.setDuty(-0.2);
-        }else{
-            stopSpeed();
-            rsetEncoder();
+            motor.setMotion(-0.1);
         }
+        length = 0.03;
     }
 
     public void extendTelescope(double length) {
