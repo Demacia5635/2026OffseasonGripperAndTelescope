@@ -27,6 +27,8 @@ public class Telescop extends SubsystemBase {
     public void SmartDasbord(){
         SmartDashboard.putNumber("length", length);
         SmartDashboard.getNumber("get length", length);
+        SmartDashboard.putString("STATE", currentState.name());
+        SmartDashboard.getString("get State", currentState.name());
     }
 
     public void rsetEncoder(){
