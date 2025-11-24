@@ -20,7 +20,7 @@ public class TelescopCommands extends Command {
     this.SubSystem = subSystem;
     addRequirements(subSystem);
     // Use addRequirements() here to declare subsystem dependencies.
-  }
+  } 
 
   // Called when the command is initially scheduled.
   @Override
