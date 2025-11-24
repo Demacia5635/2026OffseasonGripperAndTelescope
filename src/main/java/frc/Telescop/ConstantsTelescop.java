@@ -7,28 +7,6 @@ import frc.demacia.utils.Sensors.LimitSwitchConfig;
 public class ConstantsTelescop {    
 
 
-    public enum STATE{
-        L1(0,0),
-        L2(0,0),
-        L3(0,0),
-        L4(0,0),
-        HOME(0,0),
-        TESTING(-1, -1),
-        IDLE(-1, -1),
-        peckUp(0,0),
-        close(-1,0),
-        open(-1, -1);
-
-        
-
-        public double angle;
-        public double length;
-        STATE(double angle, double length){
-            this.angle = angle;
-            this.length = length;
-        }
-    }
-
     public static final double length = 0;
 
     public static final double MAX_VELOCITY = 3;
