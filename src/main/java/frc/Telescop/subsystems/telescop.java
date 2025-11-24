@@ -1,21 +1,29 @@
 package frc.Telescop.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2 .command.SubsystemBase;
 import frc.Telescop.ConstantsTelescop;  
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Telescop extends SubsystemBase {
 
     private LimitSwitch limitSwitchUp;
     private LimitSwitch limitSwitchDown;
     private TalonMotor motor;
 
+    private double length;
+
     /** Creates a new telescop. */
     public Telescop() {
         limitSwitchUp = new LimitSwitch(ConstantsTelescop.CONFIG_UP);
         limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
+    }
+
+
+    public void SmartDasbord(){
+        SmartDashboard.putNumber("length", length);
     }
 
     public void rsetEncoder(){
@@ -49,6 +57,7 @@ public class Telescop extends SubsystemBase {
     }
 
     public void extendTelescope(double length) {
+        this.length = length;
         motor.setMotion(length);
     }
 }
