@@ -26,12 +26,17 @@ public class Telescop extends SubsystemBase {
     public void Stop(){
         motor.setDuty(0);
     }
+
+    
+    public void stopSpeed(){
+        motor.setVelocity(0);
+    }
     
     public void open(){
         if(limitSwitchUp.get() == false){
             motor.setDuty(0.2);
         }else{
-            Stop();
+            stopSpeed();
         }
     }
 
@@ -39,13 +44,9 @@ public class Telescop extends SubsystemBase {
         if(limitSwitchDown.get() == false){
             motor.setDuty(-0.2);
         }else{
-            Stop();
+            stopSpeed();
             rsetEncoder();
         }
-    }
-
-    public void stopSpeed(){
-        motor.setVelocity(0);
     }
 
     public void extendTelescope(double length) {
