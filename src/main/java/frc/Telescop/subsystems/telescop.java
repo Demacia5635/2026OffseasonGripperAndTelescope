@@ -1,11 +1,13 @@
 package frc.Telescop.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog.MotorLog;
 import edu.wpi.first.wpilibj2 .command.SubsystemBase;
 import frc.Telescop.ConstantsTelescop;
 import frc.Telescop.ConstantsTelescop.STATE;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
+import frc.demacia.utils.Log.LogManager;
 
 public class Telescop extends SubsystemBase {
 
@@ -15,7 +17,7 @@ public class Telescop extends SubsystemBase {
 
     private double length;
 
-    STATE currentState = STATE.HOME;
+    private STATE currentState = STATE.HOME;
 
     /** Creates a new telescop. */
     public Telescop() {
@@ -29,6 +31,14 @@ public class Telescop extends SubsystemBase {
         SmartDashboard.getNumber("get length", length);
         SmartDashboard.putString("STATE", currentState.name());
         SmartDashboard.getString("get State", currentState.name());
+    }
+
+    public void log(){
+        LogManager.addEntry("trlescope",length,3,"length");
+        LogManager.addEntry("state", currentState, 3, "State");
+        LogManager.addEntry("vylosty", motor.getCurrentVelocity(),3,"vylosty");
+        LogManager.addEntry("pozesan", motor.getCurrentPosition(),3,"pozesan");
+        LogManager.AddEntry("acsloresan", motor.getCurrentAcceleration(),3,"acsloresan");
     }
 
     public void rsetEncoder(){
