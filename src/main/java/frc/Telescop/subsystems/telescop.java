@@ -6,6 +6,7 @@ import frc.Telescop.ConstantsTelescop;
 import frc.Telescop.ConstantsTelescop.STATE;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
+
 public class Telescop extends SubsystemBase {
 
     private LimitSwitch limitSwitchUp;
@@ -22,7 +23,6 @@ public class Telescop extends SubsystemBase {
         limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
-
 
     public void SmartDasbord(){
         SmartDashboard.putNumber("length", length);
