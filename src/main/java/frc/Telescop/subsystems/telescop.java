@@ -23,6 +23,10 @@ public class Telescop extends SubsystemBase {
         motor.setEncoderPosition(0);
     }
 
+    public void Stop(){
+        motor.setDuty(0);
+    }
+    
     public void open(){
         if(limitSwitchUp.get() == false){
             motor.setDuty(0.2);
@@ -38,10 +42,6 @@ public class Telescop extends SubsystemBase {
             Stop();
             rsetEncoder();
         }
-    }
-
-    public void Stop(){
-        motor.setDuty(0);
     }
 
     public void stopSpeed(){
