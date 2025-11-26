@@ -17,10 +17,11 @@ import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
 public final class Constants {
 
     public enum GRIPPER_STATE{
-        Idle(0),
+        IDLE(0),
         GET_CORAL(0.3),
         GET_CUBE(0.3),
         HAS_GAME_PIECE(0),
+        TESTING(0),
         EJECT(0.3);
 
 
