@@ -34,11 +34,11 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    new LogManager();
 
 
     gripperSubsystem = new GripperSubsystem();
 
-    new LogManager();
 
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););

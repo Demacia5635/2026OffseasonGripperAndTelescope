@@ -19,7 +19,7 @@ public final class Constants {
         GET_CUBE(0.3),
         HAS_GAME_PIECE(0),
         TESTING(0),
-        EJECT(0.3);
+        EJECT(-0.3);
 
 
       
