@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,10 +26,10 @@ public class GripperSubsystem extends SubsystemBase {
 
     addNT();
 
-    // state = GRIPPER_STATE.IDLE;
+    state = GRIPPER_STATE.IDLE;
   }
 
-  public void addNT(){
+  public void addNT() {
     SendableChooser<GRIPPER_STATE> stateChooser = new SendableChooser<>();
     stateChooser.addOption("GET_CORAL", GRIPPER_STATE.GET_CORAL);
     stateChooser.addOption("GET_CUBE", GRIPPER_STATE.GET_CUBE);
@@ -37,86 +38,83 @@ public class GripperSubsystem extends SubsystemBase {
     stateChooser.onChange(state -> this.state = state);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
-
-    
-
-
-
   }
 
   public double getRange() {
-  return ultrasonicSensor.getRangeMeters();
+    return ultrasonicSensor.getRangeMeters();
   }
-    
 
-    public boolean isCoralIn() {
-      if (getRange() <= 0.03 ) return true;
-      else return false;
-    }
-    public boolean isCubeIn() {
-      if (!isCoralIn() && getRange() <=0.3) return true;
-       else return false;
-    }
-    public boolean HAS_GAME_PIECE(){
-      return isCubeIn() || isCoralIn();
-    }
+  public boolean isCoralIn() {
 
-    public void setPower(double power){
-      motor.setDuty(power);
-    }
+    return getRange() <= 0.03;
+  }
 
-    public void setVelocity(double velocity){
-      motor.setVelocity(velocity);
-    }
+  public boolean isCubeIn() {
+    return !isCoralIn() && getRange() <= 0.3;
+  }
 
-    public void stop (){  
-      motor.stopMotor();
-    }
+  public boolean hasGamePiece() {
+    return isCubeIn() || isCoralIn();
+  }
 
-    public void setVoltage(double voltage){
-      motor.setVoltage(voltage);
-    }
+  public void setPower(double power) {
+    motor.setDuty(power);
+  }
 
-    public void handleCoral() {
-      if (isCoralIn()) {
-          setVoltage(0.1);
-          setState(GRIPPER_STATE.HAS_GAME_PIECE);
-          return;  
-      }
-      setVelocity(GRIPPER_STATE.GET_CORAL.velocity);
-    }
-    public void handleCube(){
-      if (isCubeIn()){
-        stop();
-        setState(GRIPPER_STATE.HAS_GAME_PIECE);
-        return;
-      }
-        setVelocity(GRIPPER_STATE.GET_CUBE.velocity);
-      }
-      public void ejectProcess(){
-        if (!HAS_GAME_PIECE()){
-          stop();
-        }
-        setVelocity(GRIPPER_STATE.EJECT.velocity);
-        setState(GRIPPER_STATE.HAS_GAME_PIECE);
-        }
-    
+  public void setVelocity(double velocity) {
+    motor.setVelocity(velocity);
+  }
 
-    public void setState(GRIPPER_STATE state) {
-      this.state = state;
-    }
+  public void stop() {
+    motor.stopMotor();
+  }
 
-    public GRIPPER_STATE getState(){
-      return state;
+  public void setVoltage(double voltage) {
+    motor.setVoltage(voltage);
+  }
+
+  public void handleCoral() {
+    if (isCoralIn()) {
+      setVoltage(0.1);
+      setState(GRIPPER_STATE.HAS_GAME_PIECE);
+      return;
     }
-  
+    setVelocity(GRIPPER_STATE.GET_CORAL.velocity);
+  }
+
+  public void handleCube() {
+    if (isCubeIn()) {
+      stop();
+      setState(GRIPPER_STATE.HAS_GAME_PIECE);
+      return;
+    }
+    setVelocity(GRIPPER_STATE.GET_CUBE.velocity);
+  }
+
+  public void ejectProcess() {
+    if (!hasGamePiece()) {
+      stop();
+    }
+    setVelocity(GRIPPER_STATE.EJECT.velocity);
+    setState(GRIPPER_STATE.HAS_GAME_PIECE);
+  }
+
+  public void setState(GRIPPER_STATE state) {
+    this.state = state;
+  }
+
+  public GRIPPER_STATE getState() {
+    return state;
+  }
+
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
-    builder.addBooleanProperty("Is Coral In", ()-> isCoralIn(), null);
-    builder.addBooleanProperty("Is Cube In", ()-> isCubeIn(), null);
-    builder.addDoubleProperty("Get Range", ()-> getRange(), null);
+    builder.addBooleanProperty("Is Coral In", () -> isCoralIn(), null);
+    builder.addBooleanProperty("Is Cube In", () -> isCubeIn(), null);
+    builder.addDoubleProperty("Get Range", () -> getRange(), null);
   }
+
   @Override
   public void periodic() {
   }
