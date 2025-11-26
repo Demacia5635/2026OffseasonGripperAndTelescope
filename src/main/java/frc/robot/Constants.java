@@ -3,9 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.Idle;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -27,9 +24,9 @@ public final class Constants {
 
       
 
-        public double power;
-        GRIPPER_STATE (double power){
-          this.power = power;
+        public double velocity;
+        GRIPPER_STATE (double velocity){
+          this.velocity = velocity;
         } 
     }
 

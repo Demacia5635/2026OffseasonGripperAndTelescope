@@ -13,7 +13,7 @@ public class GripperCommand extends Command {
   /** Creates a new GripperCommand. */
   private GripperSubsystem gripperSubsystem;
 
-  GRIPPER_STATE currentState = GRIPPER_STATE.Idle;
+  GRIPPER_STATE currentState = GRIPPER_STATE.IDLE;
 
   public GripperCommand(GripperSubsystem gripperSubsystem) {
     this.gripperSubsystem = gripperSubsystem;
@@ -32,19 +32,19 @@ public class GripperCommand extends Command {
   public void execute() {
     switch (gripperSubsystem.getState()) {
         case GET_CORAL:
-            handleCoral();
+          gripperSubsystem.handleCoral();
             break;
 
         case GET_CUBE:
-            handleCube();
+            gripperSubsystem.handleCube();
             break;
         
         case EJECT:
-            ejectProcess();
+            gripperSubsystem.ejectProcess();
             break;
 
         case TESTING:
-            gripperSubsystem.setPower(gripperSubsystem.getState().power);
+            gripperSubsystem.setPower(gripperSubsystem.getState().velocity);
             break;
 
         case IDLE:
@@ -59,32 +59,6 @@ public class GripperCommand extends Command {
 }
 
 
-    private void handleCoral() {
-      if (gripperSubsystem.isCoralIn()) {
-          gripperSubsystem.setVoltage(0.1);
-          gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
-          return;  
-      }
-      gripperSubsystem.setPower(0.3);
-    }
-
-    private void handleCube(){
-    if (gripperSubsystem.isCubeIn()){
-      gripperSubsystem.stop();
-      gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
-      return;
-    }
-    gripperSubsystem.setPower(0.3);
-    }
-
-    private void ejectProcess(){
-    if (!gripperSubsystem.HAS_GAME_PIECE()){
-      gripperSubsystem.stop();
-    }
-    gripperSubsystem.setPower(-0.3);
-    gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
-    }
-
   //   switch (currentState) {
   //     case GetCoral, GetCube, Out:
   //       gripperSubsystem.setPower(currentState.power);
@@ -97,8 +71,6 @@ public class GripperCommand extends Command {
   //   }
   // }
 
-
-    }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
@@ -110,6 +82,5 @@ public class GripperCommand extends Command {
     return false;
   }
 }
-  }
-}
+
   

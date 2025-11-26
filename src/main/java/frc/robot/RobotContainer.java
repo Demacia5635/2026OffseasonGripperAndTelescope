@@ -5,6 +5,7 @@ package frc.robot;
 
 import frc.demacia.utils.Log.LogManager;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public static GripperSubsystem gripperSubsystem;
 
   public static boolean isComp = DriverStation.isFMSAttached();
   private static boolean hasRemovedFromLog = false;
@@ -32,6 +34,9 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+
+    gripperSubsystem = new GripperSubsystem();
 
     new LogManager();
 

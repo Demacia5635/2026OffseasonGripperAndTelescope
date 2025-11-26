@@ -3,15 +3,12 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import java.util.logging.LogManager;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.UltraSonicSensor;
-import frc.robot.Constants;
 import frc.robot.GripperConstants;
 import frc.robot.Constants.GRIPPER_STATE;
 
@@ -35,8 +32,8 @@ public class GripperSubsystem extends SubsystemBase {
     SendableChooser<GRIPPER_STATE> stateChooser = new SendableChooser<>();
     stateChooser.addOption("GET_CORAL", GRIPPER_STATE.GET_CORAL);
     stateChooser.addOption("GET_CUBE", GRIPPER_STATE.GET_CUBE);
-    stateChooser.addOption("EJECT", GRIPPER_STATE.GET_CORAL.EJECT);
-    stateChooser.addOption("IDLE", GRIPPER_STATE.Idle);
+    stateChooser.addOption("EJECT", GRIPPER_STATE.EJECT);
+    stateChooser.addOption("IDLE", GRIPPER_STATE.IDLE);
     stateChooser.onChange(state -> this.state = state);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
@@ -68,7 +65,11 @@ public class GripperSubsystem extends SubsystemBase {
       motor.setDuty(power);
     }
 
-    public void stop (){
+    public void setVelocity(double velocity){
+      motor.setVelocity(velocity);
+    }
+
+    public void stop (){  
       motor.stopMotor();
     }
 
@@ -76,25 +77,30 @@ public class GripperSubsystem extends SubsystemBase {
       motor.setVoltage(voltage);
     }
 
-    public void getCoral(){
-      while (!isCoralIn()) {
-          setPower(Constants.STATE.GetCoral.power);
-        }
-        stop();
-
+    public void handleCoral() {
+      if (isCoralIn()) {
+          setVoltage(0.1);
+          setState(GRIPPER_STATE.HAS_GAME_PIECE);
+          return;  
+      }
+      setVelocity(GRIPPER_STATE.GET_CORAL.velocity);
     }
-    public void getCube(){
-      while (!isCubeIn()) {
-          setPower(0.3);
-        }
+    public void handleCube(){
+      if (isCubeIn()){
         stop();
-    }
-    public void Out(){
-      while (isCoralIn()|| isCubeIn()) {
-          setPower(-0.3);
+        setState(GRIPPER_STATE.HAS_GAME_PIECE);
+        return;
+      }
+        setVelocity(GRIPPER_STATE.GET_CUBE.velocity);
+      }
+      public void ejectProcess(){
+        if (!HAS_GAME_PIECE()){
+          stop();
         }
-        stop();
-    }
+        setVelocity(GRIPPER_STATE.EJECT.velocity);
+        setState(GRIPPER_STATE.HAS_GAME_PIECE);
+        }
+    
 
     public void setState(GRIPPER_STATE state) {
       this.state = state;
@@ -103,16 +109,6 @@ public class GripperSubsystem extends SubsystemBase {
     public GRIPPER_STATE getState(){
       return state;
     }
-
-    public static GRIPPER_STATE levelStateToArmState(LEVEL level) {
-      switch (level) {
-        case L1:
-          return ARM_ANGLE_STATES.L1;
-        
-        case L2:
-          return ARM_ANGLE_STATES.L2;
-  
-  
   
   @Override
   public void initSendable(SendableBuilder builder) {
@@ -123,6 +119,5 @@ public class GripperSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    if(isCoralIn() || isCubeIn()) 
   }
 }
