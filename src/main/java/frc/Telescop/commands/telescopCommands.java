@@ -4,10 +4,7 @@
 
 package frc.Telescop.commands;
 
-import java.time.format.SignStyle;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.Telescop.subsystems.Telescop.STATE;
 import frc.Telescop.subsystems.Telescop;
 
@@ -33,8 +30,6 @@ public class TelescopCommands extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    
     if(telescop.currentState == STATE.CALIBRATE) {
       if(calibrateUp && telescop.getLength() < STATE.CALIBRATE.length) {
         telescop.setPower(0);
