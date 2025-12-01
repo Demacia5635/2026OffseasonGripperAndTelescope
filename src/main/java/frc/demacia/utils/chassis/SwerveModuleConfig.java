@@ -1,7 +1,5 @@
 package frc.demacia.utils.chassis;
 
-import com.ctre.phoenix6.CANBus;
-
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Sensors.CancoderConfig;
 
