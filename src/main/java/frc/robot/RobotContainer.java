@@ -3,9 +3,12 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import frc.demacia.utils.Controller.CommandController;
+import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
+import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.Gripper.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -57,6 +60,9 @@ public class RobotContainer {
     }
   }
 
+  private final CommandController controller =
+    new CommandController(0, ControllerType.kXbox);
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -68,6 +74,10 @@ public class RobotContainer {
    */
   private void configureBindings() {
     
+    controller.rightBumper().onTrue(new InstantCommand(() -> {
+    gripperSubsystem.setState(GRIPPER_STATE.GET_CORAL);
+}));
+
   }
 
   /**

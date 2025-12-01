@@ -45,11 +45,11 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public boolean isCoralIn() {
-    return getRange() <= 0.03;
+    return getRange() <= GripperConstants.coralDetectedDistance;
   }
 
   public boolean isCubeIn() {
-    return !isCoralIn() && getRange() <= 0.3;
+    return !isCoralIn() && getRange() <= GripperConstants.cubeDetectedDistance;
   }
 
   public boolean hasGamePiece() {
@@ -85,6 +85,7 @@ public class GripperSubsystem extends SubsystemBase {
     super.initSendable(builder);
     builder.addBooleanProperty("Is Coral In", () -> isCoralIn(), null);
     builder.addBooleanProperty("Is Cube In", () -> isCubeIn(), null);
+    builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
   }
 

@@ -21,6 +21,8 @@ public class GripperConstants {
           this.velocity = velocity;
         } 
     }
+    public static final double coralDetectedDistance = 0.03;
+    public static final double cubeDetectedDistance = 0.3;
     public static final int echoChannel = 0;
     public static final int pingChannel = 0;
     public static final int motor_ID = 0;
