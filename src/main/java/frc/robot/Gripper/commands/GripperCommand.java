@@ -2,11 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.Gripper.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.GRIPPER_STATE;
-import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
+import frc.robot.Gripper.subsystems.GripperSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class GripperCommand extends Command {
@@ -32,17 +32,36 @@ public class GripperCommand extends Command {
   public void execute() {
     switch (gripperSubsystem.getState()) {
         case GET_CORAL:
-          gripperSubsystem.handleCoral();
+          if (gripperSubsystem.isCoralIn()) {
+            gripperSubsystem.setVoltage(0);
+            gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
+          }
+          else{
+            gripperSubsystem.setVelocity(GRIPPER_STATE.GET_CORAL.velocity);
+          }
             break;
 
         case GET_CUBE:
-            gripperSubsystem.handleCube();
+          if(gripperSubsystem.isCubeIn()){
+              gripperSubsystem.stop();
+              gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
+            }
+          else{
+            gripperSubsystem.setVelocity(GRIPPER_STATE.GET_CUBE.velocity);
+          }        
             break;
         
-        case EJECT:
-            gripperSubsystem.ejectProcess();
+        case EJECT: 
+          if (gripperSubsystem.hasGamePiece()) {
+            gripperSubsystem.setVelocity(GRIPPER_STATE.EJECT.velocity);
+          }
+            else{
+              gripperSubsystem.stop();
+              gripperSubsystem.setState(GRIPPER_STATE.IDLE);
+            }
             break;
-
+        
+            
         case TESTING:
             gripperSubsystem.setPower(gripperSubsystem.getState().velocity);
             break;

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.Gripper.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.UltraSonicSensor;
-import frc.robot.GripperConstants;
-import frc.robot.Constants.GRIPPER_STATE;
+import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
+import frc.robot.Gripper.GripperConstants;
 
 public class GripperSubsystem extends SubsystemBase {
   /** Creates a new GripperSubsystem. */
@@ -45,7 +45,6 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public boolean isCoralIn() {
-
     return getRange() <= 0.03;
   }
 
@@ -71,32 +70,6 @@ public class GripperSubsystem extends SubsystemBase {
 
   public void setVoltage(double voltage) {
     motor.setVoltage(voltage);
-  }
-
-  public void handleCoral() {
-    if (isCoralIn()) {
-      setVoltage(0.1);
-      setState(GRIPPER_STATE.HAS_GAME_PIECE);
-      return;
-    }
-    setVelocity(GRIPPER_STATE.GET_CORAL.velocity);
-  }
-
-  public void handleCube() {
-    if (isCubeIn()) {
-      stop();
-      setState(GRIPPER_STATE.HAS_GAME_PIECE);
-      return;
-    }
-    setVelocity(GRIPPER_STATE.GET_CUBE.velocity);
-  }
-
-  public void ejectProcess() {
-    if (!hasGamePiece()) {
-      stop();
-    }
-    setVelocity(GRIPPER_STATE.EJECT.velocity);
-    setState(GRIPPER_STATE.HAS_GAME_PIECE);
   }
 
   public void setState(GRIPPER_STATE state) {
