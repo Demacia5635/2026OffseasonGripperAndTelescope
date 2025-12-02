@@ -86,6 +86,8 @@ public class Telescop extends SubsystemBase {
     @Override
     public void periodic(){
         LogManager.log("Heigt" + currentHeigt);
+        LogManager.log("wnted height" + currentState.length);
+        LogManager.log("state" + currentState.name());
     }
 
 }
