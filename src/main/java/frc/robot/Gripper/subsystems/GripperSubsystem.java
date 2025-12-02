@@ -44,6 +44,10 @@ public class GripperSubsystem extends SubsystemBase {
     return ultrasonicSensor.getRangeMeters();
   }
 
+  public double getCurrentAmpers(){
+    return motor.getCurrentCurrent();
+  }
+
   public boolean isCoralIn() {
     return getRange() <= GripperConstants.coralDetectedDistance;
   }
@@ -56,7 +60,7 @@ public class GripperSubsystem extends SubsystemBase {
     return isCubeIn() || isCoralIn();
   }
 
-  public void setPower(double power) {
+  public void setDuty(double power) {
     motor.setDuty(power);
   }
 
@@ -87,6 +91,7 @@ public class GripperSubsystem extends SubsystemBase {
     builder.addBooleanProperty("Is Cube In", () -> isCubeIn(), null);
     builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
+    builder.addDoubleProperty("Get Cuurent Ampers", () -> getCurrentAmpers(), null);
   }
 
   @Override
