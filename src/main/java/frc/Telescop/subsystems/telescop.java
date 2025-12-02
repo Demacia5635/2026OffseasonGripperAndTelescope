@@ -4,6 +4,7 @@ package frc.Telescop.subsystems;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2 .command.SubsystemBase;
 import frc.Telescop.ConstantsTelescop;
 import frc.demacia.utils.Log.LogManager;
@@ -59,7 +60,9 @@ public class Telescop extends SubsystemBase {
         builder.addDoubleProperty("Length", this::getLength, null);
         builder.addStringProperty("State", ()->currentState.name(), null);
         builder.addDoubleProperty("Test Length", ()->STATE.TESTING.length, (l)->STATE.TESTING.length = l);
+    }
 
+    public void putdata(){
         SendableChooser<STATE> stateChooser = new SendableChooser<>();
         stateChooser.addOption("L1", STATE.L1);
         stateChooser.addOption("L2", STATE.L2);
@@ -68,8 +71,9 @@ public class Telescop extends SubsystemBase {
         stateChooser.addOption("HOME", STATE.HOME);
         stateChooser.addOption("INTAKE", STATE.INTAKE);
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
+        stateChooser.onChange(null);
+        SmartDashboard.putData("Telescop State", stateChooser);
     }
-
 
     public double getLength() {
         return motor.getCurrentPosition();
