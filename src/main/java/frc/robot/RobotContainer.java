@@ -3,11 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import frc.demacia.utils.Controller.CommandController;
+import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
+import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
+import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
+import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -25,6 +29,9 @@ public class RobotContainer {
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
 
+  public static CommandController controller = new CommandController(OperatorConstants.kDriverControllerPort, ControllerType.kPS5);
+
+  public static ChangeAngle changeAngle;
   // The robot's subsystems and commands are defined here...
 
 
@@ -34,6 +41,9 @@ public class RobotContainer {
   public RobotContainer() {
 
     new LogManager();
+    changeAngle = new ChangeAngle();
+    changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
+    // changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
 
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
@@ -62,7 +72,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+    controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
   }
 
   /**
