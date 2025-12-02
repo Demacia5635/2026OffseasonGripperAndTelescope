@@ -26,14 +26,14 @@ public class TelescopCommands extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(telescop.currentState == STATE.CALIBRATE) {
-      timer.reset();
-      timer.start();
       if (timer.get() < 0.5){
         telescop.setPower(0.2);
       }
@@ -49,6 +49,7 @@ public class TelescopCommands extends Command {
   @Override
   public void end(boolean interrupted) {
     telescop.Stop();
+    timer.stop();
   }
 
   // Returns true when the command should end.
