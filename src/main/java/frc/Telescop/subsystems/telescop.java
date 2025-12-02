@@ -50,6 +50,7 @@ public class Telescop extends SubsystemBase {
         //limitSwitchUp = new LimitSwitch(ConstantsTelescop.CONFIG_UP);
         limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
+        putdata();
     }
 
     private double currentHeigt = motor.getCurrentPosition();
