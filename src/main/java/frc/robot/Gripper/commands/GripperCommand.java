@@ -5,6 +5,7 @@
 package frc.robot.Gripper.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Gripper.GripperConstants;
 import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
 import frc.robot.Gripper.subsystems.GripperSubsystem;
 
@@ -33,27 +34,26 @@ public class GripperCommand extends Command {
     switch (gripperSubsystem.getState()) {
         case GET_CORAL:
           if (gripperSubsystem.isCoralIn()) {
-            gripperSubsystem.setVoltage(0);
-            gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
+            gripperSubsystem.setVoltage(GripperConstants.holdCoralVoltage);
           }
           else{
-            gripperSubsystem.setVelocity(GRIPPER_STATE.GET_CORAL.velocity);
+            gripperSubsystem.setDuty(GRIPPER_STATE.GET_CORAL.duty);
           }
             break;
 
         case GET_CUBE:
           if(gripperSubsystem.isCubeIn()){
               gripperSubsystem.stop();
-              gripperSubsystem.setState(GRIPPER_STATE.HAS_GAME_PIECE);
+              gripperSubsystem.setState(GRIPPER_STATE.IDLE);
             }
           else{
-            gripperSubsystem.setVelocity(GRIPPER_STATE.GET_CUBE.velocity);
+            gripperSubsystem.setDuty(GRIPPER_STATE.GET_CUBE.duty);
           }        
             break;
         
         case EJECT: 
           if (gripperSubsystem.hasGamePiece()) {
-            gripperSubsystem.setVelocity(GRIPPER_STATE.EJECT.velocity);
+            gripperSubsystem.setDuty(GRIPPER_STATE.EJECT.duty);
           }
             else{
               gripperSubsystem.stop();
@@ -63,7 +63,7 @@ public class GripperCommand extends Command {
         
             
         case TESTING:
-            gripperSubsystem.setPower(gripperSubsystem.getState().velocity);
+            gripperSubsystem.setDuty(gripperSubsystem.getState().duty);
             break;
 
         case IDLE:
@@ -77,22 +77,10 @@ public class GripperCommand extends Command {
     }
 }
 
-
-  //   switch (currentState) {
-  //     case GetCoral, GetCube, Out:
-  //       gripperSubsystem.setPower(currentState.power);
-  //       break;
-
-  //     default:
-  //       gripperSubsystem.setPower(0);
-  //       break;
-
-  //   }
-  // }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    gripperSubsystem.stop();
   }
 
   // Returns true when the command should end.
