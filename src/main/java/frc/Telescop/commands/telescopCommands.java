@@ -4,6 +4,7 @@
 
 package frc.Telescop.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.Telescop.subsystems.Telescop.STATE;
 import frc.Telescop.subsystems.Telescop;
@@ -13,9 +14,9 @@ public class TelescopCommands extends Command {
   /** Creates a new telescopCommands. */
 
   private Telescop telescop; 
-  private boolean calibrateUp = true;
   
-  
+  Timer timer = new Timer();
+
   public TelescopCommands(Telescop subSystem) {
     this.telescop = subSystem;
     addRequirements(subSystem);
@@ -31,12 +32,14 @@ public class TelescopCommands extends Command {
   @Override
   public void execute() {
     if(telescop.currentState == STATE.CALIBRATE) {
-      if(Telescop.calibreated && telescop.getLength() < STATE.CALIBRATE.length) {
-        telescop.setPower(0);
-      } else {
-        calibrateUp = false;
-        telescop.setPower(0);
-      } 
+      timer.reset();
+      timer.start();
+      if (timer.get() < 0.5){
+        telescop.setPower(0.2);
+      }
+      if (Telescop.limitSwitchDown.get() == false){
+        telescop.setPower(-0.1);
+      }
     } else {
       telescop.setLengthPosition(telescop.currentState.length);
     }

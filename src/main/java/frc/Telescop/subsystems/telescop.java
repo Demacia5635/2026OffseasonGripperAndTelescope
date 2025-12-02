@@ -1,20 +1,21 @@
 package frc.Telescop.subsystems;
 
+
+
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj2 .command.SubsystemBase;
 import frc.Telescop.ConstantsTelescop;
+import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
 
 public class Telescop extends SubsystemBase {
 
     private LimitSwitch limitSwitchUp;
-    private LimitSwitch limitSwitchDown;
+    public static LimitSwitch limitSwitchDown;
     private TalonMotor motor;
 
-    private double lengthOffset = 0;
     public static boolean calibreated = true;
-
 
     public enum STATE{
         L1(0,0),
@@ -49,6 +50,8 @@ public class Telescop extends SubsystemBase {
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
     }
 
+    private double currentHeigt = motor.getCurrentPosition();
+
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
@@ -76,6 +79,13 @@ public class Telescop extends SubsystemBase {
 
     public void setLengthPosition(double length) {
         motor.setMotion(length);
+    }
+
+
+
+    @Override
+    public void periodic(){
+        LogManager.log("Heigt" + currentHeigt);
     }
 
 }
