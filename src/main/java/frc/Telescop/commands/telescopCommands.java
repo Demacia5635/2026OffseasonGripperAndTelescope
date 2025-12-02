@@ -31,17 +31,13 @@ public class TelescopCommands extends Command {
   @Override
   public void execute() {
     if(telescop.currentState == STATE.CALIBRATE) {
-      if(calibrateUp && telescop.getLength() < STATE.CALIBRATE.length) {
+      if(Telescop.calibreated && telescop.getLength() < STATE.CALIBRATE.length) {
         telescop.setPower(0);
       } else {
         calibrateUp = false;
         telescop.setPower(0);
       } 
-    } 
-    else if(telescop.currentState == STATE.IDLE){
-      telescop.setLengthPosition(STATE.IDLE.length);
-    }
-    else {
+    } else {
       telescop.setLengthPosition(telescop.currentState.length);
     }
   }

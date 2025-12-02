@@ -13,7 +13,7 @@ public class Telescop extends SubsystemBase {
     private TalonMotor motor;
 
     private double lengthOffset = 0;
-    private boolean calibreated = false;
+    public static boolean calibreated = true;
 
 
     public enum STATE{
@@ -27,7 +27,7 @@ public class Telescop extends SubsystemBase {
         INTAKE(0,0),
         CLOSED(-1,0),
         OPEN(-1, -1),
-        CALIBRATE(0,0);
+        CALIBRATE(0,0.03);
 
         
 
@@ -47,8 +47,6 @@ public class Telescop extends SubsystemBase {
         limitSwitchUp = new LimitSwitch(ConstantsTelescop.CONFIG_UP);
         limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
-        setPosition(0);
-        STATE.CALIBRATE.length = 0.3;
     }
 
     @Override
@@ -74,18 +72,6 @@ public class Telescop extends SubsystemBase {
 
     public void setPower(double power) {
         motor.setDuty(power);
-    }
-    
-    public void stopSpeed(){
-        motor.setVelocity(0);
-    }
-    
-    public void setState(STATE state){
-        if(calibreated)  {
-            currentState = state;
-        }else{
-            currentState = STATE.CALIBRATE;
-        }
     }
 
     public void setLengthPosition(double length) {
