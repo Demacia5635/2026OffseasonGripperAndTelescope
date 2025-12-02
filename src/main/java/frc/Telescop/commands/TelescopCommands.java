@@ -14,19 +14,18 @@ public class TelescopCommands extends Command {
   /** Creates a new telescopCommands. */
 
   private Telescop telescop; 
-  
-  Timer timer = new Timer();
+  private Timer timer;
 
   public TelescopCommands(Telescop subSystem) {
     this.telescop = subSystem;
     addRequirements(subSystem);
+     timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
   } 
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.reset();
     timer.start();
   }
 
@@ -49,6 +48,7 @@ public class TelescopCommands extends Command {
   @Override
   public void end(boolean interrupted) {
     telescop.Stop();
+    timer.reset();
     timer.stop();
   }
 
