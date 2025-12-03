@@ -2,59 +2,56 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.Telescop.commands;
+package frc.robot.Telescop.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.Telescop.subsystems.Telescop.STATE;
-import frc.Telescop.subsystems.Telescop;
+import frc.robot.Telescop.ConstantsTelescop.CalibrationConstants;
+import frc.robot.Telescop.ConstantsTelescop.STATE;
+import frc.robot.Telescop.subsystems.Telescop;
+import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TelescopCommands extends Command {
-  /** Creates a new telescopCommands. */
-
-  private Telescop telescop; 
-  private Timer timer;
-
-  public TelescopCommands(Telescop subSystem) {
+public class CalibrationCommands extends Command {
+  /** Creates a new CalibrationCommands. */
+  public CalibrationCommands(Telescop subSystem) {
     this.telescop = subSystem;
     addRequirements(subSystem);
-     timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
-  } 
+  }
+
+  private Telescop telescop;
+  private Timer timer;
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    timer.reset();
     timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(telescop.currentState == STATE.CALIBRATE) {
-      if (timer.get() < 0.5){
-        telescop.setPower(0.2);
-      }
-      if (Telescop.limitSwitchDown.get() == false){
-        telescop.setPower(-0.1);
-      }
-    } else {
-      telescop.setLengthPosition(telescop.currentState.length);
-    }
+
+    if (timer.hasElapsed(CalibrationConstants.TIME_TO_MOVE_CALIBRATION)) telescop.setPower(CalibrationConstants.POWER_TO_BOTTOM);
+
+    else telescop.setPower(CalibrationConstants.POWER_TO_TOP);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    telescop.Stop();
-    timer.reset();
     timer.stop();
+    timer.reset();
+    telescop.stop();
+    telescop.setMotorPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
+    telescop.setState(STATE.HOME);
+    ;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return telescop.isAtBottom();
   }
 }
