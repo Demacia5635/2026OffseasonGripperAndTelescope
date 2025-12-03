@@ -2,6 +2,8 @@ package frc.robot.Telescop.subsystems;
 
 import static frc.robot.Telescop.ConstantsTelescop.*;
 
+import java.util.function.BiConsumer;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
