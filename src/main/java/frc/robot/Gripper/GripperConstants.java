@@ -27,18 +27,14 @@ public class GripperConstants {
     public static final int pingChannel = 0;
     public static final int motor_ID = 0;
     public static final Canbus CANBUS = Canbus.CANIvore;
-    public static final double MAX_VELOCITY = 3;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_JERK = 0;
     public static final double MAX_CURRENT = 80;    
 
     public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel, pingChannel, null);
 
     public static final TalonConfig TALON_CONFIG = new TalonConfig(motor_ID, CANBUS, null)
     .withBrake(false)
-    .withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)
-    .withCurrent(MAX_CURRENT);
-
+    .withCurrent(MAX_CURRENT)
+    .withInvert(true);
 
 
 }

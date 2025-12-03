@@ -31,11 +31,11 @@ public class GripperSubsystem extends SubsystemBase {
 
   public void addNT() {
     SendableChooser<GRIPPER_STATE> stateChooser = new SendableChooser<>();
-    stateChooser.addOption("GET_CORAL", GRIPPER_STATE.GET_CORAL);
-    stateChooser.addOption("GET_CUBE", GRIPPER_STATE.GET_CUBE);
+    stateChooser.addOption("Get Coral", GRIPPER_STATE.GET_CORAL);
+    stateChooser.addOption("GET CUBE", GRIPPER_STATE.GET_CUBE);
     stateChooser.addOption("EJECT", GRIPPER_STATE.EJECT);
     stateChooser.addOption("IDLE", GRIPPER_STATE.IDLE);
-    stateChooser.onChange(state -> this.state = state);
+    stateChooser.onChange(newState -> this.state = newState);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
   }
