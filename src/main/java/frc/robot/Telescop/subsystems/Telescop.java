@@ -18,9 +18,8 @@ import frc.robot.Telescop.ConstantsTelescop;
 public class Telescop extends SubsystemBase {
 
     // private LimitSwitch limitSwitchUp;
-    private LimitSwitch limitSwitchDown;
+    private LimitSwitch limitSwitchTelescope;
 
-    private LimitSwitch limitSwitchUp;
     private TalonMotor motor;
 
     private boolean calibreated;
@@ -30,8 +29,7 @@ public class Telescop extends SubsystemBase {
 
     /** Creates a new telescop. */
     public Telescop() {
-        limitSwitchUp = new LimitSwitch(ConstantsTelescop.CONFIG_UP);
-        limitSwitchDown = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
+        limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
         calibreated = false;
         currentHeigt = motor.getCurrentPosition();
@@ -59,7 +57,7 @@ public class Telescop extends SubsystemBase {
         stateChooser.onChange(this::setState);
         SmartDashboard.putData("Telescop State", stateChooser);
 
-        LogManager2.addEntry("Telescope", this::getCurrentLength, this::isAtBottom, this::isAtTop, this::isCalibreated);
+        LogManager2.addEntry("Telescope", this::getCurrentLength, this::isAtBottom, this::isCalibreated);
     }
 
     public double getCurrentLength() {
@@ -84,7 +82,7 @@ public class Telescop extends SubsystemBase {
             stop();
             return;
         }
-        if (isAtBottom() || isAtTop()) {
+        if (isAtBottom()) {
             LogManager.log("Telescop at limit switch");
             stop();
             return;
@@ -106,11 +104,7 @@ public class Telescop extends SubsystemBase {
     }
 
     public boolean isAtBottom() {
-        return limitSwitchDown.get();
-    }
-
-    public boolean isAtTop() {
-        return limitSwitchUp.get();
+        return limitSwitchTelescope.get();
     }
 
     public void setState(STATE state) {
