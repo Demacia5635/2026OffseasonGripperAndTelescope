@@ -26,7 +26,7 @@ public class GripperSubsystem extends SubsystemBase {
 
     addNT();
 
-    state = GRIPPER_STATE.IDLE;
+    state = GRIPPER_STATE.IDLE;  
   }
 
   public void addNT() {
@@ -35,6 +35,7 @@ public class GripperSubsystem extends SubsystemBase {
     stateChooser.addOption("GET CUBE", GRIPPER_STATE.GET_CUBE);
     stateChooser.addOption("EJECT", GRIPPER_STATE.EJECT);
     stateChooser.addOption("IDLE", GRIPPER_STATE.IDLE);
+    stateChooser.addOption("TESTING", GRIPPER_STATE.TESTING);
     stateChooser.onChange(newState -> this.state = newState);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
@@ -44,7 +45,7 @@ public class GripperSubsystem extends SubsystemBase {
     return ultrasonicSensor.getRangeMeters();
   }
 
-  public double getCurrentAmpers(){
+  public double getCurrentAmpers() {
     return motor.getCurrentCurrent();
   }
 
