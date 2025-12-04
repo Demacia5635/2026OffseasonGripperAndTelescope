@@ -2,15 +2,12 @@ package frc.robot.Telescop.subsystems;
 
 import static frc.robot.Telescop.ConstantsTelescop.*;
 
-import java.util.function.BiConsumer;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Log.LogManager;
-import frc.demacia.utils.Log.LogManager2;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Telescop.ConstantsTelescop;
@@ -56,8 +53,9 @@ public class Telescop extends SubsystemBase {
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
         stateChooser.onChange(this::setState);
         SmartDashboard.putData("Telescop State", stateChooser);
-
-        LogManager2.addEntry("Telescope", this::getCurrentLength, this::isAtBottom, this::isCalibreated);
+        LogManager.addEntry("Telescope", ()->(new double[]{getCurrentLength()}), 3);
+        
+        LogManager.addEntry("Telescope2", ()->(new boolean[]{isAtBottom(), isCalibreated()}), 3);
     }
 
     public double getCurrentLength() {
@@ -109,6 +107,11 @@ public class Telescop extends SubsystemBase {
 
     public void setState(STATE state) {
         this.currentState = state;
+    }
+
+
+    public double getCurrentHeigt(){
+        return currentHeigt;
     }
 
     public STATE getCurrentState() {
