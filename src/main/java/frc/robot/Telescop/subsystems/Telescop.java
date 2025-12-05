@@ -85,11 +85,6 @@ public class Telescop extends SubsystemBase {
             stop();
             return;
         }
-        // if (getCurrentLength() < MIN_LENGTH || getCurrentLength() > ConstantsTelescop.MAX_LENGTH) {
-        //     LogManager.log("Telescop out of bounds");
-        //     stop();
-        //     return;
-        // }
         motor.setMotion(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
     }
 
@@ -120,6 +115,7 @@ public class Telescop extends SubsystemBase {
 
     @Override
     public void periodic() {
+
     }
 
 }

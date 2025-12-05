@@ -4,14 +4,9 @@
 
 package frc.robot.Telescop.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Telescop.ConstantsTelescop;
-import frc.robot.Telescop.ConstantsTelescop.STATE;
 import frc.robot.Telescop.subsystems.Telescop;
-
 import static frc.robot.Telescop.ConstantsTelescop.STATE;
-import static frc.robot.Telescop.ConstantsTelescop.*;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TelescopCommands extends Command {
@@ -34,15 +29,17 @@ public class TelescopCommands extends Command {
   @Override
   public void execute() {
     STATE currentState = telescop.getCurrentState();
-    if(currentState == STATE.IDLE){
-      telescop.setLengthPosition(telescop.getCurrentLength());
-    }
-    else{
-      telescop.setLengthPosition(currentState.length);
-    }
+    switch (currentState) {
+  case IDLE:
+    telescop.setMotorPosition(telescop.getCurrentLength());
+    break;
 
+  default:
+    telescop.setLengthPosition(currentState.length);
+    break;
   }
 
+}
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}

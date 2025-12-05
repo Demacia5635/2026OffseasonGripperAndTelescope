@@ -47,13 +47,13 @@ public class ConstantsTelescop {
     public static final double DIAMETER = 30;
     public static final double MAX_CURRENT = 12; 
 
-    public static final double kp = -1; //TODO: CEAKE WHAT THE PID
+    public static final double kp = -1; 
     public static final double KI = 0;
     public static final double KD = 0;
-    public static final double ks = -1; //TODO: CEAKE WHAT THE PID
-    public static final double kv = -1; //TODO: CEAKE WHAT THE PID
-    public static final double ka = -1; //TODO: CEAKE WHAT THE PID
-    public static final double kg = -1; //TODO: CEAKE WHAT THE PID
+    public static final double ks = -1; 
+    public static final double kv = -1; 
+    public static final double ka = -1; 
+    public static final double kg = -1; 
     
     
     public static final int UP_CHANNEL = -1;
