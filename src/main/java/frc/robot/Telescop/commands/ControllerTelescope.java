@@ -10,7 +10,7 @@ import frc.robot.Telescop.subsystems.Telescop;
 import static frc.robot.Telescop.ConstantsTelescop.STATE;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Controller extends Command {
+public class ControllerTelescope extends Command {
   /** Creates a new Controller. */
   
   private Telescop telescop;
@@ -18,7 +18,7 @@ public class Controller extends Command {
   private STATE state;
 
 
-  public Controller(Telescop telescop) {
+  public ControllerTelescope(Telescop telescop) {
     this.telescop = telescop;
     addRequirements(telescop);
     // Use addRequirements() here to declare subsystem dependencies.
