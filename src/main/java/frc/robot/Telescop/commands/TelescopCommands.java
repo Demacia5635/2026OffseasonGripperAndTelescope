@@ -33,7 +33,6 @@ public class TelescopCommands extends Command {
   case IDLE:
     telescop.setMotorPosition(telescop.getCurrentLength());
     break;
-
   default:
     telescop.setLengthPosition(currentState.length);
     break;

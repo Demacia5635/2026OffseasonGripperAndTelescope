@@ -15,7 +15,8 @@ public class ControllerTelescope extends Command {
   
   private Telescop telescop;
   private CommandController controller;
-  private STATE state;
+
+  private double joyX = -controller.getLeftX();
 
 
   public ControllerTelescope(Telescop telescop) {
@@ -26,13 +27,21 @@ public class ControllerTelescope extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    controller.rightButton().onTrue(null);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (controller.upButton().getAsBoolean()) telescop.setState(STATE.OPEN);
+
+    else if (controller.downButton().getAsBoolean()) telescop.setState(STATE.CLOSED);
+  
+    else if (controller.rightButton().getAsBoolean()) telescop.setState(STATE.HOME);
+  
+    else if (controller.leftButton().getAsBoolean()) telescop.setState(STATE.INTAKE);
+    
+    else{telescop.setPower(joyX * 0.5);}
+  }
 
   // Called once the command ends or is interrupted.
   @Override
