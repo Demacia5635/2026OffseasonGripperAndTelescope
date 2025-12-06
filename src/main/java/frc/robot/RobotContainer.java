@@ -3,11 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import frc.demacia.utils.Controller.CommandController;
+import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogManager2;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.subsystems.Telescop;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -32,6 +35,7 @@ public class RobotContainer {
   public static Telescop subsystemsTelescope;
   public static TelescopCommands commandTelescop;
   public static CalibrationCommands commandCalibration;
+  public static CommandController controller;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -39,6 +43,7 @@ public class RobotContainer {
     new LogManager();
     new LogManager2();
 
+    controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new Telescop();
     commandCalibration = new CalibrationCommands(subsystemsTelescope);
     subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
@@ -51,6 +56,7 @@ public class RobotContainer {
   public static boolean isComp() {
     return isComp;
   }
+
 
   public static void setIsComp(boolean isComp) {
     RobotContainer.isComp = isComp;
