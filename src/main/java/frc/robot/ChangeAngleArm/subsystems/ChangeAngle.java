@@ -23,7 +23,7 @@ public class ChangeAngle extends SubsystemBase {
     }
 
     public void setAngle(double angle) {
-        changeAngleMotor.setMotion(angle + offset);
+        changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()));
     }
 
     public double getAngle(){
