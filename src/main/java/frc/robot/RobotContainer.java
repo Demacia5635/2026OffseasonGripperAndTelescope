@@ -48,7 +48,6 @@ public class RobotContainer {
     commandCalibration = new CalibrationCommands(subsystemsTelescope);
     subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
     subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));
-
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
     configureBindings();

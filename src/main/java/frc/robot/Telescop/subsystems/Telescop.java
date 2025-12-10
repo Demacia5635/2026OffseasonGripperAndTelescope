@@ -14,7 +14,6 @@ import frc.robot.Telescop.ConstantsTelescop;
 
 public class Telescop extends SubsystemBase {
 
-    // private LimitSwitch limitSwitchUp;
     private LimitSwitch limitSwitchTelescope;
 
     private TalonMotor motor;

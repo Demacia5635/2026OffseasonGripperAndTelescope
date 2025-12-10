@@ -32,6 +32,7 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     if (controller.upButton().getAsBoolean()) telescop.setState(STATE.OPEN);
 
     else if (controller.downButton().getAsBoolean()) telescop.setState(STATE.CLOSED);
