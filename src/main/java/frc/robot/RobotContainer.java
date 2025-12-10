@@ -10,7 +10,7 @@ import frc.demacia.utils.Log.LogManager2;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.Telescop.commands.TelescopCommands;
-import frc.robot.Telescop.subsystems.Telescop;
+import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -32,7 +32,7 @@ public class RobotContainer {
 
   
   // The robot's subsystems and commands are defined here...
-  public static Telescop subsystemsTelescope;
+  public static TelescopSubSystem subsystemsTelescope;
   public static TelescopCommands commandTelescop;
   public static CalibrationCommands commandCalibration;
   public static CommandController controller;
@@ -44,7 +44,7 @@ public class RobotContainer {
     new LogManager2();
 
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
-    subsystemsTelescope = new Telescop();
+    subsystemsTelescope = new TelescopSubSystem();
     commandCalibration = new CalibrationCommands(subsystemsTelescope);
     subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
     subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));

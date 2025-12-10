@@ -12,7 +12,7 @@ import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Telescop.ConstantsTelescop;
 
-public class Telescop extends SubsystemBase {
+public class TelescopSubSystem extends SubsystemBase {
 
     private LimitSwitch limitSwitchTelescope;
 
@@ -24,7 +24,7 @@ public class Telescop extends SubsystemBase {
     private double currentHeigt;
 
     /** Creates a new telescop. */
-    public Telescop() {
+    public TelescopSubSystem() {
         limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
         motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
         calibreated = false;

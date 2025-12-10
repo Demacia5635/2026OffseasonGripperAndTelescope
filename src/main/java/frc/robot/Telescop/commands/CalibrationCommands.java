@@ -7,19 +7,19 @@ package frc.robot.Telescop.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Telescop.ConstantsTelescop.CalibrationConstants;
 import frc.robot.Telescop.ConstantsTelescop.STATE;
-import frc.robot.Telescop.subsystems.Telescop;
+import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CalibrationCommands extends Command {
   /** Creates a new CalibrationCommands. */
-  public CalibrationCommands(Telescop subSystem) {
+  public CalibrationCommands(TelescopSubSystem subSystem) {
     this.telescop = subSystem;
     addRequirements(subSystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  private Telescop telescop;
+  private TelescopSubSystem telescop;
   private Timer timer;
 
   // Called when the command is initially scheduled.

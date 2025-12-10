@@ -6,20 +6,20 @@ package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.demacia.utils.Controller.CommandController;
-import frc.robot.Telescop.subsystems.Telescop;
+import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import static frc.robot.Telescop.ConstantsTelescop.STATE;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ControllerTelescope extends Command {
   /** Creates a new Controller. */
   
-  private Telescop telescop;
+  private TelescopSubSystem telescop;
   private CommandController controller;
 
   private double joyX = controller.getLeftX();
 
 
-  public ControllerTelescope(Telescop telescop) {
+  public ControllerTelescope(TelescopSubSystem telescop) {
     this.telescop = telescop;
     addRequirements(telescop);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,7 +32,7 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+
     if (controller.upButton().getAsBoolean()) telescop.setState(STATE.OPEN);
 
     else if (controller.downButton().getAsBoolean()) telescop.setState(STATE.CLOSED);
