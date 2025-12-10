@@ -31,7 +31,6 @@ public class UltraSonicSensor extends Ultrasonic implements AnalogSensorInterfac
     }
 
     public double getRangeMeters() {
-        ping();
         return getRangeMM() / 100.0;
     }
     private void addLog() {
