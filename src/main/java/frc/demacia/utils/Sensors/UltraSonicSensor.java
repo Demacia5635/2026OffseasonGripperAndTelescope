@@ -8,8 +8,6 @@ public class UltraSonicSensor extends Ultrasonic implements AnalogSensorInterfac
         name = config.name;
         addLog();
 		LogManager.log(name + " ultrasonic initialized");
-        
-        Ultrasonic.setAutomaticMode(true);
     }
     String name;
     UltraSonicSensorConfig config;

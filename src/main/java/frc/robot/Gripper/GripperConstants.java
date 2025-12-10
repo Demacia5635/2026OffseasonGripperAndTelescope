@@ -20,7 +20,7 @@ public class GripperConstants {
     }
   }
 
-  public static final double coralDetectedDistance = 0.03;
+  public static final double coralDetectedDistance = 0.06;
   public static final double cubeDetectedDistance = 0.3;
   public static final double holdCoralVoltage = 0.01;
   public static final int echoChannel = 7;

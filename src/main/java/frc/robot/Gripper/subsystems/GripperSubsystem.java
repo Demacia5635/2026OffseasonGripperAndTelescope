@@ -4,7 +4,10 @@
 
 package frc.robot.Gripper.subsystems;
 
+import edu.wpi.first.hal.DIOJNI;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.SensorUtil;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,13 +20,13 @@ public class GripperSubsystem extends SubsystemBase {
   /** Creates a new GripperSubsystem. */
   private final TalonMotor motor;
   private final UltraSonicSensor ultrasonicSensor;
+  Ultrasonic sensor;
 
   private GRIPPER_STATE state;
 
   public GripperSubsystem() {
     motor = new TalonMotor(GripperConstants.TALON_CONFIG);
     ultrasonicSensor = new UltraSonicSensor(GripperConstants.ULTRA_SONIC_SENSOR_CONFIG);
-
     addNT();
 
     state = GRIPPER_STATE.IDLE;  
