@@ -16,7 +16,7 @@ public class ControllerTelescope extends Command {
   private Telescop telescop;
   private CommandController controller;
 
-  private double joyX = -controller.getLeftX();
+  private double joyX = controller.getLeftX();
 
 
   public ControllerTelescope(Telescop telescop) {

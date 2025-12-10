@@ -8,9 +8,9 @@ import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogManager2;
 import frc.robot.Telescop.commands.CalibrationCommands;
+import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.subsystems.Telescop;
-import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -47,6 +47,7 @@ public class RobotContainer {
     subsystemsTelescope = new Telescop();
     commandCalibration = new CalibrationCommands(subsystemsTelescope);
     subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
+    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));
 
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
