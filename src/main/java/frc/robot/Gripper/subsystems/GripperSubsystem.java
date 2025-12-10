@@ -39,6 +39,7 @@ public class GripperSubsystem extends SubsystemBase {
     stateChooser.onChange(newState -> this.state = newState);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
+    SmartDashboard.putData("Gripper", this);
   }
 
   public double getRange() {
@@ -85,6 +86,16 @@ public class GripperSubsystem extends SubsystemBase {
     return state;
   }
 
+  protected double[] testValues;
+
+  private double[] getTestValues(){
+    return testValues;
+}
+
+private void setTestValues(double[] testValues){
+    this.testValues = testValues;
+}
+
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
@@ -92,7 +103,8 @@ public class GripperSubsystem extends SubsystemBase {
     builder.addBooleanProperty("Is Cube In", () -> isCubeIn(), null);
     builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
-    builder.addDoubleProperty("Get Cuurent Ampers", () -> getCurrentAmpers(), null);
+    builder.addDoubleProperty("Get Current Ampers", () -> getCurrentAmpers(), null);
+    // builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(), testValues -> setTestValues(testValues));
   }
 
   @Override

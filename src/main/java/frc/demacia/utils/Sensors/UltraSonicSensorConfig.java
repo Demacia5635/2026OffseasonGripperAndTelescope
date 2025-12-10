@@ -1,8 +1,9 @@
 package frc.demacia.utils.Sensors;
 public class UltraSonicSensorConfig extends AnalogSensorConfig<UltraSonicSensorConfig> {
     int pingChannel;
-    public UltraSonicSensorConfig(int channel, int pingChannel, String name) {
-        super(channel, name);
+    int echoChannel;
+    public UltraSonicSensorConfig(int echoChannel, int pingChannel, String name) {
+        super(echoChannel, name);
         this.pingChannel = pingChannel;
-        }
     }
+}
