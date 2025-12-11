@@ -16,6 +16,8 @@ public class ControllerTelescope extends Command {
   private TelescopSubSystem telescop;
   private CommandController controller;
 
+  private boolean isCalibreated = TelescopSubSystem.isCalibreated();
+
   private double joyX = controller.getLeftX();
 
 
@@ -32,7 +34,7 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(telescop.isCalibreated()){
+    if(isCalibreated){
       telescop.setPower(joyX * 0.5);
     }else{
       LogManager.log("not calberate");

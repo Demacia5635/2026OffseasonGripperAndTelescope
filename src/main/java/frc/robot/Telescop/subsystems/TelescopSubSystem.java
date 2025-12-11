@@ -18,9 +18,9 @@ public class TelescopSubSystem extends SubsystemBase {
 
     private TalonMotor motor;
 
-    private boolean calibreated;
+    private static boolean calibreated;
 
-    private STATE currentState = STATE.CALIBRATE;
+    private static STATE currentState = STATE.CALIBRATE;
     private double currentHeigt;
 
     /** Creates a new telescop. */
@@ -50,7 +50,7 @@ public class TelescopSubSystem extends SubsystemBase {
         stateChooser.addOption("HOME", STATE.HOME);
         stateChooser.addOption("INTAKE", STATE.INTAKE);
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
-        stateChooser.onChange(this::setState);
+        stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
         LogManager.addEntry("Telescope", ()->(new double[]{getCurrentLength()}), 3);
         
@@ -87,21 +87,21 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setMotion(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
     }
 
-    public boolean isCalibreated() {
-        return calibreated;
-    }
-
-    public void setCalibrated() {
-        this.calibreated = true;
-    }
-
-    public boolean isAtBottom() {
-        return limitSwitchTelescope.get();
-    }
-
-    public void setState(STATE state) {
-        if(isCalibreated()){
-            this.currentState = state;
+    public static boolean isCalibreated() {
+            return calibreated;
+        }
+    
+        public void setCalibrated() {
+            calibreated = true;
+        }
+    
+        public boolean isAtBottom() {
+            return limitSwitchTelescope.get();
+        }
+    
+        public static void setState(STATE state) {
+            if(isCalibreated() == true){
+            currentState = state;
         }else{
             LogManager.log("not calibreated");
         }
@@ -113,7 +113,11 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public STATE getCurrentState() {
-        return this.currentState;
+        return currentState;
+    }
+
+    public void setStateToHome(){
+        setState(STATE.HOME);
     }
 
     @Override
