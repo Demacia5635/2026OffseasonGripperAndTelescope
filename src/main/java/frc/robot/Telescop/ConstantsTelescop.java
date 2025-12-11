@@ -8,7 +8,7 @@ public class ConstantsTelescop {
 
 
     
-    public enum STATE{
+    public static enum STATE{
         L1(0,0),
         L2(0,0),
         L3(0,0),

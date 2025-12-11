@@ -7,12 +7,14 @@ import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogManager2;
+import frc.robot.Telescop.ConstantsTelescop.STATE;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -51,6 +53,8 @@ public class RobotContainer {
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
     configureBindings();
+    
+    
   }
 
   public static boolean isComp() {
@@ -78,7 +82,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+    controller.upButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.OPEN),null));
+    controller.downButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.CLOSED),null));
+    controller.leftButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.INTAKE),null));
+    controller.rightButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.HOME),null)); 
   }
 
   /**

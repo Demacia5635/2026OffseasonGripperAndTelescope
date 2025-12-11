@@ -100,7 +100,11 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public void setState(STATE state) {
-        this.currentState = state;
+        if(isCalibreated()){
+            this.currentState = state;
+        }else{
+            LogManager.log("not calibreated");
+        }
     }
 
 

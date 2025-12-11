@@ -6,8 +6,8 @@ package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.demacia.utils.Controller.CommandController;
+import frc.demacia.utils.Log.LogManager;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
-import static frc.robot.Telescop.ConstantsTelescop.STATE;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ControllerTelescope extends Command {
@@ -32,16 +32,12 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (controller.upButton().getAsBoolean()) telescop.setState(STATE.OPEN);
-
-    else if (controller.downButton().getAsBoolean()) telescop.setState(STATE.CLOSED);
-  
-    else if (controller.rightButton().getAsBoolean()) telescop.setState(STATE.HOME);
-  
-    else if (controller.leftButton().getAsBoolean()) telescop.setState(STATE.INTAKE);
-    
-    else{telescop.setPower(joyX * 0.5);}
+    if(telescop.isCalibreated()){
+      telescop.setPower(joyX * 0.5);
+    }else{
+      LogManager.log("not calberate");
+      return;
+    }
   }
 
   // Called once the command ends or is interrupted.
