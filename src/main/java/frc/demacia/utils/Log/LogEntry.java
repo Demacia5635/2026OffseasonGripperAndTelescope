@@ -5,10 +5,6 @@
 package frc.demacia.utils.Log;
 
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
-
-import com.ctre.phoenix6.StatusCode;
-import com.ctre.phoenix6.StatusSignal;
 
 import edu.wpi.first.networktables.BooleanArrayPublisher;
 import edu.wpi.first.networktables.BooleanPublisher;
@@ -26,6 +22,9 @@ import edu.wpi.first.util.datalog.FloatArrayLogEntry;
 import edu.wpi.first.util.datalog.FloatLogEntry;
 import edu.wpi.first.util.datalog.StringArrayLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import frc.demacia.utils.Data;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.robot.RobotContainer;
 
 public class LogEntry<T> {
@@ -33,264 +32,140 @@ public class LogEntry<T> {
     private final LogManager logManager;
 
     DataLogEntry entry;
-    StatusSignal<T>[] phoenix6Status;
-    Supplier<T> getter;
-    BiConsumer<T, Long> consumer = null;
+    Data<T> data;
+    BiConsumer<T[], Long> consumer = null;
     String name;
     String metaData;
     Publisher ntPublisher;
-    T lastValue;
-    private double precision = 0;
-    private int skipedCycles2 = 0;
-    private int SkipCycle = 1;
 
     private boolean isFloat;
     private boolean isBoolean;
     private boolean isArray;
 
-    /*
-        * the log levels are this:
-        * 1 -> log if it is not in a compition
-        * 2 -> only log
-        * 3 -> log and add to network tables if not in a compition
-        * 4 -> log and add to network tables
-    */
-    public int logLevel;
+    public LogLevel logLevel;
 
     /*
         * Constructor with the suppliers and boolean if add to network table
     */
-    LogEntry(String name, StatusSignal<T>[] phoenix6Status, Supplier<T> getter, int logLevel, String metaData, boolean isFloat, boolean isBoolean, boolean isArray) {
+    LogEntry(String name, Data<T> data, LogLevel logLevel, String metaData) {
 
         logManager = LogManager.logManager;
 
         this.name = name;
         this.logLevel = logLevel;
-        this.phoenix6Status = phoenix6Status;
-        this.getter = getter;
+        this.data = data;
         this.metaData = metaData;
 
-        this.isFloat = isFloat;
-        this.isBoolean = isBoolean;
-        this.isArray = isArray;
+        this.isFloat = data.isDouble();
+        this.isBoolean = data.isBoolean();
+        this.isArray = data.isArray();
 
         this.entry = createLogEntry(logManager.log, name, metaData);
 
-        if (logLevel == 4 || (logLevel == 3 && !RobotContainer.isComp())) {
+        if (logLevel == LogLevel.LOG_AND_NT || (logLevel == LogLevel.LOG_AND_NT_NOT_IN_COMP && !RobotContainer.isComp())) {
             this.ntPublisher = createPublisher(logManager.table, name);
         } else {
             this.ntPublisher = null;
         }
     }
 
-    void log() {
-        skipedCycles2++;
-        if (skipedCycles2 < SkipCycle) {
+    public void addData(String name, Data<T> data){
+        this.name = this.name + " | " + name;
+        if (this.data.getSignals() != null){
+            this.data.expandWithSignals(data.getSignals());
+        } else {
+            this.data.expandWithSuppliers(data.getSuppliers());
+        }
+        this.isArray = this.data.isArray();
+        if (ntPublisher != null) ntPublisher.close();
+        
+        entry = createLogEntry(logManager.log, this.name, metaData);
+
+        if (logLevel == LogLevel.LOG_AND_NT || (logLevel == LogLevel.LOG_AND_NT_NOT_IN_COMP && !RobotContainer.isComp())) {
+            ntPublisher = createPublisher(logManager.table, this.name);
+        } else {
+            ntPublisher = null;
+        }
+    }
+
+    public void removeData(int nameIndex, int dataIndex, int count) {
+        int actualIndex = nameIndex - 1;
+
+        String[] parts = name.split(" \\| ");
+
+        if (actualIndex >= parts.length || actualIndex < 0) {
+            LogManager.log("removeData: nameIndex out of range: " + nameIndex + " (parts length: " + parts.length + ")", AlertType.kWarning);
             return;
         }
-        skipedCycles2 = 0;
+        StringBuilder newName = new StringBuilder();
+        for (int i = 0; i < parts.length; i++) {
+            if (i != actualIndex) {
+                if (newName.length() > 0) newName.append(" | ");
+                newName.append(parts[i]);
+            }
+        }
 
-        T newValue = null;
-        long time = 0;
-        boolean hasChanged = false;
+        name = newName.toString();
 
-        if (phoenix6Status != null) {
-            StatusCode st = StatusSignal.refreshAll(phoenix6Status);
-            if (st == StatusCode.OK) {
-                newValue = extractPhoenixValue();
-                if (newValue != null) {
-                    hasChanged = hasValueChanged(newValue);
-                    time = (long) (phoenix6Status[0].getTimestamp().getTime() * 1000);
+        if (data != null) {
+            try {
+                if (data.getSignals() != null) {
+                    data.removeSignalRange(dataIndex, count);
+                } else if (data.getSuppliers() != null) {
+                    data.removeSupplierRange(dataIndex, count);
                 }
-            } else {
-                newValue = lastValue;
-                hasChanged = false;
-            }
-        } else if (getter != null) {
-            T rawValue = getter.get();
-            if (rawValue != null) {
-                newValue = rawValue;
-                hasChanged = hasValueChanged(newValue);
-                time = 0;
+            } catch (Exception e) {
+                LogManager.log("removeData: failed to remove from data: " + e.getMessage(), AlertType.kError);
             }
         }
-        
-        if (hasChanged && newValue != null) {
-            log(newValue, time);
-            lastValue = copyValue(newValue);
+
+        if (name.isEmpty()) {
+            if (ntPublisher != null) {
+                ntPublisher.close();
+                ntPublisher = null;
+            }
+            entry = null;
+            data = null;
+            return;
+        }
+
+        if (ntPublisher != null) ntPublisher.close();
+
+        entry = createLogEntry(logManager.log, name, metaData);
+        if (logLevel == LogLevel.LOG_AND_NT || (logLevel == LogLevel.LOG_AND_NT_NOT_IN_COMP && !RobotContainer.isComp())) {
+            ntPublisher = createPublisher(logManager.table, name);
+        } else {
+            ntPublisher = null;
         }
     }
 
-    public void log(T value) {
-        log(value, 0);
-    }
+    void log() {
+        data.refresh();
+        if (!data.hasChanged()) {
+            return;
+        }
 
-    public void log(T value, long time) {
-        if (value == null) return;
-        
-        appendEntry(value, time);
+        long time = data.getTime();
+
+        appendEntry(time);
 
         if (ntPublisher != null) {
-            publishToNetworkTable(value);
+            publishToNetworkTable();
         }
         
         if (consumer != null) {
-            consumer.accept(value, time);
-        }
+            consumer.accept(data.getValueArray(), time);
+        } 
     }
 
-    
-
-    public void setPrecision(double precision) {
-        this.precision = Math.max(0, precision);
-    }
-
-    public double getPrecision() {
-        return precision;
-    }
-
-    public void setSkipCycles(int interval) {
-        SkipCycle = Math.max(1, interval);
-    }
-
-    public int getSkipCycles() {
-        return SkipCycle;
-    }
-
-    public void setConsumer(BiConsumer<T, Long> consumer) {
+    public void setConsumer(BiConsumer<T[], Long> consumer) {
         this.consumer = consumer;
     }
 
     public void removeInComp() {
-        if (logLevel == 3 && ntPublisher != null) {
+        if (logLevel == LogLevel.LOG_AND_NT_NOT_IN_COMP && ntPublisher != null) {
             ntPublisher.close();
         }
-    }
-
-    private T extractPhoenixValue() {
-        if (isArray) {
-            if (isFloat) {
-                float[] floatArray = new float[phoenix6Status.length];
-                for (int i = 0; i < phoenix6Status.length; i++) {
-                    floatArray[i] = (float)phoenix6Status[i].getValueAsDouble();
-                }
-                return (T) floatArray;
-            } else if (isBoolean) {
-                boolean[] booleanArray = new boolean[phoenix6Status.length];
-                for (int i = 0; i < phoenix6Status.length; i++) {
-                    booleanArray[i] = (Boolean)phoenix6Status[i].getValue();
-                }
-                return (T) booleanArray;
-            } else {
-                String[] stringArray = new String[phoenix6Status.length];
-                for (int i = 0; i < phoenix6Status.length; i++) {
-                    stringArray[i] = phoenix6Status[i].getValue().toString();
-                }
-                return (T) stringArray;
-            }
-        } else {
-            if (isFloat) {
-                return (T) Float.valueOf((float)phoenix6Status[0].getValueAsDouble());
-            } else if (isBoolean) {
-                return (T) phoenix6Status[0].getValue();
-            } else{
-                return (T) phoenix6Status[0].getValue().toString();
-            }
-        }
-    }
-
-    private boolean hasValueChanged(T newValue) {
-        if (lastValue == null) {
-            return true;
-        }
-
-        if (isArray){
-            if (isFloat){
-                float[] newArr = toFloatArray(newValue);
-                float[] lastArr = toFloatArray(lastValue);
-                if (newArr.length != lastArr.length) {
-                    return true;
-                }
-                for (int i = 0; i < newArr.length; i++) {
-                    if (Math.abs(newArr[i] - lastArr[i]) >= precision) {
-                        return true;
-                    }
-                }
-                return false;
-            } else if (isBoolean){
-                boolean[] newArr = (boolean[]) newValue;
-                boolean[] lastArr = (boolean[]) lastValue;
-                if (newArr.length != lastArr.length) {
-                    return true;
-                }
-                for (int i = 0; i < newArr.length; i++) {
-                    if (newArr[i] != lastArr[i]) {
-                        return true;
-                    }
-                }
-                return false;
-            } else{
-                String[] newArr = toStringArray(newValue);
-                String[] lastArr = toStringArray(lastValue);
-                if (newArr.length != lastArr.length) {
-                    return true;
-                }
-                for (int i = 0; i < newArr.length; i++) {
-                    if (!(newArr[i].toString()).equals((lastArr[i].toString()))) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        } else{
-            if (isFloat){
-                return Math.abs(((Number) newValue).floatValue() - ((Number) lastValue).floatValue()) >= precision;
-            } else if (isBoolean){
-                return !newValue.equals(lastValue);
-            } else{
-                return !(newValue.toString()).equals((lastValue.toString()));
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private T copyValue(T value) {
-        if (isArray){
-            if (isFloat) {
-                return (T) toFloatArray(value);
-            } else if (isBoolean) {
-                return (T) ((boolean[]) value).clone();
-            } else {
-                return (T) toStringArray(value);
-            }
-        }
-        else{
-            if (!(isFloat || isBoolean)) {
-                return (T) value.toString();
-            } else{
-                return value;
-            }
-        }
-    }
-
-    private float[] toFloatArray(T value){
-        int length = java.lang.reflect.Array.getLength(value);
-        float[] floatArr = new float[length];
-            for (int i = 0; i < length; i++) {
-                Object elem = java.lang.reflect.Array.get(value, i);
-                floatArr[i] = (elem != null) ? ((Number) elem).floatValue() : 0f;
-            }
-            return floatArr;
-    }
-
-    private String[] toStringArray(T value){
-        int length = java.lang.reflect.Array.getLength(value);
-            String[] stringArr = new String[length];
-            for (int i = 0; i < length; i++) {
-                Object elem = java.lang.reflect.Array.get(value, i);
-                stringArr[i] = (elem != null) ? elem.toString() : null;
-            }
-            return stringArr;
     }
 
     private DataLogEntry createLogEntry(DataLog log, String name, String metaData) {
@@ -333,43 +208,42 @@ public class LogEntry<T> {
         }
     }
 
-    private void appendEntry(T value, long time) {
+    private void appendEntry(long time) {
         if (isArray) {
             if (isFloat){
-                ((FloatArrayLogEntry) entry).append(toFloatArray(value), time);
+                ((FloatArrayLogEntry) entry).append(data.getFloatArray(), time);
             } else if (isBoolean){
-                ((BooleanArrayLogEntry) entry).append((boolean[]) value, time);
+                ((BooleanArrayLogEntry) entry).append(data.getBooleanArray(), time);
             } else{
-                ((StringArrayLogEntry) entry).append(toStringArray(value), time);
+                ((StringArrayLogEntry) entry).append(data.getStringArray(), time);
             }
         } else {
             if (isFloat){
-                ((FloatLogEntry) entry).append(((Number) value).floatValue()
-                , time);
+                ((FloatLogEntry) entry).append(data.getFloat(), time);
             } else if (isBoolean){
-                ((BooleanLogEntry) entry).append((Boolean) value, time);
+                ((BooleanLogEntry) entry).append(data.getBoolean(), time);
             } else{
-                ((StringLogEntry) entry).append(value.toString(), time);
+                ((StringLogEntry) entry).append(data.getString(), time);
             }
         }
     }
 
-    private void publishToNetworkTable(T value) {
+    private void publishToNetworkTable() {
         if (isArray) {
             if (isFloat){
-                ((FloatArrayPublisher) ntPublisher).set(toFloatArray(value));
+                ((FloatArrayPublisher) ntPublisher).set(data.getFloatArray());
             } else if (isBoolean){
-                ((BooleanArrayPublisher) ntPublisher).set((boolean[]) value);
+                ((BooleanArrayPublisher) ntPublisher).set(data.getBooleanArray());
             } else{
-                ((StringArrayPublisher) ntPublisher).set(toStringArray(value));
+                ((StringArrayPublisher) ntPublisher).set(data.getStringArray());
             }
         } else {
             if (isFloat){
-                ((FloatPublisher) ntPublisher).set(((Number) value).floatValue());
+                ((FloatPublisher) ntPublisher).set(data.getFloat());
             } else if (isBoolean){
-                ((BooleanPublisher) ntPublisher).set((Boolean) value);
+                ((BooleanPublisher) ntPublisher).set(data.getBoolean());
             } else{
-                ((StringPublisher) ntPublisher).set(value.toString());
+                ((StringPublisher) ntPublisher).set(data.getString());
             }
         }
     }

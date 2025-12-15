@@ -15,32 +15,33 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Utilities;
 import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.robot.RobotContainer;
 
-public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
+public class SparkMaxMotor extends SparkMax implements Sendable, MotorInterface {
 
-  private SparkConfig config;
+  private frc.demacia.utils.Motors.SparkMaxConfig config;
   private String name;
   private SparkMaxConfig cfg;
   private int slot = 0;
   private ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
   private ControlType controlType = ControlType.kDutyCycle;
 
-  private String lastControlMode;
+  private String lastControlMode = "";
   private double lastVelocity;
   private double lastAcceleration;
   private double setPoint = 0;
   private int lastCycleNum = 0;
   private double lastTime = 0;
 
-  public SparkMotor(SparkConfig config) {
+  public SparkMaxMotor(frc.demacia.utils.Motors.SparkMaxConfig config) {
     super(config.id, SparkLowLevel.MotorType.kBrushless);
     this.config = config;
     name = config.name;
     configMotor();
     addLog();
-    SmartDashboard.putData(name, this);
     LogManager.log(name + " motor initialized");
+    SmartDashboard.putData(name, this);
   }
 
   private void configMotor() {
@@ -57,7 +58,6 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     if (config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
     }
-    getEncoder();
     this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -73,8 +73,9 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void addLog() {
-    LogManager.addEntry(name + "/Position and Velocity and Acceleration and Voltage and Current and CloseLoopError and CloseLoopSP2", 
+    LogManager.addEntry(name + " Position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP", 
       () -> new double[] {
         getCurrentPosition(),
         getCurrentVelocity(),
@@ -83,7 +84,14 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
         getCurrentCurrent(),
         getCurrentClosedLoopError(),
         getCurrentClosedLoopSP(),
-      }, 3, "motor");
+      }).withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP).build();
+  }
+
+  public void checkElectronics() {
+      Faults faults = getFaults();
+      if (faults != null) {
+          LogManager.log(name + " have fault num: " + faults.toString(), AlertType.kError);
+      }
   }
 
   /**
@@ -135,7 +143,11 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
    *                    defaults to 0
    */
   public void setVelocity(double velocity, double feedForward) {
-    super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot, feedForward);
+    if (config.maxVelocity == 0) {
+      LogManager.log(name + ": maxVelocity not configured", AlertType.kError);
+      return;
+    }
+    getClosedLoopController().setReference(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot, feedForward);
     controlType = ControlType.kMAXMotionVelocityControl;
     lastControlMode = "Velocity";
     setPoint = velocity;
@@ -146,7 +158,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   public void setPositionVoltage(double position, double feedForward) {
-    super.closedLoopController.setReference(position, ControlType.kPosition, closedLoopSlot, feedForward);
+    getClosedLoopController().setReference(position, ControlType.kPosition, closedLoopSlot, feedForward);
     controlType = ControlType.kPosition;
     lastControlMode = "Position Voltage";
     setPoint = position;
@@ -166,7 +178,11 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   @Override
   public void setMotion(double position, double feedForward) {
-    super.closedLoopController.setReference(position, ControlType.kMAXMotionPositionControl, closedLoopSlot, feedForward);
+    if (config.maxVelocity == 0) {
+      LogManager.log(name + ": maxVelocity not configured", AlertType.kError);
+      return;
+    }
+    getClosedLoopController().setReference(position, ControlType.kMAXMotionPositionControl, closedLoopSlot, feedForward);
     controlType = ControlType.kMAXMotionPositionControl;
     lastControlMode = "Motion";
     setPoint = position;
@@ -225,7 +241,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   public void showConfigPIDFSlotCommand(int slot) {
     CloseLoopParam p = config.pid[slot];
     if (p != null) {
-      UpdateArray.show(name + " PID " + slot, CloseLoopParam.names, p.toArray(), (double[] array) -> updatePID(true));
+      UpdateArray.show(name + " PID " + slot, CloseLoopParam.PARAMETER_NAMES, p.toArray(), (double[] array) -> updatePID(true));
     }
   }
 
@@ -313,7 +329,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   public double getCurrentPosition() {
-    return encoder.getPosition();
+    return getEncoder().getPosition();
   }
 
   public double getCurrentAngle() {
@@ -326,7 +342,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
   }
 
   public double getCurrentVelocity() {
-    double velocity = encoder.getVelocity();
+    double velocity = getEncoder().getVelocity();
     if (lastCycleNum != RobotContainer.N_CYCLE) {
       lastCycleNum = RobotContainer.N_CYCLE;
       double time = Timer.getFPGATimestamp();
@@ -348,16 +364,6 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
     return getOutputCurrent();
   }
 
-  /**
-   * override the sendable of the talonFX to our costum widget in elastic
-   * <br>
-   * </br>
-   * to activate put in the code:
-   * 
-   * <pre>
-   * SmartDashboard.putData("talonMotor name", talonMotor);
-   * </pre>
-   */
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Spark Motor");
@@ -383,7 +389,7 @@ public class SparkMotor extends SparkMax implements Sendable, MotorInterface {
 
   @Override
   public void setEncoderPosition(double position) {
-    encoder.setPosition(position);
+    getEncoder().setPosition(position);
   }
 
   @Override

@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Log.LogManager;
-import frc.demacia.utils.Motors.TalonMotor;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
+import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Telescop.ConstantsTelescop;
 
@@ -16,7 +17,7 @@ public class TelescopSubSystem extends SubsystemBase {
 
     private LimitSwitch limitSwitchTelescope;
 
-    private TalonMotor motor;
+    private TalonFXMotor motor;
 
     private static boolean calibreated;
 
@@ -25,8 +26,8 @@ public class TelescopSubSystem extends SubsystemBase {
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
-        limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
-        motor = new TalonMotor(ConstantsTelescop.MOTOR_CONFIG);
+        // limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
+        motor = new TalonFXMotor(ConstantsTelescop.MOTOR_CONFIG);
         calibreated = false;
         currentHeigt = motor.getCurrentPosition();
         putData();
@@ -52,9 +53,11 @@ public class TelescopSubSystem extends SubsystemBase {
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
-        LogManager.addEntry("Telescope", ()->(new double[]{getCurrentLength()}), 3);
+        LogManager.addEntry("Telescope", ()->(new double[]{getCurrentLength()}))
+            .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
         
-        LogManager.addEntry("Telescope2", ()->(new boolean[]{isAtBottom(), isCalibreated()}), 3);
+        LogManager.addEntry("Telescope2", ()->(new boolean[]{isAtBottom(), isCalibreated()}))
+            .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
     }
 
     public double getCurrentLength() {

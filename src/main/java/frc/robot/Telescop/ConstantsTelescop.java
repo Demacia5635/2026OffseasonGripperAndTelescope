@@ -1,7 +1,8 @@
 package frc.robot.Telescop;
 
-import frc.demacia.utils.Motors.TalonConfig;
+import frc.demacia.utils.Motors.TalonFXConfig;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
+import frc.demacia.utils.Sensors.LimitSwitchConfig;
 
 public class ConstantsTelescop {    
 
@@ -58,7 +59,8 @@ public class ConstantsTelescop {
     public static final int UP_CHANNEL = -1;
     public static final int DOWN_CHANNEL = -1;
 
-    public static final TalonConfig MOTOR_CONFIG = new TalonConfig(ID, CANBUS, "telescopMotor")
+    
+    public static final TalonFXConfig MOTOR_CONFIG = new TalonFXConfig(ID, CANBUS, "telescopMotor")
     .withBrake(true)
     .withMeterMotor(GEAR_RATIO, DIAMETER)
     .withPID(kp, KI, KD, ks, kv, ka, kg)

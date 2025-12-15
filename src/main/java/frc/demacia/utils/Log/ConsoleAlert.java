@@ -1,7 +1,5 @@
 package frc.demacia.utils.Log;
 
-import static frc.demacia.utils.constants.UtilsContants.*;
-
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 
