@@ -6,8 +6,8 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
-import frc.demacia.utils.Log.LogManager2;
 import frc.robot.Telescop.ConstantsTelescop.STATE;
+import frc.robot.Telescop.commands.AviTest;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.Telescop.commands.TelescopCommands;
@@ -15,6 +15,7 @@ import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -44,16 +45,16 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     new LogManager();
-    new LogManager2();
 
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new TelescopSubSystem();
-    commandCalibration = new CalibrationCommands(subsystemsTelescope);
-    subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
-    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));
+    // commandCalibration = new CalibrationCommands(subsystemsTelescope);
+    controller.downButton().onTrue(new AviTest(subsystemsTelescope));
+    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
+    // subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
+    // subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
-    configureBindings();
     
     
   }
@@ -83,10 +84,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    controller.upButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.OPEN),new Subsystem[]{}));
-    controller.downButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.CLOSED),new Subsystem[]{}));
-    controller.leftButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.INTAKE),new Subsystem[]{}));
-    controller.rightButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.HOME),new Subsystem[]{})); 
+    // controller.upButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.OPEN),new Subsystem[]{}));
+    // controller.downButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.CLOSED),new Subsystem[]{}));
+    // controller.leftButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.INTAKE),new Subsystem[]{}));
+    // controller.rightButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.HOME),new Subsystem[]{})); 
   }
 
   /**
@@ -96,6 +97,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return new AviTest(subsystemsTelescope);
   }
 }

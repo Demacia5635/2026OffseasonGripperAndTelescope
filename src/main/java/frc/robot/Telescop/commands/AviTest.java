@@ -5,17 +5,15 @@
 package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.demacia.utils.Controller.CommandController;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ControllerTelescope extends Command {
-  CommandController controller;
+public class AviTest extends Command {
+  double wantedDistance = 0.5;
   TelescopSubSystem telescop;
-  public ControllerTelescope(CommandController controller, TelescopSubSystem telescop) {
-    this.controller = controller;
+  public AviTest(TelescopSubSystem telescop) {
     this.telescop = telescop;
-    addRequirements(telescop);
+    addRequirements();
   }
 
   // Called when the command is initially scheduled.
@@ -25,17 +23,18 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    telescop.setPower(-controller.getLeftY() * 0.3);
+    telescop.setPower(0.8);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    telescop.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return telescop.getCurrentLength() >= 0.5;
   }
 }
