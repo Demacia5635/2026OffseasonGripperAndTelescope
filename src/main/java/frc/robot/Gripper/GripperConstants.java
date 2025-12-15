@@ -23,7 +23,7 @@ public class GripperConstants {
     }
     public static final double coralDetectedDistance = 0.065;
     public static final double cubeDetectedDistance = 0.3;
-    public static final double holdCoralVoltage = 0.01;
+    public static final double holdCoralVoltage = -0.01;
     public static final int echoChannel = 7;
     public static final int pingChannel = 8;
     public static final int motor_ID = 10;
