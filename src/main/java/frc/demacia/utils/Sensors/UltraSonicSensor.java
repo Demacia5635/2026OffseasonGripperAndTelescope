@@ -58,7 +58,7 @@ public class UltraSonicSensor extends Ultrasonic implements AnalogSensorInterfac
      * @param config Configuration with ping and echo channels
      */
     public UltraSonicSensor(UltraSonicSensorConfig config) {
-        super(config.pingChannel, config.channel);
+        super(config.pingChannel, config.echoChannel);
         this.config = config;
         name = config.name;
         setAutomaticMode(true);
