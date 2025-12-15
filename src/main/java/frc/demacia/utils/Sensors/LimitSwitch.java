@@ -11,7 +11,7 @@ public class LimitSwitch extends DigitalInput implements DigitalSensorInterface{
     boolean inverted;
 
     public LimitSwitch(LimitSwitchConfig config){
-        super(config.channel);
+        super(config.echoChannel);
         this.config = config;
 		name = config.name;
         configLimitSwitch();

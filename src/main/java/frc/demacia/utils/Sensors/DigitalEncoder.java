@@ -10,7 +10,7 @@ public class DigitalEncoder extends DutyCycleEncoder implements SensorInterface{
     String name;
 
     public DigitalEncoder(DigitalEncoderConfig config){
-        super(config.channel, config.scalar, config.offset);
+        super(config.echoChannel, config.scalar, config.offset);
         this.config = config;
         name = config.name;
         configEncoder();

@@ -107,10 +107,11 @@ private void setTestValues(double[] testValues){
     builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
     builder.addDoubleProperty("Get Current Ampers", () -> getCurrentAmpers(), null);
-    // builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(), testValues -> setTestValues(testValues));
+     builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(), testValues -> setTestValues(testValues));
   }
 
   @Override
   public void periodic() {
   }
 }
+ 
