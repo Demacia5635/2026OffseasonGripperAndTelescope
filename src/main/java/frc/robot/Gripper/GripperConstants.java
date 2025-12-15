@@ -10,7 +10,8 @@ public class GripperConstants {
     IDLE(0),
     GET_CORAL(0.3),
     GET_CUBE(0.3),
-    TESTING(0),
+    
+      TESTING(0),
     EJECT(-0.3);
 
     public double duty;
@@ -27,7 +28,7 @@ public class GripperConstants {
   public static final int pingChannel = 6;
   public static final int motor_ID = 10;
   public static final Canbus CANBUS = Canbus.Rio;
-  public static final double MAX_CURRENT = 80-
+  public static final double MAX_CURRENT = 80;
   public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel,
       pingChannel, "ultrasonicConfig");
 
