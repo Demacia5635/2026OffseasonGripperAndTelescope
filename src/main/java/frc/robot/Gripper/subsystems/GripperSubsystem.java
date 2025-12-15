@@ -46,7 +46,7 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public double getRange() {
-    return ultrasonicSensor.getRangeMeters();
+    return ultrasonicSensor.getAverage();
   }
 
   public double getCurrentAmpers() {
