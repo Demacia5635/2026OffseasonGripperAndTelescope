@@ -7,7 +7,7 @@ public abstract class BaseSensorConfig<T extends BaseSensorConfig<T>> {
     public CANBus canbus;
     public String name;
 
-    public int channel;
+    public int echoChannel;
  
     public boolean isInverted;
 
@@ -15,7 +15,7 @@ public abstract class BaseSensorConfig<T extends BaseSensorConfig<T>> {
      * Constructor for DIO/Analog sensors
      */
     public BaseSensorConfig(int channel, String name){
-        this.channel = channel;
+        this.echoChannel = channel;
         this.name = name;
     }
 

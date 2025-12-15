@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
         private final OpticalSensorConfig config;
     
         public OpticalSensor(OpticalSensorConfig config) {
-            super(config.channel);
+            super(config.echoChannel);
             this.config = config;
         }
     

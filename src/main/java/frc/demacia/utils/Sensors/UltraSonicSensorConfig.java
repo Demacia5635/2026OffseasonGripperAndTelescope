@@ -34,3 +34,5 @@ public class UltraSonicSensorConfig extends AnalogSensorConfig<UltraSonicSensorC
         this.pingChannel = pingChannel;
     }
 }
+    }
+}

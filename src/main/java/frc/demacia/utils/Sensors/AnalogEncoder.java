@@ -8,7 +8,7 @@ public class AnalogEncoder extends edu.wpi.first.wpilibj.AnalogEncoder implement
     String name;
 
     public AnalogEncoder(AnalogEncoderConfig config){
-        super(config.channel, config.fullRange, config.offset);
+        super(config.echoChannel, config.fullRange, config.offset);
         this.config = config;
         name = config.name;
         configEncoder();

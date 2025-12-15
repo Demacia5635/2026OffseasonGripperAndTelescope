@@ -32,50 +32,46 @@ public class GripperCommand extends Command {
   @Override
   public void execute() {
     switch (gripperSubsystem.getState()) {
-        case GET_CORAL:
-          if (gripperSubsystem.isCoralIn()) {
-            gripperSubsystem.setVoltage(GripperConstants.holdCoralVoltage);
-          }
-          else{
-            gripperSubsystem.setDuty(GRIPPER_STATE.GET_CORAL.duty);
-          }
-            break;
+      case GET_CORAL:
+        if (gripperSubsystem.isCoralIn()) {
+          gripperSubsystem.setVoltage(GripperConstants.holdCoralVoltage);
+        } else {
+          gripperSubsystem.setDuty(GRIPPER_STATE.GET_CORAL.duty);
+        }
+        break;
 
-        case GET_CUBE:
-          if(gripperSubsystem.isCubeIn()){
-              gripperSubsystem.stop();
-              gripperSubsystem.setState(GRIPPER_STATE.IDLE);
-            }
-          else{
-            gripperSubsystem.setDuty(GRIPPER_STATE.GET_CUBE.duty);
-          }        
-            break;
-        
-        case EJECT: 
-          if (gripperSubsystem.hasGamePiece()) {
-            gripperSubsystem.setDuty(GRIPPER_STATE.EJECT.duty);
-          }
-            else{
-              gripperSubsystem.stop();
-              gripperSubsystem.setState(GRIPPER_STATE.IDLE);
-            }
-            break;
-        
-            
-        case TESTING:
-            gripperSubsystem.setDuty(gripperSubsystem.getState().duty);
-            break;
+      case GET_CUBE:
+        if (gripperSubsystem.isCubeIn()) {
+          gripperSubsystem.stop();
+          gripperSubsystem.setState(GRIPPER_STATE.IDLE);
+        } else {
+          gripperSubsystem.setDuty(GRIPPER_STATE.GET_CUBE.duty);
+        }
+        break;
 
-        case IDLE:
-            gripperSubsystem.stop();
-            break;
+      case EJECT:
+        if (gripperSubsystem.hasGamePiece()) {
+          gripperSubsystem.setDuty(GRIPPER_STATE.EJECT.duty);
+        } else {
+          gripperSubsystem.stop();
+          gripperSubsystem.setState(GRIPPER_STATE.IDLE);
+        }
+        break;
 
-        default:
-            gripperSubsystem.setState(GRIPPER_STATE.IDLE);
-            gripperSubsystem.stop();
-            break;
+      case TESTING:
+        gripperSubsystem.setDuty(gripperSubsystem.getTestValue());
+        break;
+
+      case IDLE:
+        gripperSubsystem.stop();
+        break;
+
+      default:
+        gripperSubsystem.setState(GRIPPER_STATE.IDLE);
+        gripperSubsystem.stop();
+        break;
     }
-}
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -89,5 +85,3 @@ public class GripperCommand extends Command {
     return false;
   }
 }
-
-  

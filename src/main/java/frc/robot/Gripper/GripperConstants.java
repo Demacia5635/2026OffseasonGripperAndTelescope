@@ -3,6 +3,7 @@ package frc.robot.Gripper;
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
+
 public class GripperConstants {
     
     public enum GRIPPER_STATE{
