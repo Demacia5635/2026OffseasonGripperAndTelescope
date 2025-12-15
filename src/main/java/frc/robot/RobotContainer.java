@@ -7,6 +7,7 @@ import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
+import frc.robot.Gripper.commands.GripperCommand;
 import frc.robot.Gripper.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -42,6 +43,7 @@ public class RobotContainer {
 
     Ultrasonic.setAutomaticMode(true);
     gripperSubsystem = new GripperSubsystem();
+    gripperSubsystem.setDefaultCommand(new GripperCommand(gripperSubsystem));
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
     configureBindings();
@@ -59,8 +61,7 @@ public class RobotContainer {
     }
   }
 
-  // private final CommandController controller =
-  //   new CommandController(0, ControllerType.kXbox);
+  private final CommandController controller = new CommandController(0, ControllerType.kPS5);
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -72,10 +73,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
-    // controller.rightBumper().onTrue(new InstantCommand(() -> {
-    // gripperSubsystem.setState(GRIPPER_STATE.GET_CORAL);
-    // }));
+    controller.rightBumper().onTrue(new InstantCommand(() -> {
+    gripperSubsystem.setState(GRIPPER_STATE.GET_CORAL);
+    }));
 
   }
 

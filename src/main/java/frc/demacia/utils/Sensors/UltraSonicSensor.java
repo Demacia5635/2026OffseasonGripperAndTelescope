@@ -44,7 +44,7 @@ public class UltraSonicSensor extends Ultrasonic implements AnalogSensorInterfac
         if (samples.size() > average_Window) {
             sum -= samples.remove();
         }
-
+        if(samples.size() == 0) return current;
         return sum / samples.size();
     }
 

@@ -22,14 +22,15 @@ public class GripperSubsystem extends SubsystemBase {
   private final UltraSonicSensor ultrasonicSensor;
   Ultrasonic sensor;
 
-  private GRIPPER_STATE state;
+  private GRIPPER_STATE state = GRIPPER_STATE.IDLE;
 
   public GripperSubsystem() {
     motor = new TalonMotor(GripperConstants.TALON_CONFIG);
     ultrasonicSensor = new UltraSonicSensor(GripperConstants.ULTRA_SONIC_SENSOR_CONFIG);
     addNT();
 
-    state = GRIPPER_STATE.IDLE;  
+    SmartDashboard.putData("Gripper", this);
+
   }
 
   public void addNT() {
@@ -42,7 +43,6 @@ public class GripperSubsystem extends SubsystemBase {
     stateChooser.onChange(newState -> this.state = newState);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
-    SmartDashboard.putData("Gripper", this);
   }
 
   public double getRange() {
@@ -91,27 +91,26 @@ public class GripperSubsystem extends SubsystemBase {
 
   protected double[] testValues;
 
-  private double[] getTestValues(){
+  private double[] getTestValues() {
     return testValues;
-}
+  }
 
-private void setTestValues(double[] testValues){
+  private void setTestValues(double[] testValues) {
     this.testValues = testValues;
-}
+  }
 
   @Override
   public void initSendable(SendableBuilder builder) {
-    super.initSendable(builder);
     builder.addBooleanProperty("Is Coral In", () -> isCoralIn(), null);
     builder.addBooleanProperty("Is Cube In", () -> isCubeIn(), null);
     builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
     builder.addDoubleProperty("Get Current Ampers", () -> getCurrentAmpers(), null);
-     builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(), testValues -> setTestValues(testValues));
+    builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(),
+        testValues -> setTestValues(testValues));
   }
 
   @Override
   public void periodic() {
   }
 }
- 
