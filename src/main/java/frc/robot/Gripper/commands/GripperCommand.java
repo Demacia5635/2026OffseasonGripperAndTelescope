@@ -59,7 +59,7 @@ public class GripperCommand extends Command {
         break;
 
       case TESTING:
-        gripperSubsystem.setDuty(gripperSubsystem.getState().duty);
+        gripperSubsystem.setDuty(gripperSubsystem.getTestValue());
         break;
 
       case IDLE:

@@ -22,9 +22,12 @@ public class GripperSubsystem extends SubsystemBase {
   private final UltraSonicSensor ultrasonicSensor;
   Ultrasonic sensor;
 
+  private double testValues = 0;
+
   private GRIPPER_STATE state = GRIPPER_STATE.IDLE;
 
   public GripperSubsystem() {
+
     motor = new TalonMotor(GripperConstants.TALON_CONFIG);
     ultrasonicSensor = new UltraSonicSensor(GripperConstants.ULTRA_SONIC_SENSOR_CONFIG);
     addNT();
@@ -46,7 +49,7 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public double getRange() {
-    return ultrasonicSensor.getAverage();
+    return ultrasonicSensor.getRangeMeters();
   }
 
   public double getCurrentAmpers() {
@@ -89,13 +92,11 @@ public class GripperSubsystem extends SubsystemBase {
     return state;
   }
 
-  protected double[] testValues;
-
-  private double[] getTestValues() {
+  public double getTestValue() {
     return testValues;
   }
 
-  private void setTestValues(double[] testValues) {
+  private void setTestValues(double testValues) {
     this.testValues = testValues;
   }
 
@@ -106,7 +107,7 @@ public class GripperSubsystem extends SubsystemBase {
     builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
     builder.addDoubleProperty("Get Current Ampers", () -> getCurrentAmpers(), null);
-    builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(),
+    builder.addDoubleProperty(getName() + "/Test Values", () -> getTestValue(),
         testValues -> setTestValues(testValues));
   }
 

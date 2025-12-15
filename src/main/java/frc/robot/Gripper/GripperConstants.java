@@ -24,11 +24,10 @@ public class GripperConstants {
   public static final double cubeDetectedDistance = 0.3;
   public static final double holdCoralVoltage = 0.01;
   public static final int echoChannel = 7;
-  public static final int pingChannel = 8;
+  public static final int pingChannel = 6;
   public static final int motor_ID = 10;
   public static final Canbus CANBUS = Canbus.Rio;
-  public static final double MAX_CURRENT = 80;
-
+  public static final double MAX_CURRENT = 80-
   public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel,
       pingChannel, "ultrasonicConfig");
 

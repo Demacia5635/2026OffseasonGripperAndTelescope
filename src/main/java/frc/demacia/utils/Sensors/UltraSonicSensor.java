@@ -32,20 +32,31 @@ public class UltraSonicSensor extends Ultrasonic implements AnalogSensorInterfac
     }
 
     
-    private static final int average_Window = 5;
+    private final int average_Window = 5;
     private final Queue<Double> samples = new ArrayDeque<>();
-    private double sum = 0;
 
     public double getAverage() {
         double current = getRangeMeters();
-        samples.add(current);
-        sum += current;
-
-        if (samples.size() > average_Window) {
-            sum -= samples.remove();
+        
+        if(samples.size() < 5) {
+            samples.add(current);
+            return current;
         }
-        if(samples.size() == 0) return current;
-        return sum / samples.size();
+
+        samples.remove();
+        samples.add(current);
+        return calcAvg();
+
+    }
+    private double calcAvg(){
+        double sum = 0;
+        int c =0;
+        for(double val : samples){
+            sum+=val;
+            c++;
+        }
+        return c != 0 ? sum / c : 0;
+
     }
 
     private void addLog() {
