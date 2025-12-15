@@ -7,6 +7,7 @@ import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
+import frc.robot.Gripper.commands.GripperCommand;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Gripper.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,12 +24,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   public static GripperSubsystem gripperSubsystem;
+  public GripperCommand gripperCommand;
 
   public static boolean isComp = DriverStation.isFMSAttached();
   private static boolean hasRemovedFromLog = false;
 
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
+
+  private final CommandController controller;
 
   // The robot's subsystems and commands are defined here...
 
@@ -39,9 +43,9 @@ public class RobotContainer {
   public RobotContainer() {
     new LogManager();
 
-
+    controller = new CommandController(0, ControllerType.kXbox);
     gripperSubsystem = new GripperSubsystem();
-
+    gripperCommand = new GripperCommand(gripperSubsystem);
 
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
@@ -60,9 +64,6 @@ public class RobotContainer {
     }
   }
 
-  private final CommandController controller =
-    new CommandController(0, ControllerType.kXbox);
-
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -73,7 +74,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+    gripperSubsystem.setDefaultCommand(gripperCommand);
     controller.rightBumper().onTrue(new InstantCommand(() -> {
     gripperSubsystem.setState(GRIPPER_STATE.GET_CORAL);
 }));
