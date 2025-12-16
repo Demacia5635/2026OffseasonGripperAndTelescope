@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonMotor;
 import frc.demacia.utils.Sensors.UltraSonicSensor;
+import frc.robot.Gripper.GripperConstants.CubeIntakeState;
 import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
 import frc.robot.Gripper.GripperConstants;
 
@@ -25,6 +26,7 @@ public class GripperSubsystem extends SubsystemBase {
   private double testValues = 0;
 
   private GRIPPER_STATE state = GRIPPER_STATE.IDLE;
+  private CubeIntakeState intakeState = CubeIntakeState.DONE;
 
   public GripperSubsystem() {
 
@@ -41,8 +43,8 @@ public class GripperSubsystem extends SubsystemBase {
     stateChooser.addOption("Get Coral", GRIPPER_STATE.GET_CORAL);
     stateChooser.addOption("GET CUBE", GRIPPER_STATE.GET_CUBE);
     stateChooser.addOption("EJECT", GRIPPER_STATE.EJECT);
-    stateChooser.addOption("IDLE", GRIPPER_STATE.IDLE);
     stateChooser.addOption("TESTING", GRIPPER_STATE.TESTING);
+    stateChooser.setDefaultOption("IDLE", GRIPPER_STATE.IDLE);
     stateChooser.onChange(newState -> this.state = newState);
     SmartDashboard.putData(getName() + "Gripper State Chooser", stateChooser);
 
@@ -50,6 +52,10 @@ public class GripperSubsystem extends SubsystemBase {
 
   public double getRange() {
     return ultrasonicSensor.getRangeMeters();
+  }
+
+  public double getAvgRange() {
+    return ultrasonicSensor.getAverage();
   }
 
   public double getCurrentAmpers() {
@@ -61,11 +67,15 @@ public class GripperSubsystem extends SubsystemBase {
   }
 
   public boolean isCubeIn() {
-    return !isCoralIn() && getRange() <= GripperConstants.cubeDetectedDistance;
+    return getRange() <= GripperConstants.cubeDetectedDistance;
   }
 
   public boolean hasGamePiece() {
     return isCubeIn() || isCoralIn();
+  }
+
+  public boolean isOut() {
+    return getRange()<GripperConstants.cubeDetectedDistance + GripperConstants.ejectOffset;
   }
 
   public void setDuty(double power) {
@@ -92,6 +102,16 @@ public class GripperSubsystem extends SubsystemBase {
     return state;
   }
 
+  public CubeIntakeState getIntakeState() {
+    return intakeState;
+  }
+  public void setIntakeState(CubeIntakeState intakeState) {
+    if(this.state != GRIPPER_STATE.GET_CUBE) {
+      return;
+    }
+    this.intakeState = intakeState;
+  }
+
   public double getTestValue() {
     return testValues;
   }
@@ -106,6 +126,8 @@ public class GripperSubsystem extends SubsystemBase {
     builder.addBooleanProperty("Is Cube In", () -> isCubeIn(), null);
     builder.addBooleanProperty("Has Game Piece", () -> hasGamePiece(), null);
     builder.addDoubleProperty("Get Range", () -> getRange(), null);
+    builder.addDoubleProperty("Get Avg Range", () -> getAvgRange(), null);
+    builder.addStringProperty("intake_cube_state", () -> getIntakeState().name(), null);
     builder.addDoubleProperty("Get Current Ampers", () -> getCurrentAmpers(), null);
     builder.addDoubleProperty(getName() + "/Test Values", () -> getTestValue(),
         testValues -> setTestValues(testValues));
@@ -113,5 +135,6 @@ public class GripperSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+
   }
 }

@@ -45,7 +45,7 @@ public class RobotContainer {
   public RobotContainer() {
     new LogManager();
 
-    controller = new CommandController(0, ControllerType.kXbox);
+    controller = new CommandController(0, ControllerType.kPS5);
     gripperSubsystem = new GripperSubsystem();
     gripperCommand = new GripperCommand(gripperSubsystem);
 
@@ -77,7 +77,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     gripperSubsystem.setDefaultCommand(gripperCommand);
-    controller.rightBumper().onTrue(new InstantCommand(() -> {
+    controller.getTouchPad().onTrue(new InstantCommand(() -> {
     gripperSubsystem.setState(GRIPPER_STATE.GET_CORAL);
     }));
 

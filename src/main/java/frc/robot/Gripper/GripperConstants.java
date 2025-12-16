@@ -8,10 +8,10 @@ public class GripperConstants {
     
     public enum GRIPPER_STATE{
         IDLE(0),
-        GET_CORAL(-0.5),
-        GET_CUBE(-0.5),
+        GET_CORAL(-0.7),
+        GET_CUBE(-0.6),
         TESTING(0),
-        EJECT(0.5);
+        EJECT(0.9);
 
 
       
@@ -21,9 +21,16 @@ public class GripperConstants {
           this.duty = duty;
         } 
     }
+
+    public enum CubeIntakeState {
+      FULL_INTAKE,
+      ALIGN,
+      DONE
+    }
     public static final double coralDetectedDistance = 0.065;
-    public static final double cubeDetectedDistance = 0.3;
-    public static final double holdCoralVoltage = -0.01;
+    public static final double cubeDetectedDistance = 0.17;
+    public static final double ejectOffset = 0.10;
+    public static final double holdCoralVoltage = -0.04;
     public static final int echoChannel = 7;
     public static final int pingChannel = 8;
     public static final int motor_ID = 10;
@@ -31,12 +38,12 @@ public class GripperConstants {
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 0;
     public static final double MAX_JERK = 0;
-    public static final double MAX_CURRENT = 80;    
+    public static final double MAX_CURRENT = 40;    
 
     public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel, pingChannel, "sonic");
 
     public static final TalonConfig TALON_CONFIG = new TalonConfig(motor_ID, CANBUS, "motor")
-    .withBrake(false)
+    .withBrake(true)
     .withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)
     .withCurrent(MAX_CURRENT);
 
