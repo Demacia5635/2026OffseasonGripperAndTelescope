@@ -104,15 +104,13 @@ public class GripperCommand extends Command {
     double currentAmper = gripperSubsystem.getCurrentAmpers();
     LogManager.log("CUR AMPS" + currentAmper);
 
-    // Increment counter if current exceeds threshold
     if (currentAmper > CURRENT_THRESHOLD) {
       currentSpikeCounter++;
     } else {
-      currentSpikeCounter = 0; // Reset counter if current drops below threshold
+      currentSpikeCounter = 0; 
     }
 
-    // Check if current has been above threshold for 0.1 seconds (assuming 20ms cycles)
-    if (currentSpikeCounter >= 3) { // 0.1 seconds / 0.02 seconds per cycle = 5 cycles
+    if (currentSpikeCounter >= 3) { 
       gripperSubsystem.setState(GRIPPER_STATE.IDLE);
       gripperSubsystem.stop();
     } else {
