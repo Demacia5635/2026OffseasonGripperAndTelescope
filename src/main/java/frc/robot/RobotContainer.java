@@ -6,6 +6,7 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.chassis.Chassis;
 import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
 import frc.robot.Gripper.commands.GripperCommand;
 import frc.robot.Constants.OperatorConstants;
@@ -17,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.testChassis.Constants;
+import frc.robot.testChassis.commands.DriveCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -27,6 +30,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   public static GripperSubsystem gripperSubsystem;
   public GripperCommand gripperCommand;
+
+  public static CommandController driverController;
+  Chassis chassis;
 
   public static boolean isComp = DriverStation.isFMSAttached();
   private static boolean hasRemovedFromLog = false;
@@ -45,9 +51,13 @@ public class RobotContainer {
   public RobotContainer() {
     new LogManager();
 
-    controller = new CommandController(0, ControllerType.kPS5);
     gripperSubsystem = new GripperSubsystem();
     gripperCommand = new GripperCommand(gripperSubsystem);
+    
+    
+    this.chassis = new Chassis(Constants.CHASSIS_CONFIG);
+
+    controller = new CommandController(0, ControllerType.kPS5);
 
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
@@ -76,6 +86,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    chassis.setDefaultCommand(new DriveCommand(chassis, controller));
     gripperSubsystem.setDefaultCommand(gripperCommand);
     controller.getTouchPad().onTrue(new InstantCommand(() -> {
     gripperSubsystem.setState(GRIPPER_STATE.GET_CORAL);

@@ -1,15 +1,9 @@
 package frc.demacia.utils.chassis;
 
-import com.ctre.phoenix6.CANBus;
-
 import frc.demacia.utils.Motors.TalonConfig;
 import frc.demacia.utils.Sensors.CancoderConfig;
 
-/**
- * Abstract base class for motor configurations
- * Contains common fields and methods shared between different motor controller types
- */
-public abstract class SwerveModuleConfig {
+public class SwerveModuleConfig {
 
     public String name;             // Name of the motor - used for logging
 

@@ -28,12 +28,12 @@ public class GripperConstants {
       DONE
     }
     public static final double coralDetectedDistance = 0.065;
-    public static final double cubeDetectedDistance = 0.17;
+    public static final double cubeDetectedDistance = 0.13;
     public static final double ejectOffset = 0.10;
     public static final double holdCoralVoltage = -0.04;
     public static final int echoChannel = 7;
     public static final int pingChannel = 8;
-    public static final int motor_ID = 10;
+    public static final int motor_ID = 21;
     public static final Canbus CANBUS = Canbus.Rio;
     public static final double MAX_VELOCITY = 3;
     public static final double MAX_ACCELERATION = 0;
