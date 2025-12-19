@@ -9,32 +9,34 @@ import frc.robot.Telescop.subsystems.TelescopSubSystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AviTest extends Command {
-  double wantedDistance = 0.5;
+  double wantedDistance = 0.3;
   TelescopSubSystem telescop;
   public AviTest(TelescopSubSystem telescop) {
     this.telescop = telescop;
-    addRequirements();
+    addRequirements(telescop);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    telescop.setCalibrated();
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    telescop.setPower(0.8);
+    telescop.testPosition(wantedDistance);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    telescop.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return telescop.getCurrentLength() >= 0.5;
+    return false;
   }
 }

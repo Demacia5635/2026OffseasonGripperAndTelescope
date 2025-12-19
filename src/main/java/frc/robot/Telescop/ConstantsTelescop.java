@@ -33,12 +33,12 @@ public class ConstantsTelescop {
 
 
 
-    public static final double MAX_LENGTH = 0;
+    public static final double MAX_LENGTH = 0.7;
     public static final double MIN_LENGTH = 0;
 
-    public static final double MAX_VELOCITY = 3;
-    public static final double MAX_ACCELERATION = 0;
-    public static final double MAX_JERK = 0;
+    public static final double MAX_VELOCITY = 1;
+    public static final double MAX_ACCELERATION = 2;
+    public static final double MAX_JERK = 4;
     
 
     public static final int ID = 40;
@@ -47,15 +47,15 @@ public class ConstantsTelescop {
     public static final double DIAMETER = 1;
     public static final double MAX_CURRENT = 40; 
 
-    public static final double kp = -1; 
+    public static final double kp = 1; 
     public static final double KI = 0;
     public static final double KD = 0;
-    public static final double ks = -1; 
-    public static final double kv = -1; 
-    public static final double ka = -1; 
-    public static final double kg = -1; 
+    public static final double ks = 0.15; 
+    public static final double kv = 12; 
+    public static final double ka = 0.4; 
+    public static final double kg = 0; 
     
-    
+
     public static final int UP_CHANNEL = -1;
     public static final int DOWN_CHANNEL = -1;
 

@@ -76,6 +76,9 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setDuty(power);
     }
 
+    public void testPosition(double pos){
+        motor.setPositionVoltage(pos);
+    }
     public void setLengthPosition(double wantedLength) {
         if (!isCalibreated()) {
             LogManager.log("Telescop not calibrated");
@@ -91,7 +94,8 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public static boolean isCalibreated() {
-            return calibreated;
+        return true;
+            // return calibreated;
         }
     
         public void setCalibrated() {
@@ -99,7 +103,8 @@ public class TelescopSubSystem extends SubsystemBase {
         }
     
         public boolean isAtBottom() {
-            return limitSwitchTelescope.get();
+            return false;
+            // return limitSwitchTelescope.get();
         }
     
         public static void setState(STATE state) {

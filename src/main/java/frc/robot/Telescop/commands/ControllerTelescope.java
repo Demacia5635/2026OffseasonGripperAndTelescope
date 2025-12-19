@@ -4,6 +4,8 @@
 
 package frc.robot.Telescop.commands;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.demacia.utils.Controller.CommandController;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
@@ -15,6 +17,7 @@ public class ControllerTelescope extends Command {
   public ControllerTelescope(CommandController controller, TelescopSubSystem telescop) {
     this.controller = controller;
     this.telescop = telescop;
+    SmartDashboard.putData(this);
     addRequirements(telescop);
   }
 
@@ -33,6 +36,10 @@ public class ControllerTelescope extends Command {
   public void end(boolean interrupted) {
   }
 
+  @Override
+  public void initSendable(SendableBuilder builder) {
+      builder.addDoubleProperty("controller", ()->-controller.getLeftY() * 0.3, null);
+  }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
