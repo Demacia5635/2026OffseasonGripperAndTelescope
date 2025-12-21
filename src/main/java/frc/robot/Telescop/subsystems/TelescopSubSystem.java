@@ -28,7 +28,7 @@ public class TelescopSubSystem extends SubsystemBase {
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
-        // limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.CONFIG_DOWN);
+        limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.SENSOR_CONFIG);
         motor = new TalonFXMotor(ConstantsTelescop.MOTOR_CONFIG);
         calibreated = false;
         currentHeigt = motor.getCurrentPosition();
@@ -36,14 +36,13 @@ public class TelescopSubSystem extends SubsystemBase {
         SmartDashboard.putData("Telescop", this);
     }
 
-
     @Override
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
+        builder.addBooleanProperty("Sensor", this::getSensor, null);
         builder.addDoubleProperty("Length", this::getCurrentLength, null);
         builder.addStringProperty("State", () -> currentState.name(), null);
         builder.addDoubleProperty("Test Length", () -> STATE.TESTING.length, (l) -> STATE.TESTING.length = l);
-
 
     }
 
@@ -58,12 +57,11 @@ public class TelescopSubSystem extends SubsystemBase {
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
-        LogManager.addEntry("Telescope", ()->(new double[]{getCurrentLength()}))
-            .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
-        
-        LogManager.addEntry("Telescope2", ()->(new boolean[]{isAtBottom(), isCalibreated()}))
-            .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
+        LogManager.addEntry("Telescope", () -> (new double[] { getCurrentLength() }))
+                .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
 
+        LogManager.addEntry("Telescope2", () -> (new boolean[] { isAtBottom(), isCalibreated() }))
+                .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
 
         motor.showConfigMotionVelocitiesCommand();
         motor.showConfigPIDFSlotCommand(0);
@@ -89,9 +87,10 @@ public class TelescopSubSystem extends SubsystemBase {
         return motor.getCurrentVelocity();
     }
 
-    public void testPosition(double pos){
-        motor.setMotion(pos);
+    public void testPosition(double pos) {
+        motor.setPositionVoltage(pos);
     }
+
     public void setLengthPosition(double wantedLength) {
         if (!isCalibreated()) {
             LogManager.log("Telescop not calibrated");
@@ -100,44 +99,46 @@ public class TelescopSubSystem extends SubsystemBase {
         }
         if (isAtBottom()) {
             LogManager.log("Telescop at limit switch");
+            wantedLength = 0.03;
+
+        }
+        if (Math.abs(wantedLength - getCurrentLength()) <= 0.01) {
             stop();
             return;
         }
-        motor.setMotion(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
+        motor.setPositionVoltageWithFeedForward(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
     }
 
     public static boolean isCalibreated() {
         return true;
-            // return calibreated;
-        }
-    
-        public void setCalibrated() {
-            calibreated = true;
-        }
-    
-        public boolean isAtBottom() {
-            return false;
-            // return limitSwitchTelescope.get();
-        }
-    
-        public static void setState(STATE state) {
-            if(isCalibreated() == true){
+        // return calibreated;
+    }
+
+    public void setCalibrated() {
+        calibreated = true;
+    }
+
+    public boolean isAtBottom() {
+        return limitSwitchTelescope.get();
+    }
+
+    public static void setState(STATE state) {
+        if (isCalibreated()) {
             currentState = state;
-        }else{
+        } else {
             LogManager.log("not calibreated");
         }
     }
 
-
-    public double getCurrentHeigt(){
-        return currentHeigt;
+    public boolean getSensor() {
+        return limitSwitchTelescope.get();
     }
 
     public STATE getCurrentState() {
         return currentState;
     }
 
-    public void setStateToHome(){
+    public void setStateToHome() {
         setState(STATE.HOME);
     }
 

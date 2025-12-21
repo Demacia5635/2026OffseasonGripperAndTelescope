@@ -46,19 +46,16 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     new LogManager();
-
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new TelescopSubSystem();
-    // commandCalibration = new CalibrationCommands(subsystemsTelescope);
+    commandCalibration = new CalibrationCommands(subsystemsTelescope);
     controller.downButton().onTrue(new AviTest(subsystemsTelescope));
-    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
-    
-    // subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
+    subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
+    controller.upButton().onTrue(commandCalibration);
+    ///subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
     // subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
-    
-    
   }
 
   public static boolean isComp() {

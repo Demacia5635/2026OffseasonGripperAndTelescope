@@ -11,7 +11,7 @@ import frc.robot.Telescop.subsystems.TelescopSubSystem;
 public class AviTest extends Command {
 
   TelescopSubSystem telescop;
-  double d = 0.65;
+  double d = 0.3;
   public AviTest(TelescopSubSystem telescop) {
     this.telescop = telescop;
     addRequirements(telescop);

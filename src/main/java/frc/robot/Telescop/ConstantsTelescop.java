@@ -6,12 +6,15 @@ import frc.demacia.utils.Sensors.LimitSwitchConfig;
 
 public class ConstantsTelescop {
 
+
+    public static final LimitSwitchConfig SENSOR_CONFIG = new LimitSwitchConfig(9, "Telescop Sensor").withInvert(true);
+
     public static enum STATE {
-        L1(0, 0),
-        L2(0, 0),
-        L3(0, 0),
-        L4(0, 0),
-        HOME(0, 0),
+        L1(0, 0.1),
+        L2(0, 0.2),
+        L3(0, 0.4),
+        L4(0, 0.7),
+        HOME(0, 0.05),
         TESTING(-1, -1),
         IDLE(-1, -1),
         INTAKE(0, 0),
@@ -41,7 +44,7 @@ public class ConstantsTelescop {
     public static final double DIAMETER = 1;
     public static final double MAX_CURRENT = 40;
 
-    public static final double kp = 1;
+    public static final double kp = 0;
     public static final double ki = 0;
     public static final double kd = 0;
     public static final double ks = 0.5;
@@ -62,8 +65,8 @@ public class ConstantsTelescop {
     public static class CalibrationConstants {
         public static final double TIME_TO_MOVE_CALIBRATION = 0.5; // seconds
         public static final double POSITION_AT_BOTTOM_SWITCH = 0;
-        public static final double POWER_TO_TOP = 0;
-        public static final double POWER_TO_BOTTOM = 0;
+        public static final double POWER_TO_TOP = 0.2;
+        public static final double POWER_TO_BOTTOM = -0.1;
 
     }
 }

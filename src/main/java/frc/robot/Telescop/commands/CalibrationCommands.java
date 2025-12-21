@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class CalibrationCommands extends Command {
   /** Creates a new CalibrationCommands. */
   public CalibrationCommands(TelescopSubSystem subSystem) {
+    timer = new Timer();
     this.telescop = subSystem;
     addRequirements(subSystem);
     // Use addRequirements() here to declare subsystem dependencies.

@@ -1,5 +1,8 @@
 package frc.demacia.utils.Motors;
 
+import static frc.robot.Telescop.ConstantsTelescop.ks;
+import static frc.robot.Telescop.ConstantsTelescop.kv;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -272,6 +275,9 @@ public class TalonFXMotor extends TalonFX implements MotorInterface {
 
     public void setPositionVoltage(double position) {
         setPositionVoltage(position, 0);
+    }
+    public void setPositionVoltageWithFeedForward(double position){
+        setPositionVoltage(position, (ks*Math.signum(getCurrentVelocity())) + (kv * getCurrentVelocity()));
     }
 
     public void setVelocityWithFeedForward(double velocity) {
