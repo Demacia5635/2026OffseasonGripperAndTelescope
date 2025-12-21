@@ -6,12 +6,14 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Telescop.ConstantsTelescop;
+import frc.robot.Telescop.ConstantsTelescop.STATE;
 
 public class TelescopSubSystem extends SubsystemBase {
 
@@ -31,6 +33,7 @@ public class TelescopSubSystem extends SubsystemBase {
         calibreated = false;
         currentHeigt = motor.getCurrentPosition();
         putData();
+        SmartDashboard.putData("Telescop", this);
     }
 
 
@@ -40,6 +43,8 @@ public class TelescopSubSystem extends SubsystemBase {
         builder.addDoubleProperty("Length", this::getCurrentLength, null);
         builder.addStringProperty("State", () -> currentState.name(), null);
         builder.addDoubleProperty("Test Length", () -> STATE.TESTING.length, (l) -> STATE.TESTING.length = l);
+
+
     }
 
     public void putData() {
@@ -58,6 +63,10 @@ public class TelescopSubSystem extends SubsystemBase {
         
         LogManager.addEntry("Telescope2", ()->(new boolean[]{isAtBottom(), isCalibreated()}))
             .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
+
+
+        motor.showConfigMotionVelocitiesCommand();
+        motor.showConfigPIDFSlotCommand(0);
     }
 
     public double getCurrentLength() {
@@ -76,8 +85,12 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setDuty(power);
     }
 
+    public double getVel() {
+        return motor.getCurrentVelocity();
+    }
+
     public void testPosition(double pos){
-        motor.setPositionVoltage(pos);
+        motor.setMotion(pos);
     }
     public void setLengthPosition(double wantedLength) {
         if (!isCalibreated()) {

@@ -457,6 +457,7 @@ public class TalonFXMotor extends TalonFX implements MotorInterface {
         builder.addDoubleProperty("Acceleration", this::getCurrentAcceleration, null);
         builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
         builder.addDoubleProperty("Current", this::getCurrentCurrent, null);
+        builder.addDoubleProperty("Close Loop FF", () -> getClosedLoopFeedForward().getValueAsDouble(), null);
         if(config.isDegreesMotor || config.isRadiansMotor) {
             builder.addDoubleProperty("Angle", this::getCurrentAngle, null);
         }
