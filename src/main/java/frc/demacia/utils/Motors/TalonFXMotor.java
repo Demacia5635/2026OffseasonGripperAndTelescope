@@ -277,7 +277,7 @@ public class TalonFXMotor extends TalonFX implements MotorInterface {
         setPositionVoltage(position, 0);
     }
     public void setPositionVoltageWithFeedForward(double position){
-        setPositionVoltage(position, (ks*Math.signum(getCurrentVelocity())) + (kv * getCurrentVelocity()));
+        setPositionVoltage(position, (ks*Math.signum(getClosedLoopError().getValueAsDouble())) + (kv * getCurrentVelocity()));
     }
 
     public void setVelocityWithFeedForward(double velocity) {
