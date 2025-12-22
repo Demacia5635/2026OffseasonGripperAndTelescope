@@ -48,12 +48,8 @@ public class RobotContainer {
     new LogManager();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new TelescopSubSystem();
-    commandCalibration = new CalibrationCommands(subsystemsTelescope);
-    controller.downButton().onTrue(new AviTest(subsystemsTelescope));
-    subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
     controller.upButton().onTrue(commandCalibration);
-    ///subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
-    // subsystemsTelescope.setDefaultCommand(new ControllerTelescope(subsystemsTelescope));
+    commandTelescop = new TelescopCommands(subsystemsTelescope);
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
   }
@@ -83,10 +79,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // controller.upButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.OPEN),new Subsystem[]{}));
-    // controller.downButton().onTrue(new InstantCommand(()->TelescopSubSystem.setState(STATE.CLOSED),new Subsystem[]{}));
-    // controller.leftButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.INTAKE),new Subsystem[]{}));
-    // controller.rightButton().onTrue(new InstantCommand(()-> TelescopSubSystem.setState(STATE.HOME),new Subsystem[]{})); 
+    
   }
 
   /**

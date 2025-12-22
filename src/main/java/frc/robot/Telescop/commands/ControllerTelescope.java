@@ -28,7 +28,7 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    telescop.setPower(-0.3*Math.signum(controller.getLeftY()) *(Math.pow(controller.getLeftY(), 2)));
+    //telescop.setPower(-0.3*Math.signum(controller.getLeftY()) *(Math.pow(controller.getLeftY(), 2)));
   }
 
   // Called once the command ends or is interrupted.
