@@ -6,7 +6,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
@@ -15,19 +14,21 @@ import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Telescop.ConstantsTelescop;
 import frc.robot.Telescop.ConstantsTelescop.STATE;
 
+
 public class TelescopSubSystem extends SubsystemBase {
 
     private LimitSwitch limitSwitchTelescope;
 
     private TalonFXMotor motor;
+    public static boolean calibrated = false;
 
     private static STATE currentState = STATE.CALIBRATE;
+    private double currentHeigt;
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
         limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.SENSOR_CONFIG);
         motor = new TalonFXMotor(ConstantsTelescop.MOTOR_CONFIG);
-        calibreated = false;
         currentHeigt = motor.getCurrentPosition();
         putData();
         SmartDashboard.putData("Telescop", this);
@@ -65,7 +66,7 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public double getCurrentLength() {
-        return motor.getCurrentPosition();
+        return currentHeigt;
     }
 
     public void setMotorPosition(double l) {
@@ -107,12 +108,11 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public static boolean isCalibreated() {
-        return true;
-        // return calibreated;
+        return calibrated;
     }
 
     public void setCalibrated() {
-        calibreated = true;
+        calibrated = true;
     }
 
     public boolean isAtBottom() {
