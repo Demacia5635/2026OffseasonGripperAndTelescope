@@ -116,7 +116,11 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public boolean isAtBottom() {
-        return limitSwitchTelescope.get();
+        if (limitSwitchTelescope.get()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public static void setState(STATE state) {

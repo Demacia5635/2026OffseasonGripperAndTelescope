@@ -21,24 +21,29 @@ public class CalibrationCommands extends Command {
 
   private TelescopSubSystem telescop;
   private Timer timer;
-
+  private boolean moveUp;
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     timer.reset();
     timer.start();
+    moveUp = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
     if(telescop.isAtBottom() == false) {
-      timer.reset();
-      if (timer.get() < 1.0) telescop.setPower(CalibrationConstants.POWER_TO_TOP);
-      telescop.setPower(CalibrationConstants.POWER_UP_AT_START);
+      if (timer.get() < 1.0) {
+        telescop.setPower(CalibrationConstants.POWER_UP_AT_START);
+        moveUp = true;
+      }
+      if (moveUp == true){
+        telescop.setPower(CalibrationConstants.POWER_TO_BOTTOM);
+      }
     }else{
+      telescop.setPower(CalibrationConstants.POWER_AT_BOTTOM_SWITCH);
       telescop.setLengthPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
     }
   }
