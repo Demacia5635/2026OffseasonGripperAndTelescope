@@ -67,6 +67,7 @@ public class ConstantsTelescop {
         public static final double POSITION_AT_BOTTOM_SWITCH = 0;
         public static final double POWER_TO_TOP = 0.2;
         public static final double POWER_TO_BOTTOM = -0.1;
+        public static final double POWER_UP_AT_START = 0.05;
 
     }
 }
