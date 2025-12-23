@@ -21,10 +21,7 @@ public class TelescopSubSystem extends SubsystemBase {
 
     private TalonFXMotor motor;
 
-    private static boolean calibreated;
-
     private static STATE currentState = STATE.CALIBRATE;
-    private double currentHeigt;
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
