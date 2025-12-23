@@ -5,6 +5,7 @@
 package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Telescop.ConstantsTelescop;
 import frc.robot.Telescop.ConstantsTelescop.CalibrationConstants;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -33,10 +34,13 @@ public class CalibrationCommands extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (timer.hasElapsed(CalibrationConstants.TIME_TO_MOVE_CALIBRATION)) telescop.setPower(CalibrationConstants.POWER_TO_BOTTOM);
-
-    else telescop.setPower(CalibrationConstants.POWER_TO_TOP);
+    
+    if(telescop.isAtBottom() == false) {
+      if (timer.get() < 1.0) telescop.setPower();
+      telescop.setPower(CalibrationConstants.POWER_TO_BOTTOM);
+    }else{
+      telescop.setLengthPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -47,7 +51,6 @@ public class CalibrationCommands extends Command {
     telescop.stop();
     telescop.setMotorPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
     telescop.setStateToHome();
-    ;
   }
 
   // Returns true when the command should end.

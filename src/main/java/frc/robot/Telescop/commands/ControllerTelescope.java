@@ -19,16 +19,19 @@ public class ControllerTelescope extends Command {
     this.telescop = telescop;
     SmartDashboard.putData(this);
     addRequirements(telescop);
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //telescop.setPower(-0.3*Math.signum(controller.getLeftY()) *(Math.pow(controller.getLeftY(), 2)));
+    telescop.setPower(-0.3*Math.signum(controller.getLeftY()) *(Math.pow(controller.getLeftY(), 2)));
+
   }
 
   // Called once the command ends or is interrupted.

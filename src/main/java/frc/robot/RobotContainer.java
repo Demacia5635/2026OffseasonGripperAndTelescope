@@ -48,7 +48,7 @@ public class RobotContainer {
     new LogManager();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new TelescopSubSystem();
-    controller.upButton().onTrue(commandCalibration);
+    controller.upButton().onTrue(new CalibrationCommands(subsystemsTelescope));
     commandTelescop = new TelescopCommands(subsystemsTelescope);
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
