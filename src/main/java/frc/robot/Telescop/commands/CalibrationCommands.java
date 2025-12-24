@@ -29,6 +29,7 @@ public class CalibrationCommands extends Command {
     timer.reset();
     timer.start();
     moveUp = false;
+    telescop.setCalibrated(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +57,7 @@ public class CalibrationCommands extends Command {
     telescop.stop();
     telescop.setMotorPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
     telescop.setStateToHome();
-    telescop.setCalibrated();
+    telescop.setCalibrated(true);
   }
 
   // Returns true when the command should end.

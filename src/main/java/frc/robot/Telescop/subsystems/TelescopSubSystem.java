@@ -110,8 +110,8 @@ public class TelescopSubSystem extends SubsystemBase {
         return calibrated;
     }
 
-    public void setCalibrated() {
-        calibrated = true;
+    public void setCalibrated(boolean Calibrated) {
+        calibrated = Calibrated;
     }
 
     public boolean isAtBottom() {
