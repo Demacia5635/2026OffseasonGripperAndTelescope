@@ -34,7 +34,7 @@ public class CalibrationCommands extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(telescop.isAtBottom() == false) {
+    if(!telescop.isAtBottom()) {
       if (timer.get() < 1.0) {
         telescop.setPower(CalibrationConstants.POWER_UP_AT_START);
         moveUp = true;
