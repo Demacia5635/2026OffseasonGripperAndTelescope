@@ -23,13 +23,11 @@ public class TelescopSubSystem extends SubsystemBase {
     public static boolean calibrated = false;
 
     private static STATE currentState = STATE.CALIBRATE;
-    private double currentHeigt;
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
         limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.SENSOR_CONFIG);
         motor = new TalonFXMotor(ConstantsTelescop.MOTOR_CONFIG);
-        currentHeigt = motor.getCurrentPosition();
         putData();
         SmartDashboard.putData("Telescop", this);
     }
@@ -67,7 +65,7 @@ public class TelescopSubSystem extends SubsystemBase {
     }
     
     public double getCurrentHeigt() {
-        return currentHeigt;
+        return motor.getCurrentPosition();
     }
 
     public void setMotorPosition(double l) {
