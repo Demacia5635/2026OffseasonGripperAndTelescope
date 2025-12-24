@@ -82,7 +82,7 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setDuty(power);
     }
 
-    public double getVel() {
+    public double getVelocity() {
         return motor.getCurrentVelocity();
     }
 
