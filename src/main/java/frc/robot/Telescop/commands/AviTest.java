@@ -39,6 +39,6 @@ public class AviTest extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(telescop.getCurrentLength() - d) < 0.01;
+    return Math.abs(telescop.getCurrentHeigt() - d) < 0.01;
   }
 }

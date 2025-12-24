@@ -38,12 +38,13 @@ public class TelescopSubSystem extends SubsystemBase {
     public void initSendable(SendableBuilder builder) {
         super.initSendable(builder);
         builder.addBooleanProperty("Sensor", this::getSensor, null);
-        builder.addDoubleProperty("Length", this::getCurrentLength, null);
+        builder.addDoubleProperty("Length", this::getCurrentHeigt, null);
         builder.addStringProperty("State", () -> currentState.name(), null);
         builder.addDoubleProperty("Test Length", () -> STATE.TESTING.length, (l) -> STATE.TESTING.length = l);
 
     }
 
+    @SuppressWarnings("unchecked")
     public void putData() {
         SendableChooser<STATE> stateChooser = new SendableChooser<>();
         stateChooser.addOption("L1", STATE.L1);
@@ -55,7 +56,7 @@ public class TelescopSubSystem extends SubsystemBase {
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
-        LogManager.addEntry("Telescope", () -> (new double[] { getCurrentLength() }))
+        LogManager.addEntry("Telescope", () -> (new double[] { getCurrentHeigt() }))
                 .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
 
         LogManager.addEntry("Telescope2", () -> (new boolean[] { isAtBottom(), isCalibreated() }))
@@ -64,8 +65,8 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.showConfigMotionVelocitiesCommand();
         motor.showConfigPIDFSlotCommand(0);
     }
-
-    public double getCurrentLength() {
+    
+    public double getCurrentHeigt() {
         return currentHeigt;
     }
 
@@ -100,7 +101,7 @@ public class TelescopSubSystem extends SubsystemBase {
             wantedLength = 0.03;
 
         }
-        if (Math.abs(wantedLength - getCurrentLength()) <= 0.01) {
+        if (Math.abs(wantedLength - getCurrentHeigt()) <= 0.01) {
             stop();
             return;
         }
