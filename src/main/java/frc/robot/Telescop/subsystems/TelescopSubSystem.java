@@ -90,7 +90,7 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setPositionVoltage(pos);
     }
 
-    public void setLengthPosition(double wantedLength) {
+    public void setLengthHeigt(double wantedLength) {
         if (!isCalibreated()) {
             LogManager.log("Telescop not calibrated");
             stop();

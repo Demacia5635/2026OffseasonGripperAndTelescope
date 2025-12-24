@@ -39,12 +39,12 @@ public class CalibrationCommands extends Command {
         telescop.setPower(CalibrationConstants.POWER_UP_AT_START);
         moveUp = true;
       }
-      if (moveUp == true){
+      if (moveUp){
         telescop.setPower(CalibrationConstants.POWER_TO_BOTTOM);
       }
     }else{
       telescop.setPower(CalibrationConstants.POWER_AT_BOTTOM_SWITCH);
-      telescop.setLengthPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
+      telescop.setLengthHeigt(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
     }
   }
 
