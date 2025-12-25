@@ -51,9 +51,10 @@ public class RobotContainer {
 
 
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
+    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
     subsystemsTelescope = new TelescopSubSystem();
     commandTelescop = new TelescopCommands(subsystemsTelescope);
-    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
+    
     configureBindings();
   }
 

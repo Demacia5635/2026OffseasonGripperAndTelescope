@@ -19,6 +19,7 @@ public class ConstantsChangeAngle {
     public static final double KV = 0;
     public static final double KA = 0;
     public static final double KG = 0; // Maybe change the final to not final
+    public static final double KE = 0;
 
     public static final int ANALOG_ENCODER_CHANNEL = 1;
 

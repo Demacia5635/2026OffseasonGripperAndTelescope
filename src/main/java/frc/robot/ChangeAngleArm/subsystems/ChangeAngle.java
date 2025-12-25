@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonFXMotor;
+import frc.robot.RobotContainer;
 // import frc.demacia.utils.Sensors.AnalogEncoder;
 import frc.robot.ChangeAngleArm.ConstantsChangeAngle;
 import frc.robot.ChangeAngleArm.ConstantsChangeAngle.TELESCOPE_ANGLE;
@@ -23,7 +24,7 @@ public class ChangeAngle extends SubsystemBase {
     }
 
     public void setAngle(double angle) {
-        changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()));
+        changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()) + ConstantsChangeAngle.KE * RobotContainer.subsystemsTelescope.getCurrentHeigt() / 0.7);
     }
 
     public double getAngle(){

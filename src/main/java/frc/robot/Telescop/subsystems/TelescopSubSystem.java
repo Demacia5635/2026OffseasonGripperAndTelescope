@@ -11,6 +11,9 @@ import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import frc.robot.Telescop.ConstantsTelescop;
 import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 
@@ -104,8 +107,8 @@ public class TelescopSubSystem extends SubsystemBase {
             stop();
             return;
         }
-        motor.setPositionVoltage(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH), Math.sin(5));
-    }
+        motor.setPositionVoltage(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH), Math.sin(RobotContainer.changeAngle.getAngle()));
+    }   
 
 
     public static boolean isCalibreated() {
