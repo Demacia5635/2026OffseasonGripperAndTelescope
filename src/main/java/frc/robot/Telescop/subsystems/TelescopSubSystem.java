@@ -105,9 +105,6 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setPositionVoltageWithFeedForward(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
     }
 
-    public static void setLengetPozesanCalibrate(){
-
-    }
 
     public static boolean isCalibreated() {
         return calibrated;
