@@ -34,7 +34,7 @@ public class TelescopCommands extends Command {
     telescop.setMotorPosition(telescop.getCurrentHeigt());
     break;
   default:
-    telescop.setLengthHeigt(currentState.length);
+    telescop.setLength(currentState.length);
     break;
   }
 
