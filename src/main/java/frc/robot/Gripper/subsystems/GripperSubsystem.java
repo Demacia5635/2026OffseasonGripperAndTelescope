@@ -8,21 +8,20 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.demacia.utils.Motors.TalonMotor;
-import frc.demacia.utils.Motors.;
+import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.UltraSonicSensor;
 import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
 import frc.robot.Gripper.GripperConstants;
 
 public class GripperSubsystem extends SubsystemBase {
   /** Creates a new GripperSubsystem. */
-  private final TalonMotor motor;
+  private final TalonFXMotor motor;
   private final UltraSonicSensor ultrasonicSensor;
 
   private GRIPPER_STATE state;
 
   public GripperSubsystem() {
-    motor = new TalonMotor(GripperConstants.TALON_CONFIG);
+    motor = new TalonFXMotor(GripperConstants.TALON_CONFIG);
     ultrasonicSensor = new UltraSonicSensor(GripperConstants.ULTRA_SONIC_SENSOR_CONFIG);
 
     addNT();
