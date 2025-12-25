@@ -5,11 +5,14 @@ package frc.robot;
 
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
+import frc.demacia.utils.Controller.CommandController;
+import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
-import frc.robot.Gripper.subsystems.GripperSubsystem;
-import frc.robot.Telescop.commands.CalibrationCommands;
-import frc.robot.Telescop.commands.TelescopCommands;
-import frc.robot.Telescop.subsystems.TelescopSubSystem;
+import frc.demacia.utils.Log.LogManager2;
+import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
+import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
+import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
+import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,7 +33,6 @@ public class RobotContainer {
   public static int N_CYCLE = 0;
   public static double CYCLE_TIME = 0.02;
 
-  
   // The robot's subsystems and commands are defined here...
   public static TelescopSubSystem subsystemsTelescope;
   public static TelescopCommands commandTelescop;
@@ -41,6 +43,10 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     new LogManager();
+    new LogManager2();
+    changeAngle = new ChangeAngle();
+    // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
+    // changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
 
 
     gripperSubsystem = new GripperSubsystem();
@@ -78,10 +84,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    controller.upButton().onTrue(null);
-    controller.downButton().onTrue(null);
-    controller.leftButton().onTrue(null);
-    controller.rightButton().onTrue(null);
     
   }
 
