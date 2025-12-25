@@ -24,31 +24,27 @@ public class ManualControlAngleArm extends Command {
 		this.changeAngle = changeAngle;
 
 		addRequirements(changeAngle);
+		LogManager2.addEntry("Controller output", () -> joyY);
     // Use addRequirements() here to declare subsystem dependencies.
   	}
 
-  // Called when the command is initially scheduled.
-  	@Override
-	public void initialize() {
-		LogManager2.addEntry("wanted power", () -> joyY * 0.5).build();
-	}
 
   // Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
-    	joyY = -controller.getLeftY();
-		changeAngle.setPower(joyY * 0.5);
+    	joyY = controller.getLeftY()*0.5;
+		changeAngle.setPower(joyY);
 	}
 
-  // Called once the command ends or is interrupted.
 	@Override
-  	public void end(boolean interrupted) {
-		changeAngle.setPower(0);
+	public void end(boolean interrupted) {
+		changeAngle.stop();
 	}
+
 
   // Returns true when the command should end.
   	@Override
   	public boolean isFinished() {
-    	return !controller.getLeftStickMove().getAsBoolean();
+    	return false;
   	}
 }

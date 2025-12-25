@@ -7,7 +7,7 @@ import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogManager2;
-import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
+// import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import frc.robot.Constants.OperatorConstants;
@@ -43,6 +43,7 @@ public class RobotContainer {
     new LogManager();
     new LogManager2();
     changeAngle = new ChangeAngle();
+    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
     // changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
 
@@ -73,7 +74,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
+
   }
 
   /**
