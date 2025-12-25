@@ -6,11 +6,7 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
-//import frc.robot.Telescop.ConstantsTelescop.CalibrationConstants;
-import frc.robot.Telescop.ConstantsTelescop.STATE;
-import frc.robot.Telescop.commands.CalibrationCommands;
-import frc.robot.Telescop.commands.TelescopCommands;
-import frc.robot.Telescop.subsystems.TelescopSubSystem;
+import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public static GripperSubsystem gripperSubsystem;
 
   public static boolean isComp = DriverStation.isFMSAttached();
   private static boolean hasRemovedFromLog = false;
@@ -43,6 +40,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     new LogManager();
+
+
+    gripperSubsystem = new GripperSubsystem();
+
+
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new TelescopSubSystem();
     commandTelescop = new TelescopCommands(subsystemsTelescope);
@@ -67,6 +69,9 @@ public class RobotContainer {
 
   
 
+  private final CommandController controller =
+    new CommandController(0, ControllerType.kXbox);
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -77,10 +82,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    controller.upButton().onTrue(Commands.runOnce(() -> TelescopSubSystem.setState(STATE.CLOSED)));
-    controller.downButton().onTrue(Commands.runOnce(() -> TelescopSubSystem.setState(STATE.OPEN)));
-    controller.leftBumper().onTrue(Commands.runOnce(() -> TelescopSubSystem.setState(STATE.INTAKE)));
-    controller.rightButton().onTrue(new CalibrationCommands(subsystemsTelescope));
+    
   }
 
   /**
