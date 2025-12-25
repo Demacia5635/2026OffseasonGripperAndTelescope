@@ -6,7 +6,7 @@ package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Telescop.ConstantsTelescop.CalibrationConstants;
-import frc.robot.Telescop.ConstantsTelescop.STATE;
+import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -47,7 +47,7 @@ public class CalibrationCommands extends Command {
     }else{
       telescop.setPower(CalibrationConstants.POWER_AT_BOTTOM_SWITCH);
       telescop.setMotorLength(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
-      telescop.setLength(STATE.CALIBRATE.length);
+      telescop.setLength(STATE_TELESCOPE.CALIBRATE.length);
     }
   }
 

@@ -6,7 +6,7 @@ package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
-import static frc.robot.Telescop.ConstantsTelescop.STATE;
+import static frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TelescopCommands extends Command {
@@ -28,7 +28,7 @@ public class TelescopCommands extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    STATE currentState = telescop.getCurrentState();
+    STATE_TELESCOPE currentState = telescop.getCurrentState();
     switch (currentState) {
   case IDLE:
     telescop.setMotorLength(telescop.getCurrentHeigt());

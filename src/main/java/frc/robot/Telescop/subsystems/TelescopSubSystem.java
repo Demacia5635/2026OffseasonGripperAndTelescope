@@ -12,7 +12,7 @@ import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Telescop.ConstantsTelescop;
-import frc.robot.Telescop.ConstantsTelescop.STATE;
+import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 
 
 public class TelescopSubSystem extends SubsystemBase {
@@ -22,7 +22,7 @@ public class TelescopSubSystem extends SubsystemBase {
     private TalonFXMotor motor;
     public static boolean calibrated = false;
 
-    private static STATE currentState = STATE.CALIBRATE;
+    private static STATE_TELESCOPE currentState = STATE_TELESCOPE.CALIBRATE;
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
@@ -38,19 +38,19 @@ public class TelescopSubSystem extends SubsystemBase {
         builder.addBooleanProperty("Sensor", this::getSensor, null);
         builder.addDoubleProperty("Length", this::getCurrentHeigt, null);
         builder.addStringProperty("State", () -> currentState.name(), null);
-        builder.addDoubleProperty("Test Length", () -> STATE.TESTING.length, (l) -> STATE.TESTING.length = l);
+        builder.addDoubleProperty("Test Length", () -> STATE_TELESCOPE.TESTING.length, (l) -> STATE_TELESCOPE.TESTING.length = l);
 
     }
 
     @SuppressWarnings("unchecked")
     public void putData() {
-        SendableChooser<STATE> stateChooser = new SendableChooser<>();
-        stateChooser.addOption("HOME", STATE.HOME);
-        stateChooser.addOption("INTAKE", STATE.INTAKE);
-        stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
-        stateChooser.addOption("open", STATE.OPEN);
-        stateChooser.addOption("close", STATE.CLOSED);
-        stateChooser.addOption("OUT_TAKE", STATE.OUT_TAKE);
+        SendableChooser<STATE_TELESCOPE> stateChooser = new SendableChooser<>();
+        stateChooser.addOption("HOME", STATE_TELESCOPE.HOME);
+        stateChooser.addOption("INTAKE", STATE_TELESCOPE.INTAKE);
+        stateChooser.addOption("CALIBRATE", STATE_TELESCOPE.CALIBRATE);
+        stateChooser.addOption("open", STATE_TELESCOPE.OPEN);
+        stateChooser.addOption("close", STATE_TELESCOPE.CLOSED);
+        stateChooser.addOption("OUT_TAKE", STATE_TELESCOPE.OUT_TAKE);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
         LogManager.addEntry("Telescope", () -> (new double[] { getCurrentHeigt() }))
@@ -122,7 +122,7 @@ public class TelescopSubSystem extends SubsystemBase {
         }
     }
 
-    public static void setState(STATE state) {
+    public static void setState(STATE_TELESCOPE state) {
         if (isCalibreated()) {
             currentState = state;
         } else {
@@ -134,12 +134,12 @@ public class TelescopSubSystem extends SubsystemBase {
         return limitSwitchTelescope.get();
     }
 
-    public STATE getCurrentState() {
+    public STATE_TELESCOPE getCurrentState() {
         return currentState;
     }
 
     public void setStateToHome() {
-        setState(STATE.HOME);
+        setState(STATE_TELESCOPE.HOME);
     }
 
     @Override
