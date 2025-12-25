@@ -24,6 +24,8 @@ public class TelescopSubSystem extends SubsystemBase {
 
     private static STATE_TELESCOPE currentState = STATE_TELESCOPE.CALIBRATE;
 
+    public static boolean setCalibrated;
+
     /** Creates a new telescop. */
     public TelescopSubSystem() {
         limitSwitchTelescope = new LimitSwitch(ConstantsTelescop.SENSOR_CONFIG);
@@ -109,6 +111,7 @@ public class TelescopSubSystem extends SubsystemBase {
     public static boolean isCalibreated() {
         return calibrated;
     }
+
 
     public static void setCalibrated(boolean Calibrated) {
         calibrated = Calibrated;
