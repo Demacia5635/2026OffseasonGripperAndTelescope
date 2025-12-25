@@ -45,7 +45,6 @@ public class TelescopSubSystem extends SubsystemBase {
     @SuppressWarnings("unchecked")
     public void putData() {
         SendableChooser<STATE> stateChooser = new SendableChooser<>();
-
         stateChooser.addOption("HOME", STATE.HOME);
         stateChooser.addOption("INTAKE", STATE.INTAKE);
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
@@ -110,7 +109,7 @@ public class TelescopSubSystem extends SubsystemBase {
         return calibrated;
     }
 
-    public void setCalibrated(boolean Calibrated) {
+    public static void setCalibrated(boolean Calibrated) {
         calibrated = Calibrated;
     }
 
