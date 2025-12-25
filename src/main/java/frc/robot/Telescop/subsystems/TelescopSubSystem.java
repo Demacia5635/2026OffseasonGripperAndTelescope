@@ -104,7 +104,7 @@ public class TelescopSubSystem extends SubsystemBase {
             stop();
             return;
         }
-        motor.setPositionVoltageWithFeedForward(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
+        motor.setPositionVoltage(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH), Math.sin(5));
     }
 
 

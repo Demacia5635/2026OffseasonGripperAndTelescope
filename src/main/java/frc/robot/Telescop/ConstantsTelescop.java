@@ -48,15 +48,15 @@ public class ConstantsTelescop {
     public static final double kv = 70;
     public static final double ka = 0.00011;
     public static final double kg = 0;
-
+    public static final double kg2 = 0;
     public static final int UP_CHANNEL = -1;
     public static final int DOWN_CHANNEL = -1;
-
+    public static final double angle = 0;
     public static final TalonFXConfig MOTOR_CONFIG = new TalonFXConfig(ID, CANBUS, "telescopMotor")
             .withBrake(true)
             .withMeterMotor(GEAR_RATIO, DIAMETER)
             .withPID(kp, ki, kd, ks, kv, ka, kg)
-            .withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)
+            //.withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)  
             .withCurrent(MAX_CURRENT);
 
     public static class CalibrationConstants {
