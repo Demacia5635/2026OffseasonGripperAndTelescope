@@ -10,6 +10,7 @@ public class ConstantsTelescop {
     public static final LimitSwitchConfig SENSOR_CONFIG = new LimitSwitchConfig(5, "Telescop Sensor").withInvert(true);
 
     public static enum STATE {
+        OUT_TAKE(0,0),
         HOME(0, 0.05),
         TESTING(-1, -1),
         IDLE(-1, -1),
