@@ -22,7 +22,7 @@ public class ControllerTelescope extends Command {
     
   }
 
-  private double joyXLeft;
+  private double joyYRight;
 
   // Called when the command is initially scheduled.
   @Override
@@ -32,8 +32,8 @@ public class ControllerTelescope extends Command {
   // Called every time the scheduler rsuns while the command is scheduled.
   @Override
   public void execute() {
-    joyXLeft = -controller.getLeftY();
-    telescop.setPower(joyXLeft * 0.5);
+    joyYRight = -controller.getRightY();
+    telescop.setPower(joyYRight * 0.5);
     //telescop.setPower(-0.3*Math.signum(controller.getLeftY()) *(Math.pow(controller.getLeftY(), 2)));
   }
 

@@ -12,10 +12,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Gripper.subsystems.GripperSubsystem;
+// import frc.robot.Gripper.subsystems.GripperSubsystem;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
+import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,7 +25,7 @@ import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public static GripperSubsystem gripperSubsystem;
+  // public static GripperSubsystem gripperSubsystem;
 
   public static boolean isComp = DriverStation.isFMSAttached();
   private static boolean hasRemovedFromLog = false;
@@ -44,15 +45,16 @@ public class RobotContainer {
   public RobotContainer() {
     new LogManager();
     changeAngle = new ChangeAngle();
+    subsystemsTelescope = new TelescopSubSystem();
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
 
 
-    gripperSubsystem = new GripperSubsystem();
+    // gripperSubsystem = new GripperSubsystem();
 
 
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
-    subsystemsTelescope = new TelescopSubSystem();
+    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
     commandTelescop = new TelescopCommands(subsystemsTelescope);
     
     configureBindings();
