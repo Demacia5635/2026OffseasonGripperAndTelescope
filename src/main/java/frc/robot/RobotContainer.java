@@ -6,11 +6,13 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
+import frc.robot.Telescop.ConstantsTelescop.STATE;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -73,7 +75,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+    controller.upButton().onTrue(Commands.runOnce(() -> TelescopSubSystem.setState(STATE.CLOSED)));
+    controller.downButton().onTrue(Commands.runOnce(() -> TelescopSubSystem.setState(STATE.OPEN)));
+    controller.leftBumper().onTrue(Commands.runOnce(() -> TelescopSubSystem.setState(STATE.INTAKE)));
   }
 
   /**
