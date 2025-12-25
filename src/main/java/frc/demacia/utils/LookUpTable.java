@@ -6,7 +6,40 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * This class represents a look-up table for linear interpolation.
+ * Linear interpolation lookup table.
+ * 
+ * <p>Stores and interpolates multi-dimensional data for feed-forward,
+ * trajectory generation, or any mapping from input to multiple outputs.</p>
+ * 
+ * <p><b>Features:</b></p>
+ * <ul>
+ *   <li>Multi-output interpolation (1 input → N outputs)</li>
+ *   <li>Automatic sorting by input value</li>
+ *   <li>Extrapolation beyond table bounds</li>
+ *   <li>Binary search for O(log n) lookup</li>
+ * </ul>
+ * 
+ * <p><b>Example Usage:</b></p>
+ * <pre>
+ * // Shooter characterization: distance → (RPM, angle)
+ * LookUpTable shooterTable = new LookUpTable(2);  // 2 outputs
+ * shooterTable.add(1.0, 3000, 45);  // 1m: 3000 RPM, 45°
+ * shooterTable.add(2.0, 3500, 50);  // 2m: 3500 RPM, 50°
+ * shooterTable.add(3.0, 4000, 55);  // 3m: 4000 RPM, 55°
+ * 
+ * // Interpolate at 2.5m
+ * double[] result = shooterTable.get(2.5);
+ * double rpm = result[0];    // 3750
+ * double angle = result[1];  // 52.5
+ * </pre>
+ * 
+ * <p><b>Use Cases:</b></p>
+ * <ul>
+ *   <li>Shooter characterization (distance → speed, angle)</li>
+ *   <li>Elevator feed-forward (height → voltage)</li>
+ *   <li>Odometry correction (position → error correction)</li>
+ *   <li>Auto path parameters (time → position, velocity, acceleration)</li>
+ * </ul>
  */
 public class LookUpTable {
 
@@ -17,10 +50,10 @@ public class LookUpTable {
     private final int size;
 
     /**
-     * Creates a new empty look-up table with the specified size.
-     *
-     * @param size the number of interpolated values
-     * @throws IllegalArgumentException if size is less than 2
+     * Creates an empty lookup table.
+     * 
+     * @param size Number of output values per input
+     * @throws IllegalArgumentException if size < 2
      */
     public LookUpTable(int size) throws IllegalArgumentException {
         if (size < 2) {
@@ -31,10 +64,12 @@ public class LookUpTable {
     }
 
     /**
-     * Creates a new look-up table from an existing 2D array of data.
-     *
-     * @param table the 2D array containing the look-up table data
-     * @throws IllegalArgumentException if any row in the table has a different length than the others
+     * Creates a lookup table from existing data.
+     * 
+     * <p>Data is automatically sorted by first column (input value).</p>
+     * 
+     * @param table 2D array where each row is [input, output1, output2, ...]
+     * @throws IllegalArgumentException if rows have inconsistent lengths
      */
     public LookUpTable(double[][] table) throws IllegalArgumentException {
         this.table = new ArrayList<>();
@@ -66,10 +101,12 @@ public class LookUpTable {
     }
     
     /**
-     * Adds a new row to the table.
-     *
-     * @param row the row to be added, must have the same size as the existing rows
-     * @throws IllegalArgumentException if the row size doesn't match the table size
+     * Adds a data point to the table.
+     * 
+     * <p>Table is automatically sorted after insertion for fast lookup.</p>
+     * 
+     * @param row Input value followed by output values
+     * @throws IllegalArgumentException if row length doesn't match table size
      */
     public void add(double... row) throws IllegalArgumentException {
         if (row.length != size) {
@@ -80,10 +117,18 @@ public class LookUpTable {
     }
 
     /**
-     * Interpolates and returns an array of values based on the given input value.
-     *
-     * @param value the input value
-     * @return an array of interpolated values, even if the input value falls outside the table's range
+     * Interpolates output values for a given input.
+     * 
+     * <p><b>Interpolation behavior:</b></p>
+     * <ul>
+     *   <li>Input within table range: Linear interpolation between nearest points</li>
+     *   <li>Input below minimum: Returns minimum values (no extrapolation)</li>
+     *   <li>Input above maximum: Returns maximum values (no extrapolation)</li>
+     * </ul>
+     * 
+     * @param value Input value to interpolate at
+     * @return Array of interpolated output values
+     * @throws IllegalStateException if table is empty
      */
     public double[] get(double value) {
         

@@ -1,7 +1,6 @@
 package frc.demacia.utils.Motors;
 
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkAnalogSensor;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -16,17 +15,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Utilities;
 import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.robot.RobotContainer;
 
 public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterface {
 
-  private SparkConfig config;
+  private frc.demacia.utils.Motors.SparkFlexConfig config;
   private String name;
   private SparkFlexConfig cfg;
   private int slot = 0;
   private ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
   private ControlType controlType = ControlType.kDutyCycle;
-  private SparkAnalogSensor anaolg;
 
   private String lastControlMode = "";
   private double lastVelocity;
@@ -35,7 +34,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   private int lastCycleNum = 0;
   private double lastTime = 0;
 
-  public SparkFlexMotor(SparkConfig config) {
+  public SparkFlexMotor(frc.demacia.utils.Motors.SparkFlexConfig config) {
     super(config.id, SparkLowLevel.MotorType.kBrushless);
     this.config = config;
     name = config.name;
@@ -59,8 +58,6 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     if (config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
     }
-    getEncoder();
-    anaolg = getAnalog();
     this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -76,8 +73,9 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     }
   }
 
+  @SuppressWarnings("unchecked")
   private void addLog() {
-    LogManager.addEntry(name + "/Position and Velocity and Acceleration and Voltage and Current and CloseLoopError and CloseLoopSP2", 
+    LogManager.addEntry(name + " Position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP", 
       () -> new double[] {
         getCurrentPosition(),
         getCurrentVelocity(),
@@ -86,8 +84,16 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
         getCurrentCurrent(),
         getCurrentClosedLoopError(),
         getCurrentClosedLoopSP(),
-      }, 3, "motor");
+      }).withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP)
+      .WithIsMotor().build();
   }
+
+  public void checkElectronics() {
+    Faults faults = getFaults();
+    if (faults != null) {
+        LogManager.log(name + " have fault num: " + faults.toString(), AlertType.kError);
+    }
+}
 
   /**
    * change the slot of the pid and feed forward.
@@ -138,7 +144,11 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
    *                    defaults to 0
    */
   public void setVelocity(double velocity, double feedForward) {
-    super.closedLoopController.setReference(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot, feedForward);
+    if (config.maxVelocity == 0) {
+      LogManager.log(name + ": maxVelocity not configured", AlertType.kError);
+      return;
+    }
+    getClosedLoopController().setReference(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot, feedForward);
     controlType = ControlType.kMAXMotionVelocityControl;
     lastControlMode = "Velocity";
     setPoint = velocity;
@@ -149,7 +159,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   }
 
   public void setPositionVoltage(double position, double feedForward) {
-    super.closedLoopController.setReference(position, ControlType.kPosition, closedLoopSlot, feedForward);
+    getClosedLoopController().setReference(position, ControlType.kPosition, closedLoopSlot, feedForward);
     controlType = ControlType.kPosition;
     lastControlMode = "Position Voltage";
     setPoint = position;
@@ -169,11 +179,15 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
 
   @Override
   public void setMotion(double position, double feedForward) {
-    super.closedLoopController.setReference(position, ControlType.kMAXMotionPositionControl, closedLoopSlot, feedForward);
+    if (config.maxVelocity == 0) {
+      LogManager.log(name + ": maxVelocity not configured", AlertType.kError);
+      return;
+    }
+    getClosedLoopController().setReference(position, ControlType.kMAXMotionPositionControl, closedLoopSlot, feedForward);
     controlType = ControlType.kMAXMotionPositionControl;
     lastControlMode = "Motion";
     setPoint = position;
-  }
+  } 
 
   @Override
   public void setMotion(double position) {
@@ -228,7 +242,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   public void showConfigPIDFSlotCommand(int slot) {
     CloseLoopParam p = config.pid[slot];
     if (p != null) {
-      UpdateArray.show(name + " PID " + slot, CloseLoopParam.names, p.toArray(), (double[] array) -> updatePID(true));
+      UpdateArray.show(name + " PID " + slot, CloseLoopParam.PARAMETER_NAMES, p.toArray(), (double[] array) -> updatePID(true));
     }
   }
 
@@ -316,7 +330,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   }
 
   public double getCurrentPosition() {
-    return anaolg.getPosition();
+    return getEncoder().getPosition();
   }
 
   public double getCurrentAngle() {
@@ -329,7 +343,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   }
 
   public double getCurrentVelocity() {
-    double velocity = encoder.getVelocity();
+    double velocity = getEncoder().getVelocity();
     if (lastCycleNum != RobotContainer.N_CYCLE) {
       lastCycleNum = RobotContainer.N_CYCLE;
       double time = Timer.getFPGATimestamp();
@@ -351,16 +365,6 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     return getOutputCurrent();
   }
 
-  /**
-   * override the sendable of the talonFX to our costum widget in elastic
-   * <br>
-   * </br>
-   * to activate put in the code:
-   * 
-   * <pre>
-   * SmartDashboard.putData("talonMotor name", talonMotor);
-   * </pre>
-   */
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Spark Motor");
@@ -386,7 +390,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
 
   @Override
   public void setEncoderPosition(double position) {
-    encoder.setPosition(position);
+    getEncoder().setPosition(position);
   }
 
   @Override

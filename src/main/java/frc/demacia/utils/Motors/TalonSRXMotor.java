@@ -12,16 +12,17 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 
 public class TalonSRXMotor extends TalonSRX implements MotorInterface,Sendable {
-    TalonConfig config;
+    TalonSRXConfig config;
     String name;
 
     int slot = 0;
 
     String lastControlMode="";
 
-    public TalonSRXMotor(TalonConfig config) {
+    public TalonSRXMotor(TalonSRXConfig config) {
         super(config.id);
         this.config = config;
         name = config.name;
@@ -72,8 +73,9 @@ public class TalonSRXMotor extends TalonSRX implements MotorInterface,Sendable {
         configMotionCruiseVelocity((int) (config.maxVelocity/ config.motorRatio));
     }
 
+    @SuppressWarnings("unchecked")
     private void addLog() {
-      LogManager.addEntry(name + "/Position and Velocity and Acceleration and Voltage and Current and CloseLoopError and CloseLoopSP2", 
+      LogManager.addEntry(name + " position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP", 
         () -> new double[] {
           getCurrentPosition(),
           getCurrentVelocity(),
@@ -82,7 +84,16 @@ public class TalonSRXMotor extends TalonSRX implements MotorInterface,Sendable {
           getCurrentCurrent(),
           getCurrentClosedLoopError(),
           getCurrentClosedLoopSP(),
-        }, 3, "motor");
+        }).withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP)
+        .WithIsMotor().build();
+    }
+
+    public void checkElectronics() {
+        com.ctre.phoenix.motorcontrol.Faults faults = new com.ctre.phoenix.motorcontrol.Faults();
+        getFaults(faults);
+        if (faults.hasAnyFault()) {
+            LogManager.log(name + " have fault num: " + faults.toString(), AlertType.kError);
+        }
     }
 
     public void changeSlot(int slot){
@@ -96,7 +107,6 @@ public class TalonSRXMotor extends TalonSRX implements MotorInterface,Sendable {
     public void setNeutralMode(boolean isBrake){
         setNeutralMode(isBrake ? NeutralMode.Brake : NeutralMode.Coast);
     }
-
 
     public void setDuty(double power){
         set(ControlMode.PercentOutput, power);
@@ -225,7 +235,7 @@ public class TalonSRXMotor extends TalonSRX implements MotorInterface,Sendable {
     public void showConfigPIDFSlotCommand(int slot) {
         CloseLoopParam p = config.pid[slot];
         if(p != null) {
-            UpdateArray.show(name + " PID " + slot , CloseLoopParam.names, p.toArray(),(double[] array)->updatePID());
+            UpdateArray.show(name + " PID " + slot , CloseLoopParam.PARAMETER_NAMES, p.toArray(),(double[] array)->updatePID());
         }
     }
 

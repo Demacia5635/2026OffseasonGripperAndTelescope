@@ -1,5 +1,8 @@
 package frc.demacia.utils.Motors;
 
+import static frc.robot.Telescop.ConstantsTelescop.ks;
+import static frc.robot.Telescop.ConstantsTelescop.kv;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -26,10 +29,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.demacia.utils.Data;
 import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 
-public class TalonMotor extends TalonFX implements MotorInterface {
+public class TalonFXMotor extends TalonFX implements MotorInterface {
 
-    TalonConfig config;
+    TalonFXConfig config;
     String name;
     TalonFXConfiguration cfg;
 
@@ -52,7 +56,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     Data<Voltage> voltageSignal;
     Data<Current> currentSignal;
 
-    public TalonMotor(TalonConfig config) {
+    public TalonFXMotor(TalonFXConfig config) {
         super(config.id, config.canbus.canbus);
         this.config = config;
         name = config.name;
@@ -145,6 +149,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void setSignals() {
         controlModeSignal = new Data<>(getControlMode());
         closedLoopSPSignal = new Data<>(getClosedLoopReference());
@@ -156,8 +161,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         currentSignal = new Data<>(getStatorCurrent());
     }
 
+    @SuppressWarnings("unchecked")
     private void addLog() {
-        LogManager.addEntry(name + "/Position and Velocity and Acceleration and Voltage and Current and CloseLoopError and CloseLoopSP",  new StatusSignal[] {
+        LogManager.addEntry(name + " Position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP",  new StatusSignal[] {
             positionSignal.getSignal(),
             velocitySignal.getSignal(),
             accelerationSignal.getSignal(),
@@ -165,26 +171,17 @@ public class TalonMotor extends TalonFX implements MotorInterface {
             currentSignal.getSignal(),
             closedLoopErrorSignal.getSignal(),
             closedLoopSPSignal.getSignal(),
-            }, 3,"motor");
-        // LogManager.addEntry(name + "/Position and Velocity and Acceleration and Voltage and Current and CloseLoopError and CloseLoopSP2", 
-        //   () -> new double[] {
-        //     getCurrentPosition(),
-        //     getCurrentVelocity(),
-        //     getCurrentAcceleration(),
-        //     getCurrentVoltage(),
-        //     getCurrentCurrent(),
-        //     getCurrentClosedLoopError(),
-        //     getCurrentClosedLoopSP(),
-        //   }, 3, "motor");
-            // LogManager.addEntry(name + "/ControlMode2", 
-            // () -> getCurrentControlMode(), 3, "motor");
-            LogManager.addEntry(name + "/ControlMode", 
-            controlModeSignal.getSignal(), 3, "motor");
+            }).withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP)
+            .WithIsMotor().build();
+        LogManager.addEntry(name + " ControlMode", 
+            controlModeSignal.getSignal())
+            .withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP).build();
     }
 
     public void checkElectronics() {
-        if (getFaultField().getValue() != 0) {
-            LogManager.log(name + " have fault num: " + getFaultField().getValue(), AlertType.kError);
+        int fault = getFaultField().getValue();
+        if (fault != 0) {
+            LogManager.log(name + " have fault num: " + fault, AlertType.kError);
         }
     }
 
@@ -279,6 +276,9 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public void setPositionVoltage(double position) {
         setPositionVoltage(position, 0);
     }
+    public void setPositionVoltageWithFeedForward(double position){
+        setPositionVoltage(position, (ks*Math.signum(getClosedLoopError().getValueAsDouble())) + (kv * getCurrentVelocity()));
+    }
 
     public void setVelocityWithFeedForward(double velocity) {
         setVelocity(velocity, velocityFeedForward(velocity));
@@ -352,7 +352,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public void showConfigPIDFSlotCommand(int slot) {
         CloseLoopParam p = config.pid[slot];
         if(p != null) {
-            UpdateArray.show(name + " PID " + slot , CloseLoopParam.names, p.toArray(),(double[] array)->updatePID(true));
+            UpdateArray.show(name + " PID " + slot , CloseLoopParam.PARAMETER_NAMES, p.toArray(),(double[] array)->updatePID(true));
         }
     }
 
@@ -454,16 +454,6 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         );
     }
 
-    /**
-     * override the sendable of the talonFX to our costum widget in elastic
-     * <br>
-     * </br>
-     * to activate put in the code:
-     * 
-     * <pre>
-     * SmartDashboard.putData("talonMotor name", talonMotor);
-     * </pre>
-     */
     @Override
     public void initSendable(SendableBuilder builder) {
         builder.setSmartDashboardType("Talon Motor");
@@ -473,6 +463,7 @@ public class TalonMotor extends TalonFX implements MotorInterface {
         builder.addDoubleProperty("Acceleration", this::getCurrentAcceleration, null);
         builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
         builder.addDoubleProperty("Current", this::getCurrentCurrent, null);
+        builder.addDoubleProperty("Close Loop FF", () -> getClosedLoopFeedForward().getValueAsDouble(), null);
         if(config.isDegreesMotor || config.isRadiansMotor) {
             builder.addDoubleProperty("Angle", this::getCurrentAngle, null);
         }
@@ -491,25 +482,25 @@ public class TalonMotor extends TalonFX implements MotorInterface {
     public void setEncoderPosition(double position) {
       setPosition(position / unitMultiplier);   
     }
-    public Data<Double> getClosedLoopErrorgetSignal() {
+    public Data<Double> getClosedLoopErrorSignal() {
         return closedLoopErrorSignal;
     }
-    public Data<Double> getClosedLoopSPgetSignal() {
+    public Data<Double> getClosedLoopSPSignal() {
         return closedLoopSPSignal;
     }
-    public Data<Angle> getPositiongetSignal() {
+    public Data<Angle> getPositionSignal() {
         return positionSignal;
     }
-    public Data<AngularVelocity> getVelocitygetSignal() {
+    public Data<AngularVelocity> getVelocitySignal() {
         return velocitySignal;
     }
-    public Data<AngularAcceleration> getAccelerationgetSignal() {
+    public Data<AngularAcceleration> getAccelerationSignal() {
         return accelerationSignal;
     }
-    public Data<Voltage> getVoltagegetSignal() {
+    public Data<Voltage> getVoltageSignal() {
         return voltageSignal;
     }
-    public Data<Current> getCurrentgetSignal() {
+    public Data<Current> getCurrentSignal() {
         return currentSignal;
     }
 }

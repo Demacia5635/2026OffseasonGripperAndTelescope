@@ -20,5 +20,7 @@ public final class Constants {
     public static final String roborioId = "rio";
   }
 
+  public static final int ControllerPort = 0;
+
   public Canbus roborioId;
 }

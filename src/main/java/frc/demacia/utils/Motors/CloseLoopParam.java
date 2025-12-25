@@ -1,67 +1,99 @@
 package frc.demacia.utils.Motors;
 
-/** 
-* Class to hold closed loop param
-*  */
-class CloseLoopParam { // calculate volts - not -1 to 1 !!!
+/**
+ * Container class for closed-loop control parameters (PID + feed-forward).
+ * 
+ * <p>Stores seven control parameters used for precise motor control:</p>
+ * <ul>
+ *   <li>kp, ki, kd - PID gains</li>
+ *   <li>ks - Static friction compensation</li>
+ *   <li>kv - Velocity feed-forward</li>
+ *   <li>ka - Acceleration feed-forward</li>
+ *   <li>kg - Gravity feed-forward</li>
+ * </ul>
+ * 
+ * <p><b>Note:</b> This class calculates output in <i>volts</i>, not normalized [-1, 1].</p>
+ */
+class CloseLoopParam {
 
-    public static String[] names= {"kp", "ki", "kd", "ks", "kv", "ka", "kg"};
+    public static String[] PARAMETER_NAMES = {"kp", "ki", "kd", "ks", "kv", "ka", "kg"};
 
-    private double[] array = {0,0,0,0,0,0,0};
+    private double[] parameters = {0,0,0,0,0,0,0};
 
+    /**
+     * Default constructor. Initializes all parameters to zero.
+     */
+    CloseLoopParam() {}
 
-    CloseLoopParam() {
-    }
-
+    /**
+     * Constructor with all seven control parameters.
+     * 
+     * @param kp Proportional gain
+     * @param ki Integral gain
+     * @param kd Derivative gain
+     * @param ks Static friction feed-forward (volts)
+     * @param kv Velocity feed-forward (volts per unit/sec)
+     * @param ka Acceleration feed-forward (volts per unit/sec²)
+     * @param kg Gravity feed-forward (volts)
+     */
     CloseLoopParam(double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
         set(kp,ki,kd,ks,kv,ka,kg);
     }
+
+    /**
+     * Simplified constructor with feed-forward (legacy).
+     * 
+     * @param kp Proportional gain
+     * @param ki Integral gain
+     * @param kd Derivative gain
+     * @param kf Feed-forward gain (mapped to kv)
+     */
     CloseLoopParam(double kp, double ki, double kd, double kf) {
         set(kp,ki,kd,0,kf,0,0);
     }
 
     public void set (double kp, double ki, double kd, double ks, double kv, double ka, double kg) {
-        array[0] = kp;
-        array[1] = ki;
-        array[2] = kd;
-        array[3] = ks;
-        array[4] = kv;
-        array[5] = ka;
-        array[6] = kg;
+        parameters[0] = kp;
+        parameters[1] = ki;
+        parameters[2] = kd;
+        parameters[3] = ks;
+        parameters[4] = kv;
+        parameters[5] = ka;
+        parameters[6] = kg;
     }
 
     public void set(CloseLoopParam other) {
-        array = other.array.clone();
+        parameters = other.parameters.clone();
     }
 
     public double[] toArray() {
-        return array;
+        return parameters;
     }
     public double kp() {
-        return array[0];
+        return parameters[0];
     }
 
     public double ki() {
-        return array[1];
+        return parameters[1];
     }
 
     public double kd() {
-        return array[2];
+        return parameters[2];
     }
 
     public double ks() {
-        return array[3];
+        return parameters[3];
     }
 
     public double kv() {
-        return array[4];
+        return parameters[4];
     }
 
     public double ka() {
-        return array[5];
+        return parameters[5];
     }
 
     public double kg() {
-        return array[6];
+        return parameters[6];
     }
 }
