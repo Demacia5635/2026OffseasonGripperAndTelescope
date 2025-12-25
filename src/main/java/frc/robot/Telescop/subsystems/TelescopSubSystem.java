@@ -45,6 +45,7 @@ public class TelescopSubSystem extends SubsystemBase {
     @SuppressWarnings("unchecked")
     public void putData() {
         SendableChooser<STATE> stateChooser = new SendableChooser<>();
+
         stateChooser.addOption("HOME", STATE.HOME);
         stateChooser.addOption("INTAKE", STATE.INTAKE);
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
@@ -86,7 +87,7 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setPositionVoltage(pos);
     }
 
-    public void setLength(double wantedLength) {
+    public void setLengthHeigt(double wantedLength) {
         if (!isCalibreated()) {
             LogManager.log("Telescop not calibrated");
             stop();
