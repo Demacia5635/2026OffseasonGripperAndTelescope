@@ -51,10 +51,6 @@ public class RobotContainer {
     subsystemsTelescope = new TelescopSubSystem();
     commandTelescop = new TelescopCommands(subsystemsTelescope);
     configureBindings();
-    SmartDashboard.putBoolean(null, TelescopSubSystem.setCalibratedTrue());
-    //SmartDashboard.putData("Calibration with ande", Commands.runOnce(() -> TelescopSubSystem.setCalibrated(true), TelescopSubSystem.setLength(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH)));
-    // Configure the trigger bindings
-    // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
   }
 
   public static boolean isComp() {
