@@ -45,13 +45,11 @@ public class TelescopSubSystem extends SubsystemBase {
     @SuppressWarnings("unchecked")
     public void putData() {
         SendableChooser<STATE> stateChooser = new SendableChooser<>();
-        stateChooser.addOption("L1", STATE.L1);
-        stateChooser.addOption("L2", STATE.L2);
-        stateChooser.addOption("L3", STATE.L3);
-        stateChooser.addOption("L4", STATE.L4);
         stateChooser.addOption("HOME", STATE.HOME);
         stateChooser.addOption("INTAKE", STATE.INTAKE);
         stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
+        stateChooser.addOption("open", STATE.OPEN);
+        stateChooser.addOption("close", STATE.CLOSED);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
         LogManager.addEntry("Telescope", () -> (new double[] { getCurrentHeigt() }))
