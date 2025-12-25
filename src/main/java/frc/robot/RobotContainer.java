@@ -5,13 +5,9 @@ package frc.robot;
 
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
-import frc.demacia.utils.Controller.CommandController;
-import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
-import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
+// import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
-import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
-import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -49,7 +45,6 @@ public class RobotContainer {
     new LogManager();
     changeAngle = new ChangeAngle();
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
-    // changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
 
 
     gripperSubsystem = new GripperSubsystem();
@@ -58,6 +53,7 @@ public class RobotContainer {
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     subsystemsTelescope = new TelescopSubSystem();
     commandTelescop = new TelescopCommands(subsystemsTelescope);
+    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
     configureBindings();
   }
 

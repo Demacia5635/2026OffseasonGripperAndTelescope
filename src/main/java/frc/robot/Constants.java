@@ -15,10 +15,6 @@ import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final String roborioId = "rio";
-  }
 
   public static final int ControllerPort = 0;
   

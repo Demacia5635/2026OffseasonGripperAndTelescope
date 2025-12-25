@@ -1,10 +1,6 @@
 package frc.demacia.utils.chassis;
 
-<<<<<<< HEAD
 import frc.demacia.utils.Motors.BaseMotorConfig;
-=======
-import frc.demacia.utils.Motors.TalonConfig;
->>>>>>> telescope---dp
 import frc.demacia.utils.Sensors.CancoderConfig;
 
 /**

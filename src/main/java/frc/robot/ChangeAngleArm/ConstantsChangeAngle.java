@@ -2,7 +2,7 @@ package frc.robot.ChangeAngleArm;
 
 import frc.demacia.utils.Sensors.AnalogEncoderConfig;
 
-import frc.demacia.utils.Motors.TalonConfig;
+import frc.demacia.utils.Motors.TalonFXConfig;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 public class ConstantsChangeAngle {
@@ -22,8 +22,8 @@ public class ConstantsChangeAngle {
 
     public static final int ANALOG_ENCODER_CHANNEL = 1;
 
-    public static final TalonConfig CHANGE_ANGLE_CONFIG = // Maybe change the final to not final
-            new TalonConfig(MOTOR_ID, CANBUS_NAME, "Change Angle Motor")
+    public static final TalonFXConfig CHANGE_ANGLE_CONFIG = // Maybe change the final to not final
+            new TalonFXConfig(MOTOR_ID, CANBUS_NAME, "Change Angle Motor")
                     .withMotionParam(MAX_VELOCITY, MAX_ACCEL, MAX_JERK)
                     .withRadiansMotor(GEAR_RATIO)
                     .withPID(KP, KI, KD, KS, KV, KA, KG);

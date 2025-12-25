@@ -8,10 +8,6 @@ import java.util.List;
 
 import org.ejml.simple.SimpleMatrix;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> telescope---dp
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.controller.PIDController;
