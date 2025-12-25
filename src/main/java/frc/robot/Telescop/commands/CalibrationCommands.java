@@ -46,7 +46,7 @@ public class CalibrationCommands extends Command {
       }
     }else{
       telescop.setPower(CalibrationConstants.POWER_AT_BOTTOM_SWITCH);
-      telescop.setMotorPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
+      telescop.setMotorLength(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
       telescop.setLength(STATE.CALIBRATE.length);
     }
   }
@@ -57,7 +57,7 @@ public class CalibrationCommands extends Command {
     timer.stop();
     timer.reset();
     telescop.stop();
-    telescop.setMotorPosition(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
+    telescop.setMotorLength(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH);
     telescop.setStateToHome();
     TelescopSubSystem.setCalibrated(true);
   }

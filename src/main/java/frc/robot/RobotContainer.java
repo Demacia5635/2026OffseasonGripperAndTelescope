@@ -6,6 +6,7 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
+import frc.robot.Telescop.ConstantsTelescop.CalibrationConstants;
 import frc.robot.Telescop.ConstantsTelescop.STATE;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
@@ -46,7 +47,7 @@ public class RobotContainer {
     subsystemsTelescope = new TelescopSubSystem();
     commandTelescop = new TelescopCommands(subsystemsTelescope);
     configureBindings();
-    SmartDashboard.putData("Calibration with ande", Commands.runOnce(() -> TelescopSubSystem.setCalibrated(true)));
+    SmartDashboard.putData("Calibration with ande", Commands.runOnce(() -> TelescopSubSystem.setCalibrated(true), TelescopSubSystem.setLength(CalibrationConstants.POSITION_AT_BOTTOM_SWITCH)));
     // Configure the trigger bindings
     // testMotor.setDefaultCommand(new TestMotorCommand(testMotor,5););
   }

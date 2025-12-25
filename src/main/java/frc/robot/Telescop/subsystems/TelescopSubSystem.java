@@ -67,7 +67,7 @@ public class TelescopSubSystem extends SubsystemBase {
         return motor.getCurrentPosition();
     }
 
-    public void setMotorPosition(double l) {
+    public void setMotorLength(double l) {
         motor.setEncoderPosition(l);
     }
 
@@ -103,6 +103,10 @@ public class TelescopSubSystem extends SubsystemBase {
             return;
         }
         motor.setPositionVoltageWithFeedForward(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH));
+    }
+
+    public static void setLengetPozesanCalibrate(){
+
     }
 
     public static boolean isCalibreated() {

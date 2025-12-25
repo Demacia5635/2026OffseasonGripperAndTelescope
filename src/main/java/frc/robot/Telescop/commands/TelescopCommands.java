@@ -31,7 +31,7 @@ public class TelescopCommands extends Command {
     STATE currentState = telescop.getCurrentState();
     switch (currentState) {
   case IDLE:
-    telescop.setMotorPosition(telescop.getCurrentHeigt());
+    telescop.setMotorLength(telescop.getCurrentHeigt());
     break;
   default:
     telescop.setLength(currentState.length);
