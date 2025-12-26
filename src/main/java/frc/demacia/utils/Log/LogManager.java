@@ -84,6 +84,7 @@ public class LogManager extends SubsystemBase {
    */
   @SuppressWarnings("unchecked")
   public static <T> LogEntryBuilder<T> addEntry(String name, StatusSignal<T>... statusSignals) {
+    // return null;
       return new LogEntryBuilder<T>(name, statusSignals);
   }
 

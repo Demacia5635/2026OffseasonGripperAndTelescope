@@ -62,8 +62,8 @@ public class TalonFXMotor extends TalonFX implements MotorInterface {
         name = config.name;
         configMotor();
         setSignals();
-        addLog();
-        LogManager.log(name + " motor initialized");
+        // addLog();
+        // LogManager.log(name + " motor initialized");
         SmartDashboard.putData(name,this);
     }
 

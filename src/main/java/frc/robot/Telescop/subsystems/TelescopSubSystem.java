@@ -43,6 +43,7 @@ public class TelescopSubSystem extends SubsystemBase {
         builder.addBooleanProperty("Sensor", this::getSensor, null);
         builder.addDoubleProperty("Length", this::getCurrentHeigt, null);
         builder.addStringProperty("State", () -> currentState.name(), null);
+        builder.addBooleanProperty("Is at limit", ()->isAtBottom(), null);
         builder.addDoubleProperty("Test Length", () -> STATE_TELESCOPE.TESTING.length, (l) -> STATE_TELESCOPE.TESTING.length = l);
 
     }
@@ -121,11 +122,7 @@ public class TelescopSubSystem extends SubsystemBase {
     }
 
     public boolean isAtBottom() {
-        if (limitSwitchTelescope.get()){
-            return true;
-        }else{
-            return false;
-        }
+        return getSensor();
     }
 
     public static void setState(STATE_TELESCOPE state) {
@@ -148,8 +145,10 @@ public class TelescopSubSystem extends SubsystemBase {
         setState(STATE_TELESCOPE.HOME);
     }
 
+    
     @Override
     public void periodic() {
+
 
     }
 

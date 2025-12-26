@@ -113,19 +113,20 @@ public class LogEntryBuilder<T> {
      * @throws IllegalArgumentException if name is empty or level is null
      */
     public LogEntry<T> build() {
-        if (LogManager.logManager == null) {
-            throw new IllegalStateException("LogManager2 not initialized. Create LogManager2 instance before building log entries.");
-        }
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Log entry name cannot be null or empty");
-        }
-        if (logLevel == null) {
-            throw new IllegalArgumentException("Log level cant be null: ");
-        }
-        LogEntry<T> entry = LogManager.logManager.add(name, data, logLevel, metadata);
-        if (consumer != null) {
-            entry.setConsumer(consumer);
-        }
-        return entry;
+        return null;
+        // if (LogManager.logManager == null) {
+        //     throw new IllegalStateException("LogManager2 not initialized. Create LogManager2 instance before building log entries.");
+        // }
+        // if (name == null || name.trim().isEmpty()) {
+        //     throw new IllegalArgumentException("Log entry name cannot be null or empty");
+        // }
+        // if (logLevel == null) {
+        //     throw new IllegalArgumentException("Log level cant be null: ");
+        // }
+        // LogEntry<T> entry = LogManager.logManager.add(name, data, logLevel, metadata);
+        // if (consumer != null) {
+        //     entry.setConsumer(consumer);
+        // }
+        // return entry;
     }
 }

@@ -24,6 +24,7 @@ public class ChangeAngle extends SubsystemBase {
     }
 
     public void setAngle(double angle) {
+        
         changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()) + ConstantsChangeAngle.KE * RobotContainer.subsystemsTelescope.getCurrentHeigt() / 0.7);
     }
 

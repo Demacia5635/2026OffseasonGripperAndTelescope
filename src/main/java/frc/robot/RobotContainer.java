@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 // import frc.robot.Gripper.subsystems.GripperSubsystem;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
+import frc.robot.Telescop.commands.CalibrationCommand;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
@@ -55,6 +56,7 @@ public class RobotContainer {
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
     subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
+    controller.downButton().onTrue(new CalibrationCommand(subsystemsTelescope));
     commandTelescop = new TelescopCommands(subsystemsTelescope);
     
     configureBindings();

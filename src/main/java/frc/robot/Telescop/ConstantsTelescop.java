@@ -7,7 +7,7 @@ import frc.demacia.utils.Sensors.LimitSwitchConfig;
 public class ConstantsTelescop {
 
 
-    public static final LimitSwitchConfig SENSOR_CONFIG = new LimitSwitchConfig(5, "Telescop Sensor").withInvert(true);
+    public static final LimitSwitchConfig SENSOR_CONFIG = new LimitSwitchConfig(3, "Telescop Sensor").withInvert(true);
 
     public static enum STATE_TELESCOPE {
         OUT_TAKE(0,0),
