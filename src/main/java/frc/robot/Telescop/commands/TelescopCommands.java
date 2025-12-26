@@ -28,6 +28,7 @@ public class TelescopCommands extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (TelescopSubSystem.isCalibreated()) {
     STATE_TELESCOPE currentState = telescop.getCurrentState();
     switch (currentState) {
   case IDLE:
@@ -37,7 +38,9 @@ public class TelescopCommands extends Command {
     telescop.setLength(currentState.length);
     break;
   }
-
+  }else{
+    return;
+  }
 }
   // Called once the command ends or is interrupted.
   @Override

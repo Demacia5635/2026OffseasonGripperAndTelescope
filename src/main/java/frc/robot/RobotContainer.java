@@ -48,17 +48,14 @@ public class RobotContainer {
     changeAngle = new ChangeAngle();
     subsystemsTelescope = new TelescopSubSystem();
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
-
-
     // gripperSubsystem = new GripperSubsystem();
-
-
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
     subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
     controller.downButton().onTrue(new CalibrationCommand(subsystemsTelescope));
     commandTelescop = new TelescopCommands(subsystemsTelescope);
-    
+    subsystemsTelescope.setDefaultCommand(commandTelescop);
+
     configureBindings();
   }
 
@@ -74,9 +71,6 @@ public class RobotContainer {
       LogManager.removeInComp();
     }
   }
-
-  
-
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
