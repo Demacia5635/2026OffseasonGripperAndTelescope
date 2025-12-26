@@ -19,10 +19,14 @@ import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
+
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -42,14 +46,14 @@ public class RobotContainer {
   public static ChangeAngle changeAngle;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
   public RobotContainer() {
     new LogManager();
     changeAngle = new ChangeAngle();
     subsystemsTelescope = new TelescopSubSystem();
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
-
-
     // gripperSubsystem = new GripperSubsystem();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     controller.getRightStickMove().onTrue(new ControllerTelescope(controller, subsystemsTelescope));
@@ -57,7 +61,6 @@ public class RobotContainer {
     controller.downButton().onTrue(new CalibrationCommand(subsystemsTelescope));
     commandTelescop = new TelescopCommands(subsystemsTelescope);
     subsystemsTelescope.setDefaultCommand(commandTelescop);
-    
     configureBindings();
   }
 
@@ -65,26 +68,30 @@ public class RobotContainer {
     return isComp;
   }
 
-
   public static void setIsComp(boolean isComp) {
     RobotContainer.isComp = isComp;
-    if(!hasRemovedFromLog && isComp) {
+    if (!hasRemovedFromLog && isComp) {
       hasRemovedFromLog = true;
       LogManager.removeInComp();
     }
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be
+   * created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+   * an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
+   * {@link
+   * CommandXboxController
+   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or
+   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
   private void configureBindings() {
-    
+
   }
 
   /**

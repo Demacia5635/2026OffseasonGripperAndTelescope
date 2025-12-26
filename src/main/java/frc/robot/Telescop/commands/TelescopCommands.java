@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import static frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 
+import java.util.logging.LogManager;
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TelescopCommands extends Command {
   /** Creates a new telescopCommands. */
@@ -22,12 +24,14 @@ public class TelescopCommands extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("Telescop Command Started");
+  }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
+  public void execute() {;
     if (TelescopSubSystem.isCalibreated()) {
     STATE_TELESCOPE currentState = telescop.getCurrentState();
     switch (currentState) {
