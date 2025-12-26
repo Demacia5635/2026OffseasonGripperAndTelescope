@@ -6,7 +6,6 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
-import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 // import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -49,10 +48,15 @@ public class RobotContainer {
     changeAngle = new ChangeAngle();
     subsystemsTelescope = new TelescopSubSystem();
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
+
+
     // gripperSubsystem = new GripperSubsystem();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
-    subsystemsTelescope.setDefaultCommand(new TelescopCommands(subsystemsTelescope));
-
+    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
+    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
+    controller.downButton().onTrue(new CalibrationCommand(subsystemsTelescope));
+    commandTelescop = new TelescopCommands(subsystemsTelescope);
+    
     configureBindings();
   }
 
@@ -79,9 +83,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-   controller.leftStick().onTrue(new ManualControlAngleArm(changeAngle, controller));
-   controller.rightStick().onTrue(new ControllerTelescope(controller, subsystemsTelescope));
-   controller.downButton().onTrue(new CalibrationCommand(subsystemsTelescope));
+    
   }
 
   /**
