@@ -57,6 +57,7 @@ public class TelescopSubSystem extends SubsystemBase {
         stateChooser.addOption("open", STATE_TELESCOPE.OPEN);
         stateChooser.addOption("close", STATE_TELESCOPE.CLOSED);
         stateChooser.addOption("OUT_TAKE", STATE_TELESCOPE.OUT_TAKE);
+        stateChooser.addOption("TESTING", STATE_TELESCOPE.TESTING);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
         LogManager.addEntry("Telescope", () -> (new double[] { getCurrentHeigt() }))

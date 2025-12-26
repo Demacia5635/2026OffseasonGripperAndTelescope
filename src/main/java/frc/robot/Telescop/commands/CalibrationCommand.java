@@ -17,14 +17,15 @@ public class CalibrationCommand extends Command {
   public CalibrationCommand(TelescopSubSystem telescope) {
     this.telescope = telescope;
     addRequirements(telescope);
+    timer = new Timer();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
     timer.reset();
+    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +41,8 @@ public class CalibrationCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    timer.reset();
+    timer.stop();
     telescope.setMotorLength(ConstantsTelescop.MIN_LENGTH);
     telescope.stop();
   }
