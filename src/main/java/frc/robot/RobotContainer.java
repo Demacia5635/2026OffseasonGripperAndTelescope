@@ -52,10 +52,11 @@ public class RobotContainer {
 
     // gripperSubsystem = new GripperSubsystem();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
-    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle, controller));
-    subsystemsTelescope.setDefaultCommand(new ControllerTelescope(controller, subsystemsTelescope));
+    controller.getRightStickMove().onTrue(new ControllerTelescope(controller, subsystemsTelescope));
+    controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
     controller.downButton().onTrue(new CalibrationCommand(subsystemsTelescope));
     commandTelescop = new TelescopCommands(subsystemsTelescope);
+    subsystemsTelescope.setDefaultCommand(commandTelescop);
     
     configureBindings();
   }
