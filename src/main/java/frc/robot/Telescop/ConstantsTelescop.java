@@ -16,7 +16,7 @@ public class ConstantsTelescop {
         IDLE(-1, -1),
         INTAKE(0, 0),
         CLOSED(-1, 0),
-        OPEN(-1, 0.65),
+        OPEN(-1, 0.40),
         CALIBRATE(0, 0.03);
 
         public double angle;

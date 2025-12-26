@@ -35,7 +35,7 @@ public class ManualControlAngleArm extends Command {
 	@Override
 	public void execute() {
     	joyY = -controller.getLeftY();
-		changeAngle.setPower(joyY * 0.5);
+		changeAngle.setPower(joyY * 0.2);
 	}
 
   // Called once the command ends or is interrupted.
