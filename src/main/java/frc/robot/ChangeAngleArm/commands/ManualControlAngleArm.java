@@ -26,7 +26,8 @@ public class ManualControlAngleArm extends Command {
   	}
 
   // Called when the command is initially scheduled.
-  	@Override
+  	@SuppressWarnings("unchecked")
+	@Override
 	public void initialize() {
 		LogManager.addEntry("wanted power", () -> joyY * 0.5).build();
 	}
