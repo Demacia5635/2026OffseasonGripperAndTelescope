@@ -16,18 +16,17 @@ import frc.robot.RobotContainer;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import frc.robot.Telescop.ConstantsTelescop;
 import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
-
+import frc.demacia.utils.Controller.CommandController;
 
 public class TelescopSubSystem extends SubsystemBase {
 
     private LimitSwitch limitSwitchTelescope;
-
     private TalonFXMotor motor;
     public static boolean calibrated = false;
-
     private static STATE_TELESCOPE currentState = STATE_TELESCOPE.CALIBRATE;
-
     public static boolean setCalibrated;
+    public CommandController controller;
+    private double joystickRightY;
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
@@ -112,6 +111,11 @@ public class TelescopSubSystem extends SubsystemBase {
         motor.setPositionVoltage(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH), Math.sin(RobotContainer.changeAngle.getAngle()));
     }   
 
+    public void controller(){
+        double Yjostice;
+        Yjostice = - controller.getRightY();
+        motor.setDuty(Yjostice * 0.5);
+    }
 
     public static boolean isCalibreated() {
         return calibrated;
@@ -149,8 +153,8 @@ public class TelescopSubSystem extends SubsystemBase {
     
     @Override
     public void periodic() {
-
-
+        joystickRightY = -controller.getRightY();
+        setPower(joystickRightY * 0.5);
     }
 
 }
