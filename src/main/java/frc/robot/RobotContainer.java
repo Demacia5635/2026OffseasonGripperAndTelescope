@@ -8,18 +8,17 @@ import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 // import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
+import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.Gripper.subsystems.GripperSubsystem;
+import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
-import frc.robot.Telescop.commands.CalibrationCommand;
 import frc.robot.Telescop.commands.CalibrationCommands;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
-import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import frc.robot.Gripper.subsystems.GripperSubsystem;
 import frc.robot.Gripper.commands.GripperCommand;
 
@@ -48,6 +47,8 @@ public class RobotContainer {
   public static ChangeAngle changeAngle;
   public static GripperSubsystem gripperSubsystem;
   public static GripperCommand GripperCommand;
+  public static GoToTelescopeAngle GoToTelescopeAngle;
+  public static ManualControlAngleArm ManualControlAngleArm;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -62,6 +63,7 @@ public class RobotContainer {
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
     TelescopSubSystem.setDefaultCommand(Commands.sequence(CalibrationCommands, Commands.deadline(TelescopCommands, ControllerTelescope)));
+    changeAngle.setDefaultCommand(Commands.sequence(GoToTelescopeAngle, ManualControlAngleArm));
     gripperSubsystem.setDefaultCommand(GripperCommand);
     // changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
     configureBindings();
@@ -93,10 +95,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
   private void configureBindings() {
    //controller.getRightStickMove().onTrue(new ControllerTelescope(controller, TelescopSubSystem));
-    controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
-    controller.downButton().onTrue(new CalibrationCommand(TelescopSubSystem));
+    //controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
+    //controller.downButton().onTrue(new CalibrationCommand(TelescopSubSystem));
   }
 
   /**
