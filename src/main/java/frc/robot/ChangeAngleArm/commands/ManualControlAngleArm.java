@@ -4,9 +4,11 @@
 
 package frc.robot.ChangeAngleArm.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -29,14 +31,14 @@ public class ManualControlAngleArm extends Command {
   	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize() {
-		LogManager.addEntry("wanted power", () -> joyY * 0.5).build();
+		LogManager.addEntry("wanted power", () -> joyY * 0.2).withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).withIsSeparated(true).build();
 	}
 
   // Called every time the scheduler runs while the command is scheduled.
 	@Override
 	public void execute() {
     	joyY = -controller.getLeftY();
-		changeAngle.setPower(joyY * 0.2);
+		changeAngle.setPower(MathUtil.clamp(joyY * 0.2, 0.05, 1));
 	}
 
   // Called once the command ends or is interrupted.
