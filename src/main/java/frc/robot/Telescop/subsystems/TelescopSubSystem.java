@@ -61,9 +61,6 @@ public class TelescopSubSystem extends SubsystemBase {
 
         LogManager.addEntry("Telescope2", () -> (new boolean[] { isAtBottom(), isCalibreated() }))
                 .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
-
-        motor.showConfigMotionVelocitiesCommand();
-        motor.showConfigPIDFSlotCommand(0);
     }
     
     public double getCurrentHeigt() {

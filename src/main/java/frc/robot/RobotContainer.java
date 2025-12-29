@@ -45,8 +45,8 @@ public class RobotContainer {
   public static ControllerTelescope ControllerTelescope;
   public static CommandController controller;
   public static ChangeAngle changeAngle;
-  public static GripperSubsystem gripperSubsystem;
-  public static GripperCommand GripperCommand;
+  // public static GripperSubsystem gripperSubsystem;
+  // public static GripperCommand GripperCommand;
   public static GoToTelescopeAngle GoToTelescopeAngle;
   public static ManualControlAngleArm ManualControlAngleArm;
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -55,18 +55,16 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    new LogManager();
     changeAngle = new ChangeAngle();
     TelescopSubSystem = new TelescopSubSystem();
-    gripperSubsystem = new GripperSubsystem();
-    controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
+    // gripperSubsystem = new GripperSubsystem();
+    controller = new CommandController(Constants.ControllerPort, ControllerType.kXbox);
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
     controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
     // TelescopSubSystem.setDefaultCommand(Commands.sequence(CalibrationCommands, Commands.deadline(TelescopCommands, ControllerTelescope)));
     // changeAngle.setDefaultCommand(Commands.sequence(GoToTelescopeAngle, ManualControlAngleArm));
     // gripperSubsystem.setDefaultCommand(GripperCommand);
-    controller.
-    configureBindings();
+    //configureBindings();
   }
 
   public static boolean isComp() {
