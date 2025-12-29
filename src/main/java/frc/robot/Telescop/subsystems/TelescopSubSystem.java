@@ -24,7 +24,6 @@ public class TelescopSubSystem extends SubsystemBase {
     private static STATE_TELESCOPE currentState = STATE_TELESCOPE.CALIBRATE;
     public static boolean setCalibrated;
     public CommandController controller;
-    private double joystickRightY;
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
@@ -151,8 +150,7 @@ public class TelescopSubSystem extends SubsystemBase {
     
     @Override
     public void periodic() {
-        joystickRightY = -controller.getRightY();
-        setPower(joystickRightY * 0.5);
+       
     }
 
 }

@@ -92,7 +92,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
     controller.getRightStickMove().onTrue(new ControllerTelescope(controller, TelescopSubSystem));
     controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
     controller.downButton().onTrue(new CalibrationCommand(TelescopSubSystem));
