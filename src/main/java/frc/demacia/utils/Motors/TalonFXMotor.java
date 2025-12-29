@@ -161,7 +161,7 @@ public class TalonFXMotor extends TalonFX implements MotorInterface {
         currentSignal = new Data<>(getStatorCurrent());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
     private void addLog() {
         LogManager.addEntry(name + " Position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP",  new StatusSignal[] {
             positionSignal.getSignal(),
