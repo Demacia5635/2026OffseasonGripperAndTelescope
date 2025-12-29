@@ -35,6 +35,7 @@ public class OpticalSensor extends AnalogInput implements SensorInterface {
         super(config.echoChannel);
         this.config = config;
 		name = config.name;
+        setName(name);
         addLog();
 		LogManager.log(name + " Optical Sensor initialized");
     }

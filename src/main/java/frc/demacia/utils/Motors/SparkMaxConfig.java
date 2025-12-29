@@ -18,7 +18,7 @@ public class SparkMaxConfig extends BaseMotorConfig<SparkMaxConfig> {
         motorClass = MotorControllerType.SparkMax;
     }
 
-    public SparkMaxConfig(int id, String name, SparkMaxConfig config) {
+    public SparkMaxConfig(int id, String name, BaseMotorConfig<?> config) {
         this(id,name);
         copyBaseFields(config);
     }

@@ -1,6 +1,7 @@
 package frc.demacia.utils.Motors;
 
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableRegistry;
 
 /**
  * Unified interface for all motor controller types.
@@ -18,14 +19,22 @@ import edu.wpi.first.util.sendable.SendableBuilder;
  *   <li>Angle control (with automatic wrap-around)</li>
  * </ul>
  */
-public interface MotorInterface {
+public interface MotorInterface extends Sendable {
+
+    public static enum ControlMode {
+        DISABLE, DUTYCYCLE, VOLTAGE, VELOCITY, POSITION_VOLTAGE, MOTION, ANGLE
+    }
 
     /**
      * Gets the motor's name as specified in config.
      * 
      * @return Motor name for logging/debugging
      */
-    String name();
+    String getName();
+
+    default void setName(String name) {
+        SendableRegistry.setName(this, name);
+    }
 
     /**
      * Changes the active PID/FF slot.
@@ -152,14 +161,14 @@ public interface MotorInterface {
      * 
      * @param position Target position in configured units
      */
-    void setMotionWithFeedForward(double velocity);
+    void setMotionWithFeedForward(double position);
 
     /**
      * Gets the current control mode as a human-readable string.
      * 
      * @return Control mode name (e.g., "Velocity", "Motion", "Duty Cycle")
      */
-    String getCurrentControlMode();
+    int getCurrentControlMode();
     /**
      * Gets the current closed-loop setpoint.
      * 
@@ -229,21 +238,5 @@ public interface MotorInterface {
      */
     void setEncoderPosition(double position);
 
-    /**
-     * Creates a hot-reload widget for tuning PID parameters.
-     * 
-     * <p>Allows real-time tuning through dashboard without redeploying code.
-     * Changes are applied immediately to the motor controller.</p>
-     * 
-     * @param slot PID slot to display (0-2)
-     */
-    void showConfigPIDFSlotCommand(int slot);
-    /**
-    * Creates a hot-reload widget for tuning motion profile parameters.
-    * 
-    * <p>Allows real-time tuning of maxVelocity, maxAcceleration, and maxJerk.</p>
-    */
-    void showConfigMotionVelocitiesCommand();
-
-    void initSendable(SendableBuilder builder);
+    void stop();
 }

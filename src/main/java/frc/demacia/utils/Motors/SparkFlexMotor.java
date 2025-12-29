@@ -12,26 +12,23 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.demacia.utils.UpdateArray;
-import frc.demacia.utils.Utilities;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
-import frc.robot.RobotContainer;
 
-public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterface {
+public class SparkFlexMotor extends SparkFlex implements MotorInterface {
 
   private frc.demacia.utils.Motors.SparkFlexConfig config;
   private String name;
   private SparkFlexConfig cfg;
-  private int slot = 0;
   private ClosedLoopSlot closedLoopSlot = ClosedLoopSlot.kSlot0;
   private ControlType controlType = ControlType.kDutyCycle;
 
-  private String lastControlMode = "";
+  private ControlMode controlMode = ControlMode.DISABLE;
   private double lastVelocity;
   private double lastAcceleration;
   private double setPoint = 0;
-  private int lastCycleNum = 0;
   private double lastTime = 0;
 
   public SparkFlexMotor(frc.demacia.utils.Motors.SparkFlexConfig config) {
@@ -40,6 +37,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     name = config.name;
     configMotor();
     addLog();
+    setName(name);
     SmartDashboard.putData(name, this);
     LogManager.log(name + " motor initialized");
   }
@@ -53,7 +51,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     cfg.idleMode(config.brake ? SparkBaseConfig.IdleMode.kBrake : SparkBaseConfig.IdleMode.kCoast);
     cfg.voltageCompensation(config.maxVolt);
     cfg.encoder.positionConversionFactor(config.motorRatio);
-    cfg.encoder.velocityConversionFactor(config.motorRatio / 60);
+    cfg.encoder.velocityConversionFactor(config.motorRatio);
     updatePID(false);
     if (config.maxVelocity != 0) {
       cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
@@ -62,38 +60,50 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   }
 
   private void updatePID(boolean apply) {
-    cfg.closedLoop.pidf(config.pid[0].kp(), config.pid[0].ki(), config.pid[0].kd(), config.pid[0].kv(),
+    cfg.closedLoop.pidf(config.pid[0].kP(), config.pid[0].kI(), config.pid[0].kD(), config.pid[0].kV(),
         ClosedLoopSlot.kSlot0);
-    cfg.closedLoop.pidf(config.pid[1].kp(), config.pid[1].ki(), config.pid[1].kd(), config.pid[1].kv(),
+    cfg.closedLoop.pidf(config.pid[1].kP(), config.pid[1].kI(), config.pid[1].kD(), config.pid[1].kV(),
         ClosedLoopSlot.kSlot1);
-    cfg.closedLoop.pidf(config.pid[2].kp(), config.pid[2].ki(), config.pid[2].kd(), config.pid[2].kv(),
+    cfg.closedLoop.pidf(config.pid[2].kP(), config.pid[2].kI(), config.pid[2].kD(), config.pid[2].kV(),
         ClosedLoopSlot.kSlot2);
+    cfg.closedLoop.pidf(config.pid[3].kP(), config.pid[3].kI(), config.pid[3].kD(), config.pid[3].kV(),
+        ClosedLoopSlot.kSlot3);
     if (apply) {
       this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     }
   }
 
+  @Override
+  public void setName(String name) {
+      MotorInterface.super.setName(name);
+      this.name = name;
+  }
+
   @SuppressWarnings("unchecked")
   private void addLog() {
-    LogManager.addEntry(name + " Position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP", 
-      () -> new double[] {
-        getCurrentPosition(),
-        getCurrentVelocity(),
-        getCurrentAcceleration(),
-        getCurrentVoltage(),
-        getCurrentCurrent(),
-        getCurrentClosedLoopError(),
-        getCurrentClosedLoopSP(),
-      }).withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP)
-      .WithIsMotor().build();
+    LogManager.addEntry(name + ": Position, Velocity, Acceleration, Voltage, Current, CloseLoopError, CloseLoopSP", 
+        () -> getCurrentPosition(),
+        () -> getCurrentVelocity(),
+        () -> getCurrentAcceleration(),
+        () -> getCurrentVoltage(),
+        () -> getCurrentCurrent(),
+        () -> getCurrentClosedLoopError(),
+        () -> getCurrentClosedLoopSP(),
+        () -> getCurrentControlMode()
+      ).withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP)
+      .withIsMotor()
+      .build();
   }
 
   public void checkElectronics() {
     Faults faults = getFaults();
-    if (faults != null) {
-        LogManager.log(name + " have fault num: " + faults.toString(), AlertType.kError);
+    boolean hasFault = faults.other || faults.motorType || faults.sensor || 
+      faults.can || faults.temperature;
+
+    if (hasFault) {
+        LogManager.log(name + " Fault Detected: " + faults.toString(), AlertType.kError);
     }
-}
+  }
 
   /**
    * change the slot of the pid and feed forward.
@@ -102,11 +112,10 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
    * @param slot the wanted slot between 0 and 2
    */
   public void changeSlot(int slot) {
-    if (slot < 0 || slot > 2) {
+    if (slot < 0 || slot > 3) {
       LogManager.log("slot is not between 0 and 2", AlertType.kError);
       return;
     }
-    this.slot = slot;
     this.closedLoopSlot = slot == 0 ? ClosedLoopSlot.kSlot0 : slot == 1 ? ClosedLoopSlot.kSlot1 : ClosedLoopSlot.kSlot2;
   }
 
@@ -126,13 +135,17 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   public void setDuty(double power) {
     super.set(power);
     controlType = ControlType.kDutyCycle;
-    lastControlMode = "Duty Cycle";
+    if (power == 0){
+      controlMode = ControlMode.DISABLE;
+    } else {
+        controlMode = ControlMode.DUTYCYCLE;
+    }
   }
 
   public void setVoltage(double voltage) {
     super.setVoltage(voltage);
     controlType = ControlType.kVoltage;
-    lastControlMode = "Voltage";
+    controlMode = ControlMode.VOLTAGE;
   }
 
   /**
@@ -150,18 +163,18 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     }
     getClosedLoopController().setReference(velocity, ControlType.kMAXMotionVelocityControl, closedLoopSlot, feedForward);
     controlType = ControlType.kMAXMotionVelocityControl;
-    lastControlMode = "Velocity";
+    controlMode = ControlMode.VELOCITY;
     setPoint = velocity;
   }
 
   public void setVelocity(double velocity) {
-    setVelocity(velocity, config.pid[closedLoopSlot.value].ks()*Math.signum(velocity));
+    setVelocity(velocity, config.pid[closedLoopSlot.value].kS()*Math.signum(velocity));
   }
 
   public void setPositionVoltage(double position, double feedForward) {
     getClosedLoopController().setReference(position, ControlType.kPosition, closedLoopSlot, feedForward);
     controlType = ControlType.kPosition;
-    lastControlMode = "Position Voltage";
+    controlMode = ControlMode.POSITION_VOLTAGE;
     setPoint = position;
   }
 
@@ -185,23 +198,24 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     }
     getClosedLoopController().setReference(position, ControlType.kMAXMotionPositionControl, closedLoopSlot, feedForward);
     controlType = ControlType.kMAXMotionPositionControl;
-    lastControlMode = "Motion";
+    controlMode = ControlMode.MOTION;
     setPoint = position;
   } 
 
   @Override
   public void setMotion(double position) {
-    setMotion(position, config.pid[closedLoopSlot.value].ks()*Utilities.signumWithDeadband(position - getCurrentPosition(), 0.5));
+    setMotion(position, config.pid[closedLoopSlot.value].kS());
   }
 
   @Override
   public void setAngle(double angle, double feedForward) {
-    setMotion(MotorUtils.getPositionForAngle(getCurrentPosition(), angle, config.isRadiansMotor), feedForward);
-    lastControlMode = "Angle";
+    setMotion(getCurrentPosition() + MathUtil.angleModulus(angle - getCurrentAngle()), feedForward);
+    controlMode = ControlMode.ANGLE;
   }
+
   @Override
   public void setAngle(double angle) {
-    setMotion(MotorUtils.getPositionForAngle(getCurrentPosition(), angle, config.isRadiansMotor));
+    setAngle(angle, 0);
   }
 
   private double velocityFeedForward(double velocity) {
@@ -213,8 +227,8 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   }
 
   @Override
-  public String getCurrentControlMode() {
-    return lastControlMode;
+  public int getCurrentControlMode() {
+    return controlMode.ordinal();
   }
 
   @Override
@@ -234,101 +248,6 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     return setPoint;
   }
 
-  /**
-   * creates a widget in elastic of the pid and ff for hot reload
-   * 
-   * @param slot the slot of the close loop perams (from 0 to 2)
-   */
-  public void showConfigPIDFSlotCommand(int slot) {
-    CloseLoopParam p = config.pid[slot];
-    if (p != null) {
-      UpdateArray.show(name + " PID " + slot, CloseLoopParam.PARAMETER_NAMES, p.toArray(), (double[] array) -> updatePID(true));
-    }
-  }
-
-  public void showConfigMotorCommand() {
-      UpdateArray.show(name + " MOTOR CONFIG",
-          new String[] {
-              "Max Current",
-              "Ramp Time (s)",
-              "Max Volt",
-              "Brake (0,1)",
-              "Invert (0,1)",
-              "Motor Ratio",
-              "Slot"
-          },
-          new double[] {
-              config.maxCurrent,
-              config.rampUpTime,
-              config.maxVolt,
-              config.brake ? 1.0 : 0.0,
-              config.inverted ? 1.0 : 0.0,
-              config.motorRatio,
-              slot
-          },
-          (double[] array) -> {
-              config.withCurrent(array[0])
-                    .withRampTime(array[1])
-                    .withVolts(array[2])
-                    .withBrake(array[3] > 0.5)
-                    .withInvert(array[4] > 0.5);
-  
-              config.motorRatio = array[5];
-              changeSlot(slot);
-  
-              configMotor();
-  
-              System.out.println("[HOT RELOAD] Motor config updated for " + name);
-          }
-      );
-  }
-
-  public void showControlCommand() {
-      UpdateArray.show(name + " CONTROL",
-          new String[] {
-              "ControlMode (0=Duty, 1=Voltage, 2=Velocity, 3=MotionMagic, 4=angle, 5=positionVoltage, 6=velocityWithFeedForward, 7=motionWithFeedForward)",
-              "Value"
-          },
-          new double[] {
-              0, // default control mode: Duty
-              0  // default value
-          },
-          (double[] array) -> {
-              int mode = (int) array[0];
-              double value = array[1];
-              
-              switch (mode) {
-                  case 0: // Duty cycle
-                      setDuty(value);
-                      break;
-                  case 1: // Voltage
-                      setVoltage(value);
-                      break;
-                  case 2: // Velocity
-                      setVelocity(value);
-                      break;
-                  case 3: // MotionMagic
-                      setMotion(value);
-                      break;
-                  case 4: // angle
-                      setAngle(value);
-                      break;
-                  case 5: // positionVoltage
-                      setPositionVoltage(value);
-                      break;
-                  case 6: // velocityWithFeedForward
-                      setVelocityWithFeedForward(value);
-                      break;
-                  case 7: // MotionMagic
-                      setMotionWithFeedForward(value);
-                      break;
-                  default:
-                      System.out.println("[CONTROL] Invalid mode: " + mode);
-              }
-          }
-      );
-  }
-
   public double getCurrentPosition() {
     return getEncoder().getPosition();
   }
@@ -336,20 +255,18 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   public double getCurrentAngle() {
     if (config.isRadiansMotor) {
       return MathUtil.angleModulus(getCurrentPosition());
-    } else if (config.isDegreesMotor) {
-      return MathUtil.inputModulus(getCurrentPosition(), -180, 180);
     }
     return 0;
   }
 
   public double getCurrentVelocity() {
     double velocity = getEncoder().getVelocity();
-    if (lastCycleNum != RobotContainer.N_CYCLE) {
-      lastCycleNum = RobotContainer.N_CYCLE;
-      double time = Timer.getFPGATimestamp();
-      lastAcceleration = (velocity - lastVelocity) / (time - lastTime);
-      lastTime = time;
-      lastVelocity = velocity;
+    double time = Timer.getFPGATimestamp();
+    double dt = time - lastTime;
+    if (dt  > 0) {
+        lastAcceleration = (velocity - lastVelocity) / dt;
+        lastTime = time;
+        lastVelocity = velocity;
     }
     return velocity;
   }
@@ -364,17 +281,97 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
   public double getCurrentCurrent() {
     return getOutputCurrent();
   }
+	  
+  /**
+   * creates a widget in elastic of the pid and ff for hot reload
+   * @param slot the slot of the close loop perams (from 0 to 2)
+   */
+  public void configPidFf(int slot) {
+
+    Command configPidFf = new InstantCommand(()-> {
+      cfg = new SparkFlexConfig();
+      closedLoopSlot = slot == 0 ? ClosedLoopSlot.kSlot0 : slot == 1 ? ClosedLoopSlot.kSlot1 : ClosedLoopSlot.kSlot2;
+      cfg.closedLoop.pidf(config.pid[slot].kP(), config.pid[slot].kI(), config.pid[slot].kD(), config.pid[slot].kV(),
+        closedLoopSlot);
+      this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    }).ignoringDisable(true);
+
+    SmartDashboard.putData(name + "/PID+FF config", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("PID+FF Config");
+          builder.addDoubleProperty("KP", ()-> config.pid[0].kP(), (double newValue) -> config.pid[0].setKP(newValue));
+          builder.addDoubleProperty("KI", ()-> config.pid[0].kI(), (double newValue) -> config.pid[0].setKI(newValue));
+          builder.addDoubleProperty("KD", ()-> config.pid[0].kD(), (double newValue) -> config.pid[0].setKD(newValue));
+          builder.addDoubleProperty("KS", ()-> config.pid[0].kS(), (double newValue) -> config.pid[0].setKS(newValue));
+          builder.addDoubleProperty("KV", ()-> config.pid[0].kV(), (double newValue) -> config.pid[0].setKV(newValue));
+          builder.addDoubleProperty("KA", ()-> config.pid[0].kA(), (double newValue) -> config.pid[0].setKA(newValue));
+          builder.addDoubleProperty("KG", ()-> config.pid[0].kG(), (double newValue) -> config.pid[0].setKG(newValue));
+        
+        builder.addBooleanProperty("Update", ()-> configPidFf.isScheduled(), 
+          value -> {
+            if (value) {
+              if (!configPidFf.isScheduled()) {
+                configPidFf.schedule();
+              }
+            } else {
+              if (configPidFf.isScheduled()) {
+                configPidFf.cancel();
+              }
+            }
+          }
+        );
+      }
+    });
+  }
+
+  /**
+   * creates a widget in elastic to configure motion magic in hot reload
+   */
+  public void configMotionMagic() {
+    Command configMotionMagic = new InstantCommand(()-> {
+      cfg = new SparkFlexConfig();
+      
+      cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
+      
+      this.configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    }).ignoringDisable(true);
+    
+    SmartDashboard.putData(name + "/Motion Magic Config", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("Motion Magic Config");
+        
+        builder.addDoubleProperty("Vel", ()-> config.maxVelocity, value-> config.maxVelocity = value);
+        builder.addDoubleProperty("Acc", ()-> config.maxAcceleration, value-> config.maxAcceleration = value);
+        
+        builder.addBooleanProperty("Update", ()-> configMotionMagic.isScheduled(), 
+        value -> {
+          if (value) {
+            if (!configMotionMagic.isScheduled()) {
+              configMotionMagic.schedule();
+            }
+          } else {
+            if (configMotionMagic.isScheduled()) {
+              configMotionMagic.cancel();
+            }
+          }
+        }
+        );
+      }
+    });
+  }
 
   @Override
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Spark Motor");
-    builder.addStringProperty("ControlMode", this::getCurrentControlMode, null);
+    builder.addDoubleProperty("ControlMode", this::getCurrentControlMode, null);
     builder.addDoubleProperty("Position", this::getCurrentPosition, null);
     builder.addDoubleProperty("Velocity", this::getCurrentVelocity, null);
     builder.addDoubleProperty("Voltage", this::getCurrentVoltage, null);
     builder.addDoubleProperty("Current", this::getCurrentCurrent, null);
     builder.addDoubleProperty("CloseLoop Error", this::getCurrentClosedLoopError, null);
-    if (config.isDegreesMotor || config.isRadiansMotor) {
+    if (config.isRadiansMotor) {
       builder.addDoubleProperty("Angle", this::getCurrentAngle, null);
     }
 
@@ -384,7 +381,7 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     return config.motorRatio;
   }
 
-  public String name() {
+  public String getName() {
     return name;
   }
 
@@ -393,16 +390,8 @@ public class SparkFlexMotor extends SparkFlex implements Sendable, MotorInterfac
     getEncoder().setPosition(position);
   }
 
-  @Override
-  public void showConfigMotionVelocitiesCommand() {
-    UpdateArray.show(name + "MOTION PARAM",
-        new String[] { "Velocity", "Acceleration" },
-        new double[] { config.maxVelocity, config.maxAcceleration },
-        (double[] array) -> {
-          config.maxVelocity = array[0];
-          config.maxAcceleration = array[1];
-          cfg.closedLoop.maxMotion.maxVelocity(config.maxVelocity).maxAcceleration(config.maxAcceleration);
-          configure(cfg, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
-        });
+  public void stop(){
+    stopMotor();
+    controlMode = ControlMode.DISABLE;
   }
 }

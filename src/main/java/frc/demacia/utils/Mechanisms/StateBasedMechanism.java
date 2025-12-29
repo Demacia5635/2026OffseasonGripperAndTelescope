@@ -3,111 +3,60 @@ package frc.demacia.utils.Mechanisms;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.demacia.utils.Log.LogManager;
+import frc.demacia.utils.Motors.MotorInterface;
+import frc.demacia.utils.Sensors.SensorInterface;
 
-/**
- * State machine-based mechanism controller.
- * 
- * <p>Extends BaseMechanism with enum-based state control and automatic state transitions.</p>
- * 
- * <p><b>Features:</b></p>
- * <ul>
- *   <li>Enum-based state definition</li>
- *   <li>Conditional state transitions</li>
- *   <li>Dashboard state selection</li>
- *   <li>Manual test mode</li>
- * </ul>
- * 
- * <p><b>Example Usage:</b></p>
- * <pre>
- * public enum IntakeStates implements Intake.IntakeState {
- *     IDLE(new double[]{0, 0}),
- *     INTAKING(new double[]{0.8, 0.8}),
- *     OUTTAKING(new double[]{-0.5, -0.5});
- *     
- *     private double[] values;
- *     IntakeStates(double[] values) { this.values = values; }
- *     public double[] getValues() { return values; }
- * }
- * 
- * Intake intake = new Intake("Intake", motors, sensors, IntakeStates.class)
- *     .withStartingOption(IntakeStates.IDLE)
- *     .addTrigger(() -> controller.getAButton(), IntakeStates.INTAKING)
- *     .addTrigger(() -> beamBreak.get(), IntakeStates.IDLE, IntakeStates.INTAKING);
- * </pre>
- * 
- * @param <T> The concrete mechanism type
- */
-public class StateBasedMechanism<T extends StateBasedMechanism<T>> extends BaseMechanism<T> {
+public class StateBasedMechanism extends BaseMechanism {
 
-    public static class State {
-        private String name;
-        private double[] values;
-
-        public State(String name, double[] values){
-            if (values == null) {
-                throw new NullPointerException("Values cannot be null");
-            }
-            this.name = name;
-            this.values = values;
-        }
-
-        public String getName(){
-            return name;
-        }
-
-        public void setValues(double[] values){
-            this.values = values;
-        }
-
-        public double[] getValues(){
-            return values;
-        }
+    public interface MechanismState {
+        double[] getValues();
+        String name();
     }
 
     public String name;
 
-    SendableChooser<State> stateChooser = new SendableChooser<>();
-    public State state;
-    protected State testingState;
-    protected State idleState;
-    protected State idleState2;
+    SendableChooser<MechanismState> stateChooser = new SendableChooser<>();
+    public MechanismState state;
+    private final MechanismState IDLE_STATE = new MechanismState() {
+        @Override 
+        public double[] getValues() { 
+            return new double[motors != null ? motors.size() : 0]; 
+        }
+        @Override
+        public String name() {
+            return "IDLE";
+        }
+    };
 
-    public StateBasedMechanism(String name){
-        super(name);
+    private final MechanismState TESTING_STATE = new MechanismState() {
+        @Override 
+        public double[] getValues() { 
+            return getTestValues(); 
+        }
+        @Override
+        public String name() {
+            return "TESTING";
+        }
+    };
+
+    protected double[] testValues;
+
+    public StateBasedMechanism(String name, MotorInterface[] motors, SensorInterface[] sensors, Class<? extends MechanismState> enumClass){
+        super(name, motors, sensors);
+        testValues = new double[motors.length];
+        addNT(enumClass);
     }
 
-    @SuppressWarnings("unchecked")
-    public T withState(State state){
-        stateChooser.addOption(state.getName(), state);
-        return (T) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T setDefaultCommand(){
-        this.setDefaultCommand(actionCommand(new MechanismAction(name, () -> getState().getValues())));
-        return (T) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public T build(){
-        super.build();
-        double[] idleValues = new double[motors.length];
-        testingState = new State(name, idleValues);
-        idleState  = new State(name, idleValues);
-        idleState2 = new State(name, idleValues);
-        stateChooser.addOption("TESTING", testingState);
-        stateChooser.addOption("IDLE", idleState);
-        stateChooser.addOption("IDLE2", idleState2);
+    private void addNT(Class<? extends MechanismState> enumClass) {
+        stateChooser.addOption("TESTING", TESTING_STATE);
+        stateChooser.addOption("IDLE", IDLE_STATE);
+        stateChooser.addOption("IDLE2", IDLE_STATE);
+        for (MechanismState state : enumClass.getEnumConstants()) {
+            stateChooser.addOption(state.name(), state);
+        }
         stateChooser.onChange(state -> this.state = state);
         SmartDashboard.putData(getName() + "/State Chooser", stateChooser);
-        return (T) this;
-    }
-
-    @Override
-    public void initSendable(SendableBuilder builder) {
-        super.initSendable(builder);
-        builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(), testValues -> setTestValues(testValues));
     }
 
     /**
@@ -115,17 +64,19 @@ public class StateBasedMechanism<T extends StateBasedMechanism<T>> extends BaseM
      * 
      * @param state Initial state (must implement MechanismState)
      * @return this mechanism for chaining
-     * @throws IllegalArgumentException if state doesn't implement MechanismState
      */
-    @SuppressWarnings("unchecked")
-    public T withStartingOption(State state){
+    public void setStartingOption(MechanismState state){
         if (state == null) {
-            throw new IllegalArgumentException("Starting state cannot be null");
+            LogManager.log("Starting state cannot be null");
+            return;
         }
 
-        stateChooser.setDefaultOption(state.getName(), state);
-        this.state = state;
-        return (T) this;
+        stateChooser.setDefaultOption(state.name(), state);
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.addDoubleArrayProperty(getName() + "/Test Values", () -> getTestValues(), testValues -> setTestValues(testValues));
     }
 
     /**
@@ -133,7 +84,7 @@ public class StateBasedMechanism<T extends StateBasedMechanism<T>> extends BaseM
      * 
      * @return Current state enum
      */
-    public void setState(State state) {
+    public void setState(MechanismState state) {
         this.state = state;
     }
 
@@ -142,15 +93,15 @@ public class StateBasedMechanism<T extends StateBasedMechanism<T>> extends BaseM
      * 
      * @return Current state enum
      */
-    public State getState() {
+    public MechanismState getState() {
         return state;
     }
 
     public double[] getTestValues(){
-        return testingState.getValues();
+        return testValues != null? testValues : new double[0];
     }
 
     public void setTestValues(double[] testValues){
-        testingState.setValues(testValues);
+        this.testValues = testValues;
     }
 }

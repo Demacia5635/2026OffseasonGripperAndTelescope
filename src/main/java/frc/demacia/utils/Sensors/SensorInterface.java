@@ -1,6 +1,8 @@
 package frc.demacia.utils.Sensors;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
 
 /**
  * Base interface for all sensors.
@@ -8,13 +10,19 @@ import edu.wpi.first.util.sendable.SendableBuilder;
  * <p>Provides common methods that all sensor types must implement for
  * identification and health monitoring.</p>
  */
-public  interface SensorInterface{
+public  interface SensorInterface extends Sendable{
     /**
      * Gets the sensor's configured name.
      * 
      * @return Sensor name as specified in configuration
      */
-    String getName();
+    default String getName() {
+        return SendableRegistry.getName(this);
+    }
+
+    default void setName(String name) {
+        SendableRegistry.setName(this, name);
+    }
     
     /**
      * Checks sensor health and logs any faults.

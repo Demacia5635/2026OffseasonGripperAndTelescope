@@ -1,4 +1,4 @@
-package frc.demacia.utils.Motors;
+package frc.demacia.utils.Sensors;
 
 import edu.wpi.first.wpilibj.Servo;
 

@@ -7,7 +7,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Log.LogManager;
 
@@ -84,6 +83,7 @@ public class Pigeon extends Pigeon2 implements SensorInterface{
         super(config.id, config.canbus);
         this.config = config;
         name = config.name;
+        setName(name);
         configPigeon();
         setStatusSignals();
         addLog();
@@ -327,43 +327,6 @@ public class Pigeon extends Pigeon2 implements SensorInterface{
      */
     public void reset() {
         super.reset();
-    }
-    
-    /**
-     * Creates hot-reload widget for calibration tuning.
-     */
-    public void showConfigMotorCommand() {
-        UpdateArray.show(name + " CONFIG",
-            new String[] {
-                "pitch Offset",
-                "roll Offset",
-                "yaw Offset",
-                "x Scalar",
-                "y Scalar",
-                "z Scalar",
-                "is Inverted (1, 0)"
-            }, 
-            new double[] {
-                config.pitchOffset,
-                config.rollOffset,
-                config.yawOffset,
-                config.xScalar,
-                config.yScalar,
-                config.zScalar,
-                config.isInverted ? 1.0 : 0.0
-            },
-            (double[] array) -> {
-                config.withPitchOffset(array[0])
-                .withRollOffset(array[1])
-                .withYawOffset(array[2])
-                .withXScalar(array[3])
-                .withYScalar(array[4])
-                .withZScalar(array[5])
-                .withInvert(array[6] > 0.5);
-                
-                configPigeon();
-            }
-        );
     }
 
     @Override

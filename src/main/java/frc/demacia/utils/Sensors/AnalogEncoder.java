@@ -1,7 +1,6 @@
 package frc.demacia.utils.Sensors;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
-import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Log.LogManager;
 
@@ -35,7 +34,6 @@ import frc.demacia.utils.Log.LogManager;
  */
 public class AnalogEncoder extends edu.wpi.first.wpilibj.AnalogEncoder implements AnalogSensorInterface{
     AnalogEncoderConfig config;
-    String name;
 
     /**
      * Creates an analog encoder.
@@ -45,10 +43,10 @@ public class AnalogEncoder extends edu.wpi.first.wpilibj.AnalogEncoder implement
     public AnalogEncoder(AnalogEncoderConfig config){
         super(config.echoChannel, config.fullRange, config.offset);
         this.config = config;
-        name = config.name;
+        setName(config.name);
         configEncoder();
         addLog();
-        LogManager.log(name + " analog encoder initialized");
+        LogManager.log(getName() + " analog encoder initialized");
     }
 
     private void configEncoder() {
@@ -58,7 +56,7 @@ public class AnalogEncoder extends edu.wpi.first.wpilibj.AnalogEncoder implement
 
     @SuppressWarnings("unchecked")
     private void addLog() {
-        LogManager.addEntry(name + " Position", this::get)
+        LogManager.addEntry(getName() + " Position", this::get)
         .withLogLevel(LogLevel.LOG_ONLY_NOT_IN_COMP).build();
     }
 
@@ -95,31 +93,6 @@ public class AnalogEncoder extends edu.wpi.first.wpilibj.AnalogEncoder implement
     @Override
     public double get(){
         return super.get();
-    }
-
-    /**
-     * Creates hot-reload widget for calibration.
-     */
-    public void showConfigMotorCommand() {
-        UpdateArray.show(name + " CONFIG",
-            new String[] {
-                "is Inverted (1, 0)",
-                "Offset"
-            }, 
-            new double[] {
-                config.isInverted ? 1.0 : 0.0,
-                config.offset
-            },
-            (double[] array) -> {
-                config.withInvert(array[0] > 0.5)
-                .withOffset(array[1])
-                .withMaxRange(array[2])
-                .withMinRange(array[3])
-                .withFullRange(array[4]);
-                
-                configEncoder();
-            }
-        );
     }
 
     @Override

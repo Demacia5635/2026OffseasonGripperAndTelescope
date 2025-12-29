@@ -1,6 +1,5 @@
 package frc.demacia.utils.Sensors;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
@@ -28,7 +27,7 @@ import frc.demacia.utils.Log.LogManager;
  * @see ColorSensorV3
  * @see ColorSensorConfig
  */
-public class ColorSensor extends ColorSensorV3 implements ColorSensorInterface, Sendable {
+public class ColorSensor extends ColorSensorV3 implements ColorSensorInterface {
 
     private final ColorSensorConfig config;
     private final String name;
@@ -44,14 +43,20 @@ public class ColorSensor extends ColorSensorV3 implements ColorSensorInterface, 
     public ColorSensor(ColorSensorConfig config) {
         super(I2C.Port.kOnboard); 
         this.config = config;
-        this.name = config.name;
-        this.matcher = new ColorMatch();
+        name = config.name;
+        setName(name);
+        matcher = new ColorMatch();
 
         addDefaultColors();
         addLog();
 
         LogManager.log(name + " color sensor initialized");
      
+    }
+
+    @Override
+    public void setName(String name) {
+        ColorSensorInterface.super.setName(name);
     }
 
     private void addDefaultColors() {

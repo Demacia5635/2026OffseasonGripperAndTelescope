@@ -2,7 +2,6 @@ package frc.demacia.utils.Sensors;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Log.LogManager;
 
@@ -42,6 +41,7 @@ public class LimitSwitch extends DigitalInput implements DigitalSensorInterface{
         super(config.echoChannel);
         this.config = config;
 		name = config.name;
+        setName(name);
         configLimitSwitch();
         addLog();
 		LogManager.log(name + " limit switch initialized");
@@ -86,26 +86,6 @@ public class LimitSwitch extends DigitalInput implements DigitalSensorInterface{
      */
     public boolean get(){
         return !(inverted == super.get());
-    }
-
-    /**
-     * Creates hot-reload widget for configuration changes.
-     * 
-     * <p>Allows changing inversion without redeploying code.</p>
-     */
-    public void showConfigMotorCommand() {
-        UpdateArray.show(name + " CONFIG",
-            new String[] {
-                "is Inverted (1, 0)"
-            }, 
-            new double[] {
-                config.isInverted ? 1.0 : 0.0
-            },
-            (double[] array) -> {
-                config.withInvert(array[0] > 0.5);
-                configLimitSwitch();
-            }
-        );
     }
 
     @Override

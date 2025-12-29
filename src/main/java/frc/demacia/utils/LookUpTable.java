@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import frc.demacia.utils.Log.LogManager;
+
 /**
  * Linear interpolation lookup table.
  * 
@@ -106,11 +108,11 @@ public class LookUpTable {
      * <p>Table is automatically sorted after insertion for fast lookup.</p>
      * 
      * @param row Input value followed by output values
-     * @throws IllegalArgumentException if row length doesn't match table size
      */
-    public void add(double... row) throws IllegalArgumentException {
+    public void add(double... row) {
         if (row.length != size) {
-            throw new IllegalArgumentException("Size of new row (" + row.length + ") does not match row size of: " + size);
+            LogManager.log("Size of new row (" + row.length + ") does not match row size of: " + size);
+            return;
         }
         table.add(row);
         table.sort(Comparator.comparingDouble(r -> r[0]));
@@ -128,12 +130,12 @@ public class LookUpTable {
      * 
      * @param value Input value to interpolate at
      * @return Array of interpolated output values
-     * @throws IllegalStateException if table is empty
      */
     public double[] get(double value) {
         
         if (table.isEmpty()) {
-            throw new IllegalStateException("Cannot interpolate - table is empty. Use add() to add data first.");
+            LogManager.log("Cannot interpolate - table is empty. Use add() to add data first.");
+            return null;
         }
 
         /* checks if the value is or bigger than the biggest point */

@@ -40,6 +40,8 @@ public class ChassisConfig {
     public double maxDeltaVelocity = maxLinearAccel * cycleDt;
     public double maxVelocityToIgnoreRadius = maxRadius * maxOmegaVelocity;
     public double minVelocity = 1.5;
+    public double maxDriveVelocity = 4;
+    public double maxRotationalVelocity = 4;
 
     public ChassisConfig(String name, SwerveModuleConfig frontLeftModuleConfig, SwerveModuleConfig frontRightModuleConfig, SwerveModuleConfig backLeftModuleConfig, SwerveModuleConfig backRightModuleConfig, PigeonConfig pigeonConfig, Translation2d frontLeftPosition, Translation2d frontRightPosition, Translation2d backLeftPosition, Translation2d backRightPosition){
         this.name = name;
@@ -132,6 +134,16 @@ public class ChassisConfig {
      */
     public ChassisConfig withMinVelocity(double minVelocity){
         this.minVelocity = minVelocity;
+        return this;
+    }
+
+    public ChassisConfig withMaxDriveVelocity(double maxDriveVelocity){
+        this.maxDriveVelocity = maxDriveVelocity;
+        return this;
+    }
+
+    public ChassisConfig withMaxRotationalVelocity(double maxRotationalVelocity){
+        this.maxRotationalVelocity = maxRotationalVelocity;
         return this;
     }
 }

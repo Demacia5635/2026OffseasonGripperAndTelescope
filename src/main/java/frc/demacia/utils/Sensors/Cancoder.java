@@ -9,7 +9,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import frc.demacia.utils.UpdateArray;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Log.LogManager;
 
@@ -68,6 +67,7 @@ public class Cancoder extends CANcoder implements AnalogSensorInterface{
         super(config.id, config.canbus);
         this.config = config;
 		name = config.name;
+        setName(name);
 		configCancoder();
         setStatusSignals();
         addLog();
@@ -79,6 +79,12 @@ public class Cancoder extends CANcoder implements AnalogSensorInterface{
 		canConfig.MagnetSensor.MagnetOffset = config.offset;
         canConfig.MagnetSensor.SensorDirection = config.isInverted ? SensorDirectionValue.Clockwise_Positive: SensorDirectionValue.CounterClockwise_Positive;
         getConfigurator().apply(canConfig);
+    }
+
+    @Override
+    public void setName(String name) {
+        AnalogSensorInterface.super.setName(name);
+        this.name = name;
     }
     
     private void setStatusSignals() {
@@ -182,28 +188,6 @@ public class Cancoder extends CANcoder implements AnalogSensorInterface{
             return (velocitySignal.getValueAsDouble() * 2 * Math.PI) - lastVelocity;
         }
         return 0;
-    }
-
-    /**
-     * Creates hot-reload widget for offset and inversion tuning.
-     */
-    public void showConfigMotorCommand() {
-        UpdateArray.show(name + " CONFIG",
-            new String[] {
-                "is Inverted (1, 0)",
-                "Offset"
-            }, 
-            new double[] {
-                config.isInverted ? 1.0 : 0.0,
-                config.offset
-            },
-            (double[] array) -> {
-                config.withInvert(array[0] > 0.5)
-                .withOffset(array[1]);
-                
-                configCancoder();
-            }
-        );
     }
 
     @Override

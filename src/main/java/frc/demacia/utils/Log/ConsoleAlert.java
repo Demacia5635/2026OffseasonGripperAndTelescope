@@ -30,6 +30,9 @@ public class ConsoleAlert extends Alert{
   }
 
   public boolean isTimerOver() {
+    if (ConsoleConstants.CONSOLE_MESSEGE_TIME == 0) {
+      return false;
+    }
     return timer.hasElapsed(ConsoleConstants.CONSOLE_MESSEGE_TIME);
   }
 }
