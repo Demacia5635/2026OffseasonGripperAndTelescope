@@ -3,9 +3,12 @@
     //import frc.demacia.utils.Motors.TalonConfig;
     import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.demacia.utils.Motors.TalonFXConfig;
+import frc.demacia.utils.Sensors.LimitSwitchConfig;
 import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
 
     public class GripperConstants {
+
+      
 
       public enum GRIPPER_STATE {
         IDLE(0),
@@ -20,6 +23,8 @@ import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
           this.duty = duty;
         }
       }
+
+      
 
       public static final double coralDetectedDistance = 0.03;
       public static final double cubeDetectedDistance = 0.3;

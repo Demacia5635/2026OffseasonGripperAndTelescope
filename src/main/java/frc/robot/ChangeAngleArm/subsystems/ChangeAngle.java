@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonFXMotor;
+import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.RobotContainer;
 // import frc.demacia.utils.Sensors.AnalogEncoder;
 import frc.robot.ChangeAngleArm.ConstantsChangeAngle;
@@ -13,10 +14,12 @@ public class ChangeAngle extends SubsystemBase {
     // AnalogEncoder changeAngleEncoder;
     TalonFXMotor changeAngleMotor;
     TELESCOPE_ANGLE state;
+    LimitSwitch limitSwitch;
     double offset = 0;
 
     public ChangeAngle() {
         this.changeAngleMotor = new TalonFXMotor(ConstantsChangeAngle.CHANGE_ANGLE_CONFIG);
+        limitSwitch = new LimitSwitch(ConstantsChangeAngle.SENSOR_CONFIG_ANGLE);
         // this.changeAngleEncoder = new AnalogEncoder(ConstantsChangeAngle.CHANGE_ANGLE_ANALOG_CONFIG);
         // calibrate();
         state = TELESCOPE_ANGLE.IDLE;
@@ -24,12 +27,19 @@ public class ChangeAngle extends SubsystemBase {
     }
 
     public void setAngle(double angle) {
+        if (getSensor()){
+            return;
+        }
         
         changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()) + ConstantsChangeAngle.KE * RobotContainer.TelescopSubSystem.getCurrentHeigt() / 0.7);
     }
 
-    public double getAngle(){
+    public double getAngle(){         
         return changeAngleMotor.getCurrentAngle();
+    }
+
+    public boolean getSensor(){
+        return limitSwitch.get();
     }
 
     public void setPower(double power){

@@ -1,11 +1,14 @@
 package frc.robot.ChangeAngleArm;
 
 import frc.demacia.utils.Sensors.AnalogEncoderConfig;
-
+import frc.demacia.utils.Sensors.LimitSwitchConfig;
 import frc.demacia.utils.Motors.TalonFXConfig;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
 
 public class ConstantsChangeAngle {
+
+    public static final LimitSwitchConfig SENSOR_CONFIG_ANGLE = new LimitSwitchConfig(2, "Angle cange limate switch").withInvert(true);
+    
     public static final double GEAR_RATIO = 12.8;
     public static final int MOTOR_ID = 11;
     public static final double MAX_VELOCITY = 5 * Math.PI;

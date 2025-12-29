@@ -65,6 +65,8 @@ public class GripperSubsystem extends SubsystemBase {
     motor.setDuty(power);
   }
 
+  
+
   public void setVelocity(double velocity) {
     motor.setVelocity(velocity);
   }

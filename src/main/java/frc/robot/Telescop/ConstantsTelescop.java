@@ -52,6 +52,7 @@ public class ConstantsTelescop {
     public static final int UP_CHANNEL = -1;
     public static final int DOWN_CHANNEL = -1;
     public static final double angle = 0;
+    
     public static final TalonFXConfig MOTOR_CONFIG = new TalonFXConfig(ID, CANBUS, "telescopMotor")
             .withBrake(true)
             .withMeterMotor(GEAR_RATIO, DIAMETER)
