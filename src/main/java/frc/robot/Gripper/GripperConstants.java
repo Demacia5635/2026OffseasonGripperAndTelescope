@@ -44,7 +44,7 @@ import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
       public static final double ks = 0;
       public static final double kv = 0;
       public static final double ka = 0;
-      public static final double kg = 0;\
+      public static final double kg = 0;
 
       public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel,
           pingChannel, null);

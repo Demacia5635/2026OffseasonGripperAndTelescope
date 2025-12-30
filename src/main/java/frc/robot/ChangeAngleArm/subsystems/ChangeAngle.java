@@ -25,23 +25,28 @@ public class ChangeAngle extends SubsystemBase {
         this.changeAngleEncoder = new AnalogEncoder(ConstantsChangeAngle.CHANGE_ANGLE_ANALOG_CONFIG);
         // calibrate();
         state = TELESCOPE_ANGLE.IDLE;
+        changeAngleMotor.setEncoderPosition(changeAngleEncoder.get() - offset);
         addNT();
         SmartDashboard.putNumber("angle", getAngle());
     }
 
     public void setAngle(double angle) {
-        
+        if (angle < Math.toRadians(-5) || angle > Math.toRadians(90)){ 
+            changeAngleMotor.stop();
+            return;
+            
+        }
         if (getSensor()){
             changeAngleMotor.stop();
             return;
         }
-        changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()) + ConstantsChangeAngle.KE * RobotContainer.TelescopSubSystem.getCurrentHeigt() / 0.7);
+        changeAngleMotor.setMotion(angle, ConstantsChangeAngle.KG * Math.cos(getAngle()) + ConstantsChangeAngle.KE * RobotContainer.TelescopSubSystem.getCurrentHeigt() / 0.7);
     }
 
    
 
     public double getAngle(){         
-        return changeAngleMotor.getCurrentAngle() + offset;
+        return changeAngleMotor.getCurrentAngle();
     }
 
     // public double setEncoderPosition(){
