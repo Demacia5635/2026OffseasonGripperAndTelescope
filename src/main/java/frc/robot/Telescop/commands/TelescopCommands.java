@@ -5,6 +5,7 @@
 package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import static frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 
@@ -26,27 +27,32 @@ public class TelescopCommands extends Command {
     System.out.println("Telescop Command Started");
   }
 
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {;
-    if (TelescopSubSystem.isCalibreated()) {
+  public void execute() {
+    if (!telescop.isCalibreated())
+      return;
+
     STATE_TELESCOPE currentState = telescop.getCurrentState();
     switch (currentState) {
-  case IDLE:
-    telescop.setMotorLength(telescop.getCurrentHeigt());
-    break;
-  default:
-    telescop.setLength(currentState.length);
-    break;
+      case IDLE:
+        telescop.setLength(telescop.getCurrentHeigt());
+        break;
+      case TESTING:
+        double l = telescop.getTestingLength();
+        telescop.setLength(l);
+        break;
+      default:
+        telescop.setLength(currentState.length);
+        break;
+    }
+
   }
-  }else{
-    return;
-  }
-}
+
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

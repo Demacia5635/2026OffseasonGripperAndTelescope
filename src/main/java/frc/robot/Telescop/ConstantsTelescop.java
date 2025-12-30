@@ -31,9 +31,9 @@ public class ConstantsTelescop {
     public static final double MAX_LENGTH = 0.7;
     public static final double MIN_LENGTH = 0;
 
-    public static final double MAX_VELOCITY = 2;
-    public static final double MAX_ACCELERATION = 12;
-    public static final double MAX_JERK = 20;
+    public static final double MAX_VELOCITY = 1.2;
+    public static final double MAX_ACCELERATION = 6;
+    public static final double MAX_JERK = 0;
 
     public static final int ID = 40;
     public static final Canbus CANBUS = Canbus.Rio;
@@ -41,12 +41,12 @@ public class ConstantsTelescop {
     public static final double DIAMETER = 1;
     public static final double MAX_CURRENT = 40;
 
-    public static final double kp = 0;
+    public static final double kp = 2;
     public static final double ki = 0;
     public static final double kd = 0;
-    public static final double ks = 0.5;
-    public static final double kv = 70;
-    public static final double ka = 0.00011;
+    public static final double ks = 0.14;
+    public static final double kv = 9.3;
+    public static final double ka = 0.00028;
     public static final double kg = 0;
     public static final double kg2 = 0;
     public static final int UP_CHANNEL = -1;
@@ -57,7 +57,7 @@ public class ConstantsTelescop {
             .withBrake(true)
             .withMeterMotor(GEAR_RATIO, DIAMETER)
             .withPID(kp, ki, kd, ks, kv, ka, kg)
-            //.withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)  
+            .withMotionParam(MAX_VELOCITY, MAX_ACCELERATION, MAX_JERK)  
             .withCurrent(MAX_CURRENT);
 
     public static class CalibrationConstants {

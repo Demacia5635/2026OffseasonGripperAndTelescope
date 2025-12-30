@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
-import frc.robot.Telescop.commands.CalibrationCommands;
+import frc.robot.Telescop.commands.CalibrationCommand;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
 import frc.robot.Gripper.subsystems.GripperSubsystem;
@@ -40,15 +40,14 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   public static TelescopSubSystem TelescopSubSystem;
-  public static TelescopCommands TelescopCommands;
-  public static CalibrationCommands CalibrationCommands;
-  public static ControllerTelescope ControllerTelescope;
-  public static CommandController controller;
+  public TelescopCommands TelescopCommands;
+  public ControllerTelescope ControllerTelescope;
+  public CommandController controller;
   public static ChangeAngle changeAngle;
   // public static GripperSubsystem gripperSubsystem;
   // public static GripperCommand GripperCommand;
-  public static GoToTelescopeAngle GoToTelescopeAngle;
-  public static ManualControlAngleArm ManualControlAngleArm;
+  public GoToTelescopeAngle GoToTelescopeAngle;
+  public ManualControlAngleArm ManualControlAngleArm;
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
   /**
@@ -60,11 +59,10 @@ public class RobotContainer {
     // gripperSubsystem = new GripperSubsystem();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
-    controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
-    // TelescopSubSystem.setDefaultCommand(Commands.sequence(CalibrationCommands, Commands.deadline(TelescopCommands, ControllerTelescope)));
-    // changeAngle.setDefaultCommand(Commands.sequence(GoToTelescopeAngle, ManualControlAngleArm));
-    // gripperSubsystem.setDefaultCommand(GripperCommand);
-    //configureBindings();
+    changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle,controller));
+    TelescopSubSystem.setDefaultCommand(new TelescopCommands(TelescopSubSystem));
+    //.setDefaultCommand(GripperCommand);
+    configureBindings();
   }
 
   public static boolean isComp() {
@@ -97,7 +95,8 @@ public class RobotContainer {
   private void configureBindings() {
    //controller.getRightStickMove().onTrue(new ControllerTelescope(controller, TelescopSubSystem));
     //controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
-    //controller.downButton().onTrue(new CalibrationCommand(TelescopSubSystem));
+    controller.downButton().onTrue(new CalibrationCommand(TelescopSubSystem));
+    
   }
 
   /**

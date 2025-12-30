@@ -45,6 +45,7 @@ public class CalibrationCommand extends Command {
     timer.stop();
     telescope.setMotorLength(ConstantsTelescop.MIN_LENGTH);
     telescope.stop();
+    telescope.setCalibrated();
   }
 
   // Returns true when the command should end.

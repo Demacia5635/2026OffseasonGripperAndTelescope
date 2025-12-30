@@ -20,10 +20,9 @@ public class TelescopSubSystem extends SubsystemBase {
 
     private LimitSwitch limitSwitchTelescope;
     private TalonFXMotor motor;
-    public static boolean calibrated = false;
+    public boolean calibrated = false;
     private static STATE_TELESCOPE currentState = STATE_TELESCOPE.CALIBRATE;
-    public static boolean setCalibrated;
-    public CommandController controller;
+    
 
     /** Creates a new telescop. */
     public TelescopSubSystem() {
@@ -35,12 +34,12 @@ public class TelescopSubSystem extends SubsystemBase {
 
     @Override
     public void initSendable(SendableBuilder builder) {
-        super.initSendable(builder);
+        builder.addDoubleProperty("Testing Length",this::getTestingLength,this::setTestingLength);
         builder.addBooleanProperty("Sensor", this::getSensor, null);
         builder.addDoubleProperty("Length", this::getCurrentHeigt, null);
         builder.addStringProperty("State", () -> currentState.name(), null);
         builder.addBooleanProperty("Is at limit", ()->isAtBottom(), null);
-        builder.addDoubleProperty("Test Length", () -> STATE_TELESCOPE.TESTING.length, (l) -> STATE_TELESCOPE.TESTING.length = l);
+        // builder.addDoubleProperty("Test Length", () -> STATE_TELESCOPE.TESTING.length, (l) -> STATE_TELESCOPE.TESTING.length = l);
 
     }
 
@@ -61,6 +60,8 @@ public class TelescopSubSystem extends SubsystemBase {
 
         LogManager.addEntry("Telescope2", () -> (new boolean[] { isAtBottom(), isCalibreated() }))
                 .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
+
+        
     }
     
     public double getCurrentHeigt() {
@@ -102,29 +103,28 @@ public class TelescopSubSystem extends SubsystemBase {
             stop();
             return;
         }
-        motor.setPositionVoltage(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH), Math.sin(RobotContainer.changeAngle.getAngle()));
+        motor.setMotion(MathUtil.clamp(wantedLength, MIN_LENGTH, ConstantsTelescop.MAX_LENGTH), 0);//Math.sin(RobotContainer.changeAngle.getAngle()));
     }   
 
-    public void controller(){
-        double Yjostice;
-        Yjostice = - controller.getRightY();
-        motor.setDuty(Yjostice * 0.5);
-    }
 
-    public static boolean isCalibreated() {
+    public boolean isCalibreated() {
         return calibrated;
     }
 
-
-    public static void setCalibrated(boolean Calibrated) {
-        calibrated = Calibrated;
+    public void setCalibrated(boolean isCalibreated){
+        this.calibrated = isCalibreated;
     }
+
+    public void setCalibrated(){
+        setCalibrated(true);
+    }
+
 
     public boolean isAtBottom() {
         return getSensor();
     }
 
-    public static void setState(STATE_TELESCOPE state) {
+    public void setState(STATE_TELESCOPE state) {
         if (isCalibreated()) {
             currentState = state;
         } else {
@@ -144,7 +144,9 @@ public class TelescopSubSystem extends SubsystemBase {
         setState(STATE_TELESCOPE.HOME);
     }
 
-    
+    private double length = 0;
+    public void setTestingLength(double length){this.length = length;}
+    public double getTestingLength(){return this.length;}
     @Override
     public void periodic() {
        

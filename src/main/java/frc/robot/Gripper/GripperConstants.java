@@ -35,12 +35,16 @@ import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
       public static final Canbus CANBUS = Canbus.CANIvore;
       public static final double MAX_CURRENT = 80;
 
+      public static final double kp = 0;
+      
+
       public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel,
           pingChannel, null);
 
       public static final TalonFXConfig TALON_CONFIG = new TalonFXConfig(motor_ID, CANBUS, null)
           .withBrake(false)
           .withCurrent(MAX_CURRENT)
+          .withPID(),
           .withInvert(true);
 
     }
