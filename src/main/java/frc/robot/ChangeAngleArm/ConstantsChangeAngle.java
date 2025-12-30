@@ -21,23 +21,23 @@ public class ConstantsChangeAngle {
     public static final double KS = 0;
     public static final double KV = 0;
     public static final double KA = 0;
-    public static final double KG = 0; // Maybe change the final to not final
+    public static final double KG = 0;
     public static final double KE = 0;
 
     public static final int ANALOG_ENCODER_CHANNEL = 0;
 
-    public static final TalonFXConfig CHANGE_ANGLE_CONFIG = // Maybe change the final to not final
+    public static final TalonFXConfig CHANGE_ANGLE_CONFIG =
             new TalonFXConfig(MOTOR_ID, CANBUS_NAME, "Change Angle Motor")
                     .withMotionParam(MAX_VELOCITY, MAX_ACCEL, MAX_JERK)
                     .withRadiansMotor(GEAR_RATIO)
-                    .withPID(KP, KI, KD, KS, KV, KA, 0);
+                    .withPID(KP, KI, KD, KS, KV, KA, 0)
+                    .withInvert(true);
 
     public static final DigitalEncoderConfig CHANGE_ANGLE_ANALOG_CONFIG = new DigitalEncoderConfig(ANALOG_ENCODER_CHANNEL,
-            "Change Angle Encoder");
+            "Change Angle Encoder").withScalar(-1).withOffset(1);
 
     public static enum TELESCOPE_ANGLE {
         IDLE("Idle", 0, 0),
-        IDLE2("Idle2", 0, 0),
         TOP("Top", Math.toRadians(90), 0);
 
         public final double angle;
