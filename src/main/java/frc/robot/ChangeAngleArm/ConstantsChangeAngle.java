@@ -1,6 +1,6 @@
 package frc.robot.ChangeAngleArm;
 
-import frc.demacia.utils.Sensors.AnalogEncoderConfig;
+import frc.demacia.utils.Sensors.DigitalEncoderConfig;
 import frc.demacia.utils.Sensors.LimitSwitchConfig;
 import frc.demacia.utils.Motors.TalonFXConfig;
 import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
@@ -9,7 +9,7 @@ public class ConstantsChangeAngle {
 
     public static final LimitSwitchConfig SENSOR_CONFIG_ANGLE = new LimitSwitchConfig(2, "Angle cange limate switch").withInvert(true);
     
-    public static final double GEAR_RATIO = 12.8;
+    public static final double GEAR_RATIO = 64 * 42 / 22.0;
     public static final int MOTOR_ID = 11;
     public static final double MAX_VELOCITY = 5 * Math.PI;
     public static final double MAX_ACCEL = 5 * MAX_VELOCITY;
@@ -24,15 +24,15 @@ public class ConstantsChangeAngle {
     public static final double KG = 0; // Maybe change the final to not final
     public static final double KE = 0;
 
-    public static final int ANALOG_ENCODER_CHANNEL = 1;
+    public static final int ANALOG_ENCODER_CHANNEL = 0;
 
     public static final TalonFXConfig CHANGE_ANGLE_CONFIG = // Maybe change the final to not final
             new TalonFXConfig(MOTOR_ID, CANBUS_NAME, "Change Angle Motor")
                     .withMotionParam(MAX_VELOCITY, MAX_ACCEL, MAX_JERK)
                     .withRadiansMotor(GEAR_RATIO)
-                    .withPID(KP, KI, KD, KS, KV, KA, KG);
+                    .withPID(KP, KI, KD, KS, KV, KA, 0);
 
-    public static final AnalogEncoderConfig CHANGE_ANGLE_ANALOG_CONFIG = new AnalogEncoderConfig(ANALOG_ENCODER_CHANNEL,
+    public static final DigitalEncoderConfig CHANGE_ANGLE_ANALOG_CONFIG = new DigitalEncoderConfig(ANALOG_ENCODER_CHANNEL,
             "Change Angle Encoder");
 
     public static enum TELESCOPE_ANGLE {

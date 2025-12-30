@@ -20,8 +20,8 @@ public class TelescopSubSystem extends SubsystemBase {
 
     private LimitSwitch limitSwitchTelescope;
     private TalonFXMotor motor;
-    public boolean calibrated = false;
-    private static STATE_TELESCOPE currentState = STATE_TELESCOPE.CALIBRATE;
+    private boolean calibrated = false;
+    private STATE_TELESCOPE currentState = STATE_TELESCOPE.IDLE;
     
 
     /** Creates a new telescop. */
