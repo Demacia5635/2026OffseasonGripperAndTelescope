@@ -28,6 +28,7 @@ public class ChangeAngle extends SubsystemBase {
 
     public void setAngle(double angle) {
         if (getSensor()){
+            changeAngleMotor.stop();
             return;
         }
         changeAngleMotor.setMotion(angle + offset, ConstantsChangeAngle.KG * Math.cos(getAngle()) + ConstantsChangeAngle.KE * RobotContainer.TelescopSubSystem.getCurrentHeigt() / 0.7);
@@ -43,6 +44,7 @@ public class ChangeAngle extends SubsystemBase {
 
     public void setPower(double power){
         if (getSensor() && power < 0){
+            changeAngleMotor.stop();
             return;
         }
         changeAngleMotor.setDuty(power);
