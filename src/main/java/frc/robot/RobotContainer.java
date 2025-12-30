@@ -58,7 +58,7 @@ public class RobotContainer {
     changeAngle = new ChangeAngle();
     TelescopSubSystem = new TelescopSubSystem();
     // gripperSubsystem = new GripperSubsystem();
-    controller = new CommandController(Constants.ControllerPort, ControllerType.kXbox);
+    controller = new CommandController(Constants.ControllerPort, ControllerType.kPS5);
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
     controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
     // TelescopSubSystem.setDefaultCommand(Commands.sequence(CalibrationCommands, Commands.deadline(TelescopCommands, ControllerTelescope)));
