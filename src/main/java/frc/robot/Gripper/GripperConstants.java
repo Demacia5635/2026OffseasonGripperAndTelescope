@@ -2,6 +2,9 @@
 
     //import frc.demacia.utils.Motors.TalonConfig;
     import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
+
+import java.lang.reflect.Field;
+
 import frc.demacia.utils.Motors.TalonFXConfig;
 import frc.demacia.utils.Sensors.LimitSwitchConfig;
 import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
@@ -34,9 +37,14 @@ import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
       public static final int motor_ID = 0;
       public static final Canbus CANBUS = Canbus.CANIvore;
       public static final double MAX_CURRENT = 80;
-
-      public static final double kp = 0;
       
+      public static final double kp = 0;
+      public static final double ki = 0;
+      public static final double kd = 0;
+      public static final double ks = 0;
+      public static final double kv = 0;
+      public static final double ka = 0;
+      public static final double kg = 0;\
 
       public static final UltraSonicSensorConfig ULTRA_SONIC_SENSOR_CONFIG = new UltraSonicSensorConfig(echoChannel,
           pingChannel, null);
@@ -44,7 +52,7 @@ import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
       public static final TalonFXConfig TALON_CONFIG = new TalonFXConfig(motor_ID, CANBUS, null)
           .withBrake(false)
           .withCurrent(MAX_CURRENT)
-          .withPID(),
+          .withPID(kp, ki, kd, ks, kv, ka, kg)
           .withInvert(true);
 
     }
