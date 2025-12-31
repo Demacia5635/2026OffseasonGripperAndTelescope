@@ -59,7 +59,7 @@ public class RobotContainer {
     TelescopSubSystem = new TelescopSubSystem();
     gripperSubsystem = new GripperSubsystem();
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
-    //changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle,controller));
+    changeAngle.setDefaultCommand(new GoToTelescopeAngle(changeAngle));
     TelescopSubSystem.setDefaultCommand(new TelescopCommands(TelescopSubSystem));
     GripperCommand = new GripperCommand(gripperSubsystem);
     gripperSubsystem.setDefaultCommand(GripperCommand);
