@@ -113,7 +113,7 @@ public class RobotContainer {
    */
 
   private void configureBindings() {
-   controller.getRightStickMove().onTrue(new ControllerTelescope(controller, TelescopSubSystem));
+    controller.getRightStickMove().onTrue(new ControllerTelescope(controller, TelescopSubSystem));
     controller.getLeftStickMove().onTrue(new ManualControlAngleArm(changeAngle, controller));
     controller.downButton().onTrue(new CalibrationCommand(TelescopSubSystem));
     controller.upButton().onTrue(new ControllerTelescope(controller, TelescopSubSystem));
