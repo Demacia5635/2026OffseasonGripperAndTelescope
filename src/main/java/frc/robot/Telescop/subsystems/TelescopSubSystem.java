@@ -53,6 +53,7 @@ public class TelescopSubSystem extends SubsystemBase {
         stateChooser.addOption("TESTING", STATE_TELESCOPE.TESTING);
         stateChooser.onChange(STATE -> setState(STATE));
         SmartDashboard.putData("Telescop State", stateChooser);
+        
         LogManager.addEntry("Telescope", () -> (new double[] { getCurrentHeigt() }))
                 .withLogLevel(LogLevel.LOG_AND_NT_NOT_IN_COMP).build();
 
