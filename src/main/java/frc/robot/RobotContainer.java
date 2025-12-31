@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.STATE;
 import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
-import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 import frc.robot.Telescop.commands.CalibrationCommand;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
