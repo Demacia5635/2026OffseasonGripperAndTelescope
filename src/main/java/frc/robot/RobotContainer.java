@@ -6,7 +6,6 @@ package frc.robot;
 import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
-// import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
 import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import edu.wpi.first.wpilibj.DriverStation;
