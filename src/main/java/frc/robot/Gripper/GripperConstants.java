@@ -1,12 +1,8 @@
-    package frc.robot.Gripper;
+package frc.robot.Gripper;
 
-    //import frc.demacia.utils.Motors.TalonConfig;
-    import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
-
-import java.lang.reflect.Field;
-
+//import frc.demacia.utils.Motors.TalonConfig;
+import frc.demacia.utils.Motors.BaseMotorConfig.Canbus;
 import frc.demacia.utils.Motors.TalonFXConfig;
-import frc.demacia.utils.Sensors.LimitSwitchConfig;
 import frc.demacia.utils.Sensors.UltraSonicSensorConfig;
 
     public class GripperConstants {

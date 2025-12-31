@@ -20,4 +20,29 @@ public final class Constants {
   
   public Canbus roborioId;
 
+  public static enum STATE{
+    HOME(Math.toRadians(0),0,0),
+    TESTING(Math.toRadians(0),0,0),
+    IDLE(Math.toRadians(0),0,0),
+    EJECT(Math.toRadians(0),0,-0.3),
+    GET_CORAL(Math.toRadians(0),0,0.3),
+    GET_CUBE(Math.toRadians(0),0,0.3),
+    CLOSED(Math.toRadians(0),0,0),
+    OPEN(Math.toRadians(0),0.50,0),
+    CALIBRATE(Math.toRadians(0),0.03,0),
+    TOP(Math.toRadians(90),0,0),
+    MID(Math.toRadians(45),0,0),
+    DOWN(Math.toRadians(0),0,0);
+
+    public double angle;
+    public double length;
+    public double duty;
+
+    STATE(double angle, double length, double duty){
+      this.angle = angle;
+      this.length = length;
+      this.duty = duty;
+    }
+  }
+
 }

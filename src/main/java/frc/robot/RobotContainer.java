@@ -7,6 +7,8 @@ import frc.demacia.utils.Controller.CommandController;
 import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -33,7 +35,7 @@ public class RobotContainer {
   private Arm arm;
   public CommandController controller;
   // Replace with CommandPS4Controller or CommandJoystick if needed
-
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -57,6 +59,24 @@ public class RobotContainer {
       LogManager.removeInComp();
     }
   }
+
+  public void putDataState(){
+    SendableChooser<STATE> stateChooser = new SendableChooser<>();
+    stateChooser.addOption("HOME", STATE.HOME);
+    stateChooser.addOption("IDLE", STATE.IDLE);
+    stateChooser.addOption("GET_CORAL", STATE.GET_CORAL);
+    stateChooser.addOption("GET_CUBE", STATE.GET_CUBE);
+    stateChooser.addOption("EJECT", STATE.EJECT);
+    stateChooser.addOption("TOP", STATE.TOP);
+    stateChooser.addOption("MID", STATE.MID);
+    stateChooser.addOption("DOWN", STATE.DOWN);
+    stateChooser.addOption("OPEN", STATE.OPEN);
+    stateChooser.addOption("CLOSED", STATE.CLOSED);
+    stateChooser.addOption("CALIBRATE", STATE.CALIBRATE);
+    stateChooser.addOption("TESTING", STATE.TESTING);
+    SmartDashboard.putData("STATE for all", stateChooser);
+  }
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
