@@ -50,7 +50,7 @@ public class RobotContainer {
   public GoToTelescopeAngle GoToTelescopeAngle;
   public ManualControlAngleArm ManualControlAngleArm;
   // Replace with CommandPS4Controller or CommandJoystick if needed
-
+  controller = new CommandController(Constants.ControllerPort, ControllerType.kXbox);
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -58,11 +58,11 @@ public class RobotContainer {
     changeAngle = new ChangeAngle();
     TelescopSubSystem = new TelescopSubSystem();
     gripperSubsystem = new GripperSubsystem();
-    controller = new CommandController(Constants.ControllerPort, ControllerType.kXbox);
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
     //changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle,controller));
     TelescopSubSystem.setDefaultCommand(new TelescopCommands(TelescopSubSystem));
-    //gripperSubsystem.setDefaultCommand(GripperCommand);
+    GripperCommand = new GripperCommand(gripperSubsystem);
+    gripperSubsystem.setDefaultCommand(GripperCommand);
     configureBindings();
   }
 
