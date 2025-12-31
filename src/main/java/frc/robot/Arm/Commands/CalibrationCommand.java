@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.Telescop.commands;
+package frc.robot.Arm.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Telescop.ConstantsTelescop;
-import frc.robot.Telescop.subsystems.TelescopSubSystem;
+import frc.robot.Arm.ArmConstants;
+import frc.robot.Arm.Arm;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CalibrationCommand extends Command {
-  TelescopSubSystem telescope;
+  Arm telescope;
   int counter;
   Timer timer;
-  public CalibrationCommand(TelescopSubSystem telescope) {
+  public CalibrationCommand(Arm telescope) {
     this.telescope = telescope;
     addRequirements(telescope);
     timer = new Timer();
@@ -43,7 +43,7 @@ public class CalibrationCommand extends Command {
   public void end(boolean interrupted) {
     timer.reset();
     timer.stop();
-    telescope.setMotorLength(ConstantsTelescop.MIN_LENGTH);
+    telescope.setMotorLength(ArmConstants.TelescopConstants.MIN_LENGTH);
     telescope.stop();
     telescope.setCalibrated();
   }
