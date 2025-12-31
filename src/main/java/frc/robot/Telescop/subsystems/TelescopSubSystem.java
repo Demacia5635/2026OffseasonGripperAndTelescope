@@ -11,10 +11,8 @@ import frc.demacia.utils.Log.LogManager;
 import frc.demacia.utils.Log.LogEntryBuilder.LogLevel;
 import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.LimitSwitch;
-import frc.robot.RobotContainer;
 import frc.robot.Telescop.ConstantsTelescop;
 import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
-import frc.demacia.utils.Controller.CommandController;
 
 public class TelescopSubSystem extends SubsystemBase {
 

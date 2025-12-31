@@ -5,7 +5,6 @@
 package frc.robot.Telescop.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import static frc.robot.Telescop.ConstantsTelescop.STATE_TELESCOPE;
 

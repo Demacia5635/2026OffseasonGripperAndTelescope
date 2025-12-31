@@ -11,7 +11,6 @@ import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.ChangeAngleArm.commands.GoToTelescopeAngle;
@@ -19,8 +18,7 @@ import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import frc.robot.Telescop.commands.CalibrationCommand;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
-import frc.robot.Gripper.subsystems.GripperSubsystem;
-import frc.robot.Gripper.commands.GripperCommand;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
