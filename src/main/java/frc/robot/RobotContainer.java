@@ -8,6 +8,7 @@ import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import frc.robot.ChangeAngleArm.commands.ManualControlAngleArm;
 import frc.robot.ChangeAngleArm.subsystems.ChangeAngle;
+import frc.robot.Gripper.subsystems.GripperSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +21,7 @@ import frc.robot.Telescop.subsystems.TelescopSubSystem;
 import frc.robot.Telescop.commands.CalibrationCommand;
 import frc.robot.Telescop.commands.TelescopCommands;
 import frc.robot.Telescop.commands.ControllerTelescope;
-
+import frc.robot.Gripper.commands.GripperCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -44,8 +45,8 @@ public class RobotContainer {
   public ControllerTelescope ControllerTelescope;
   public CommandController controller;
   public static ChangeAngle changeAngle;
-  // public static GripperSubsystem gripperSubsystem;
-  // public static GripperCommand GripperCommand;
+  public static GripperSubsystem gripperSubsystem;
+  public static GripperCommand GripperCommand;
   public GoToTelescopeAngle GoToTelescopeAngle;
   public ManualControlAngleArm ManualControlAngleArm;
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -56,12 +57,12 @@ public class RobotContainer {
   public RobotContainer() {
     changeAngle = new ChangeAngle();
     TelescopSubSystem = new TelescopSubSystem();
-    // gripperSubsystem = new GripperSubsystem();
+    gripperSubsystem = new GripperSubsystem();
     controller = new CommandController(Constants.ControllerPort, ControllerType.kXbox);
     TelescopCommands = new TelescopCommands(TelescopSubSystem);
     //changeAngle.setDefaultCommand(new ManualControlAngleArm(changeAngle,controller));
     TelescopSubSystem.setDefaultCommand(new TelescopCommands(TelescopSubSystem));
-    //setDefaultCommand(GripperCommand);
+    //gripperSubsystem.setDefaultCommand(GripperCommand);
     configureBindings();
   }
 
