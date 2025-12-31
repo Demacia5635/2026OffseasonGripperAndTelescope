@@ -12,7 +12,6 @@ import frc.robot.Arm.Arm;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CalibrationCommand extends Command {
   Arm telescope;
-  int counter;
   Timer timer;
   public CalibrationCommand(Arm telescope) {
     this.telescope = telescope;
@@ -45,7 +44,7 @@ public class CalibrationCommand extends Command {
     timer.stop();
     telescope.setMotorLength(ArmConstants.TelescopConstants.MIN_LENGTH);
     telescope.stop();
-    telescope.setCalibrated();
+    telescope.setCalibrated(true);
   }
 
   // Returns true when the command should end.

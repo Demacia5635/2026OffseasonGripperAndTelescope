@@ -26,7 +26,7 @@ public class ArmCommand extends Command {
   public void execute() {
 
     if (!arm.isCalibreated()) {
-      arm.setPower(0);
+      arm.stop();
       return;
     }
 
