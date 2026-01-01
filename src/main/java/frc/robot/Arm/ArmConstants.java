@@ -42,7 +42,7 @@ public class ArmConstants {
 
         public static final double MAX_VELOCITY = 1.2;
         public static final double MAX_ACCELERATION = 6;
-        public static final double MAX_JERK = 0;
+        public static final double MAX_JERK = 11;
 
         public static final int ID = 40;
         public static final Canbus CANBUS = Canbus.Rio;
@@ -86,7 +86,7 @@ public class ArmConstants {
 
         public static final double GEAR_RATIO = 64 * 42 / 22.0;
         public static final int MOTOR_ID = 11;
-        public static final double MAX_VELOCITY = 3;
+        public static final double MAX_VELOCITY = 2;
         public static final double MAX_ACCEL = 8;
         public static final double MAX_JERK = 20;
         public static final Canbus CANBUS_NAME = Canbus.Rio;

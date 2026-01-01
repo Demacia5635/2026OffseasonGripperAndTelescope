@@ -4,7 +4,6 @@
 package frc.robot;
 
 import frc.demacia.utils.Controller.CommandController;
-import frc.demacia.utils.Controller.CommandController.ControllerType;
 import frc.demacia.utils.Log.LogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Arm.Arm;
 import frc.robot.Arm.Commands.ArmCommand;
-import frc.robot.Arm.Commands.CalibrationCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,8 +36,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-    controller = new CommandController(Constants.ControllerPort, ControllerType.kXbox);
     arm = new Arm();
 
     arm.setDefaultCommand(new ArmCommand(arm));
@@ -74,9 +70,6 @@ public class RobotContainer {
    */
 
   private void configureBindings() {
-    controller.downButton().onTrue(new CalibrationCommand(arm));
-   
-    
   }
 
   /**

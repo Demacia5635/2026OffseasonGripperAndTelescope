@@ -36,6 +36,10 @@ public class ArmCommand extends Command {
         arm.setLength(arm.getCurrentHeigt());
         break;
 
+      case TESTING:
+        arm.setAngle(null);
+        arm.setLength(null);
+        break;
       default:
       
       arm.setAngle(arm.getCurrentState().angle);

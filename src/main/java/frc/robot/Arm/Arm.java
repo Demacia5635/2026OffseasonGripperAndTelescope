@@ -18,6 +18,7 @@ import frc.demacia.utils.Sensors.LimitSwitch;
 import frc.robot.Arm.ArmConstants.AngleChangeConstants;
 import frc.robot.Arm.ArmConstants.STATE_TELESCOPE;
 import frc.robot.Arm.ArmConstants.TelescopConstants;
+import frc.robot.Arm.Commands.CalibrationCommand;
 
 /** Add your docs here. */
 public class Arm extends SubsystemBase {
@@ -53,6 +54,8 @@ public class Arm extends SubsystemBase {
             changeAngleMotor.setNeutralMode(false);
             
         }).ignoringDisable(true));
+
+        SmartDashboard.putData(getName() + "/Calibrate", new CalibrationCommand(this));
 
         SmartDashboard.putData("Telescop", this);
     }
