@@ -18,19 +18,15 @@ public class ArmConstants {
         IDLE(-1, -1,0),
         LOW_CLOSED(0, 0.05,0),
         LOW_OPEN(0, 0.6,0),
-        MID_CLOSED(Math.toRadians(30), 0.05,0),
-        MID_OPEN(Math.toRadians(30), 0.6,0),
-        HIGH_CLOSED(Math.toRadians(60), 0.05,0),
-        HIGH_OPEN(Math.toRadians(60), 0.6,0),
-        GET_CORAL(Math.toRadians(0), 0,0.3),
-        GET_CUBE(Math.toRadians(0), 0,0.3);
-        EJECT(Math.toRadians(0), 0, );
+        MID_CLOSED(Math.toRadians(30), 0.05),
+        MID_OPEN(Math.toRadians(30), 0.6),
+        HIGH_CLOSED(Math.toRadians(60), 0.05),
+        HIGH_OPEN(Math.toRadians(60), 0.6),
 
         public double angle;
         public double length;
-        public double duty;
 
-        STATE(double angle, double length, double duty) {
+        STATE(double angle, double length) {
             this.angle = angle;
             this.length = length;
             this.duty = duty;
