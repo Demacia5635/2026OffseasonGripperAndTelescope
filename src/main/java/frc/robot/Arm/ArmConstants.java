@@ -12,24 +12,22 @@ import frc.demacia.utils.Sensors.LimitSwitchConfig;
 /** Add your docs here. */
 public class ArmConstants {
     public static enum STATE_TELESCOPE {
-
-        HOME(0, 0.05,0),
-        TESTING(-1, -1,0),
-        IDLE(-1, -1,0),
-        LOW_CLOSED(0, 0.05,0),
-        LOW_OPEN(0, 0.6,0),
+        HOME(0, 0.05),
+        TESTING(-1, -1),
+        IDLE(-1, -1),
+        LOW_CLOSED(0, 0.05),
+        LOW_OPEN(0, 0.6),
         MID_CLOSED(Math.toRadians(30), 0.05),
         MID_OPEN(Math.toRadians(30), 0.6),
         HIGH_CLOSED(Math.toRadians(60), 0.05),
-        HIGH_OPEN(Math.toRadians(60), 0.6),
+        HIGH_OPEN(Math.toRadians(60), 0.6);
 
         public double angle;
         public double length;
 
-        STATE(double angle, double length) {
+        STATE_TELESCOPE(double angle, double length) {
             this.angle = angle;
             this.length = length;
-            this.duty = duty;
         }
     }
 
