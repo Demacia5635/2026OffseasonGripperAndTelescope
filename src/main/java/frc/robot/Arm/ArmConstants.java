@@ -16,12 +16,12 @@ public class ArmConstants {
         HOME(0, 0.05),
         TESTING(-1, -1),
         IDLE(-1, -1),
-        LOW_CLOSED(0, 0.05),
-        LOW_OPEN(0, 0.6),
+        LOW_CLOSED(0,0.05),
+        LOW_OPEN(Math.toRadians(-25), 0.6),
         MID_CLOSED(Math.toRadians(30), 0.05),
         MID_OPEN(Math.toRadians(30), 0.6),
-        HIGH_CLOSED(Math.toRadians(60), 0.05),
-        HIGH_OPEN(Math.toRadians(60), 0.6);
+        HIGH_CLOSED(0.97265625, 0.05),
+        HIGH_OPEN(0.97265625, 0.6);
 
         public double angle;
         public double length;
@@ -87,8 +87,8 @@ public class ArmConstants {
         public static final double GEAR_RATIO = 64 * 42 / 22.0;
         public static final int MOTOR_ID = 11;
         public static final double MAX_VELOCITY = 2;
-        public static final double MAX_ACCEL = 8;
-        public static final double MAX_JERK = 20;
+        public static final double MAX_ACCEL = 6;
+        public static final double MAX_JERK = 18;
         public static final Canbus CANBUS_NAME = Canbus.Rio;
         public static final double KP = 2;
         public static final double KI = 0;
@@ -106,6 +106,7 @@ public class ArmConstants {
                 .withRadiansMotor(GEAR_RATIO)
                 .withPID(KP, KI, KD, KS, KV, KA, 0)
                 .withInvert(true);
+                
 
         public static final DigitalEncoderConfig CHANGE_ANGLE_ANALOG_CONFIG = new DigitalEncoderConfig(
                 ANALOG_ENCODER_CHANNEL,

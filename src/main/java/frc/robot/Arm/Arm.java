@@ -31,7 +31,7 @@ public class Arm extends SubsystemBase {
     DigitalEncoder changeAngleEncoder;
     TalonFXMotor changeAngleMotor;
     LimitSwitch limitSwitchChangeAngle;
-    final double offset = -1.3288936614990234;
+    final double offset = -1.303466796875;
 
     /** Creates a new telescop. */
     public Arm() {
@@ -133,9 +133,15 @@ public class Arm extends SubsystemBase {
         telescopMotor
                 .setMotion(MathUtil.clamp(wantedLength, TelescopConstants.MIN_LENGTH, TelescopConstants.MAX_LENGTH), 0);// Math.sin(RobotContainer.changeAngle.getAngle()));
     }
+    public void setAnglePower(double power){
+        if(getLimitSensorAngle()) stop();
+        else{
+            changeAngleMotor.set(power);
+        }
+    }
 
     public void setAngle(double angle) {
-        if (angle < Math.toRadians(-5) || angle > Math.toRadians(90)) {
+        if (angle < Math.toRadians(-30) || angle > Math.toRadians(90)) {
             changeAngleMotor.stop();
             return;
 
