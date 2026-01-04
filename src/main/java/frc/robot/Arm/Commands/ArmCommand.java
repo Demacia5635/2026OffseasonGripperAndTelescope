@@ -5,6 +5,7 @@
 package frc.robot.Arm.Commands;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Arm.Arm;
 
@@ -18,6 +19,7 @@ public class ArmCommand extends Command {
   public ArmCommand(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
+    SmartDashboard.putData("testing state", this);
   }
 
   // Called when the command is initially scheduled.

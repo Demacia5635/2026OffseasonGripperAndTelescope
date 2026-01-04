@@ -13,8 +13,9 @@ public class contollerTesting extends Command {
   /** Creates a new contollerTesting. */
   Arm Arm;
   CommandController controller;
-  public contollerTesting(Arm Arm) {
+  public contollerTesting(Arm Arm, CommandController controller) {
     this.Arm = Arm;
+    this.controller = controller;
     addRequirements(Arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -27,7 +28,7 @@ public class contollerTesting extends Command {
   @Override
   public void execute() {
     double joystickValue = -controller.getLeftY();
-    Arm.setAngle(joystickValue * 0.3);
+    Arm.setAnglePower(joystickValue * 0.3);
   }
 
   // Called once the command ends or is interrupted.

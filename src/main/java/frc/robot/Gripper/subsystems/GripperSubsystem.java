@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.demacia.utils.Motors.TalonFXMotor;
 import frc.demacia.utils.Sensors.UltraSonicSensor;
-import frc.robot.Gripper.GripperConstants.GRIPPER_STATE;
+import frc.robot.Arm.ArmConstants.STATE;
 import frc.robot.Gripper.GripperConstants;
 
 public class GripperSubsystem extends SubsystemBase {
@@ -18,7 +18,7 @@ public class GripperSubsystem extends SubsystemBase {
   private final TalonFXMotor motor;
   private final UltraSonicSensor ultrasonicSensor;
 
-  private GRIPPER_STATE state;
+  private STATE state;
 
   public GripperSubsystem() {
     motor = new TalonFXMotor(GripperConstants.TALON_CONFIG);
@@ -26,7 +26,7 @@ public class GripperSubsystem extends SubsystemBase {
 
     addNT();
 
-    state = GRIPPER_STATE.IDLE;  
+    state = STATE.IDLE;  
   }
 
   public void addNT() {
@@ -83,7 +83,7 @@ public class GripperSubsystem extends SubsystemBase {
     this.state = state;
   }
 
-  public GRIPPER_STATE getState() {
+  public STATE getState() {
     return state;
   }
 
