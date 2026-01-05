@@ -1,10 +1,11 @@
 package frc.demacia.utils.Motors;
 
+
 /** 
  * Class to hold all Talon FX/SRX configuration
  * Applicable to Phoenix 6
  *  */
-public class TalonConfig extends BaseMotorConfig<TalonConfig> {
+public class TalonSRXConfig extends BaseMotorConfig<TalonSRXConfig> {
 
     /** 
      * Constructor
@@ -12,12 +13,12 @@ public class TalonConfig extends BaseMotorConfig<TalonConfig> {
      * @param canbus - Name of canbus
      * @param name - name of motor for logging
      */
-    public TalonConfig(int id, Canbus canbus, String name) {
-        super(id, name, canbus);
-        motorType = MotorControllerType.TalonFX;
+    public TalonSRXConfig(int id, String name) {
+        super(id, name);
+        motorClass = MotorControllerType.TalonSRX;
     }
 
-    public TalonConfig(int id, String name, TalonConfig config) {
+    public TalonSRXConfig(int id, String name, BaseMotorConfig<?> config) {
         super(id, name);
         copyBaseFields(config);
     }

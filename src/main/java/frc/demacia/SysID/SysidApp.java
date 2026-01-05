@@ -24,7 +24,8 @@ class Sysid implements Consumer<File> {
     SysidResultPanel result = new SysidResultPanel(this);
     JTextArea msgArea = new JTextArea();
     JScrollPane msgPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    Map<String, LogReader.SysIDResults> analysisResults;
+    
+    File currentFile;
 
     private static Sysid sysid = null;
 
@@ -71,33 +72,52 @@ class Sysid implements Consumer<File> {
     @Override
     public void accept(File file) {
         System.out.println("File set to " + file);
+        this.currentFile = file;
+        LogReader.loadFile(file.getAbsolutePath());
+        analyzeFile(LogReader.MechanismType.POSITION);
+    }
+
+    public void analyzeFile(LogReader.MechanismType type) {
+        if (currentFile == null) return;
+        
+        MotorData currentlySelected = motorList.getSelectedValue();
+        String selectedName = (currentlySelected != null) ? currentlySelected.name : null;
+
         try {
             MotorData.motors.clear();
             listModel.clear();
             
-            analysisResults = LogReader.getResult(file.getAbsolutePath());
+            Map<String, LogReader.SysIDResults> analysisResults = LogReader.analyze(type);
             
-            msg("Found " + analysisResults.size() + " motor groups in analysis");
+            msg("Analysis complete (" + type + "). Found " + analysisResults.size() + " groups.");
             
-            for(String groupName : analysisResults.keySet()) {
+            int newIndexToSelect = 0;
+            int counter = 0;
+
+            List<String> sortedNames = new ArrayList<>(analysisResults.keySet());
+            Collections.sort(sortedNames);
+
+            for(String groupName : sortedNames) {
                 MotorData motorData = new MotorData();
                 motorData.name = groupName;
                 motorData.sysidResult = analysisResults.get(groupName);
                 MotorData.motors.add(motorData);
                 listModel.addElement(motorData);
-                msg("Added motor: " + groupName);
+
+                if (selectedName != null && selectedName.equals(groupName)) {
+                    newIndexToSelect = counter;
+                }
+                counter++;
             }
             
-            msg("File " + file.getName() + " loaded with " + MotorData.motors.size() + " motors");
-            
             if (!listModel.isEmpty()) {
-                motorList.setSelectedIndex(0);
+                motorList.setSelectedIndex(newIndexToSelect);
+                result.updateDisplay(motorList.getSelectedValue());
             }
             
         } catch (Exception e) {
-            msg("IO error - for file " + file + " error=" + e);
+            msg("Analysis error: " + e);
             e.printStackTrace();
-            fileChooser.field.setText("");
         }
     }
 
@@ -142,48 +162,51 @@ class SysidResultPanel extends JPanel {
     public static int nK = KTypes.values().length;
     JCheckBox[] checkBoxes;
     JLabel[][] k;
-    JButton applyButton;
-    JLabel[] velLabels = {new JLabel("Velocity Range"), new JLabel("0%-30%"), new JLabel("30%-70%"), new JLabel("70%-100%")};
-    JLabel[] countLabels = {new JLabel("Number of records"), new JLabel("0"), new JLabel("0"), new JLabel("0")};
-    JLabel[] avgErrorLabels = {new JLabel("Average Error %"), new JLabel("0"), new JLabel("0"), new JLabel("0")};
-    JLabel[] maxErrorLabels = {new JLabel("Max Error %"), new JLabel("0"), new JLabel("0"), new JLabel("0")};
-    JLabel[] kpLabels = {new JLabel("KP"), new JLabel("0"), new JLabel("0"), new JLabel("0")};
+    
+    JComboBox<LogReader.MechanismType> mechTypeBox;
+    
+    JLabel[] labels = {new JLabel("Result Type"), new JLabel("Final Analysis")};
+    JLabel[] countLabels = {new JLabel("Points"), new JLabel("0")};
+    JLabel[] avgErrorLabels = {new JLabel("Avg Error %"), new JLabel("0")};
+    JLabel[] maxErrorLabels = {new JLabel("Max Error %"), new JLabel("0")};
+    JLabel[] kpLabels = {new JLabel("KP"), new JLabel("0")};
     Sysid app;
 
     public SysidResultPanel(Sysid app) {
-        super(new GridLayout(nK + 7, 4, 5, 5));
+        super(new GridLayout(nK + 7, 2, 5, 5));
         this.app = app;
 
-        for(JLabel l : velLabels) add(l);
-        for(JLabel l : countLabels) add(l);
-        for(JLabel l : avgErrorLabels) add(l);
-        for(JLabel l : maxErrorLabels) add(l);
+        add(new JLabel("Mechanism Type:"));
+        mechTypeBox = new JComboBox<>(LogReader.MechanismType.values());
+        
+        mechTypeBox.addActionListener(e -> {
+            LogReader.MechanismType selectedType = (LogReader.MechanismType) mechTypeBox.getSelectedItem();
+            Sysid.msg("Recalculating as " + selectedType + "...");
+            app.analyzeFile(selectedType);
+        });
+        add(mechTypeBox);
+        
+        add(new JLabel(""));
+        add(new JLabel(""));
+
+        add(labels[0]); add(labels[1]);
+        add(countLabels[0]); add(countLabels[1]);
+        add(avgErrorLabels[0]); add(avgErrorLabels[1]);
+        add(maxErrorLabels[0]); add(maxErrorLabels[1]);
 
         checkBoxes = new JCheckBox[nK];
-        k = new JLabel[nK][3];
+        k = new JLabel[nK][1];
         for(int i = 0; i < nK; i++) {
             checkBoxes[i] = new JCheckBox(KTypes.values()[i].name());
-            if(i < 3) { checkBoxes[i].setEnabled(false); checkBoxes[i].setSelected(true); } else { checkBoxes[i].setSelected(false);}
+            checkBoxes[i].setEnabled(false);
+            checkBoxes[i].setSelected(true);
             add(checkBoxes[i]);
-            for(int j=0;j<3;j++){
-                k[i][j] = new JLabel("0");
-                add(k[i][j]);
-            }
+            
+            k[i][0] = new JLabel("0");
+            add(k[i][0]);
         }
 
-        for(JLabel l : kpLabels) add(l);
-
-        applyButton = new JButton("Calculate");
-        add(applyButton);
-
-        applyButton.addActionListener(e -> {
-            MotorData motorData = app.getMotor();
-            if(motorData != null && motorData.sysidResult != null) {
-                updateDisplay(motorData);
-            } else {
-                Sysid.msg("No motor selected or no analysis data available");
-            }
-        });
+        add(kpLabels[0]); add(kpLabels[1]);
     }
     
     public void updateDisplay(MotorData motorData) {
@@ -193,48 +216,34 @@ class SysidResultPanel extends JPanel {
         }
         
         LogReader.SysIDResults result = motorData.sysidResult;
-        LogReader.BucketResult[] buckets = {result.slow, result.mid, result.high};
+        LogReader.BucketResult bucket = result.finalFit;
         
-        for(int rangeIdx = 0; rangeIdx < 3; rangeIdx++) {
-            LogReader.BucketResult bucket = buckets[rangeIdx];
+        if(bucket != null) {
+            k[KTypes.KS.ordinal()][0].setText(String.format("%7.5f", bucket.ks));
+            k[KTypes.KV.ordinal()][0].setText(String.format("%7.5f", bucket.kv));
+            k[KTypes.KA.ordinal()][0].setText(String.format("%7.5f", bucket.ka));
+            k[KTypes.KG.ordinal()][0].setText(String.format("%7.5f", bucket.kg));
             
-            if(bucket != null) {
-                k[KTypes.KS.ordinal()][rangeIdx].setText(String.format("%7.5f", bucket.ks));
-                k[KTypes.KV.ordinal()][rangeIdx].setText(String.format("%7.5f", bucket.kv));
-                k[KTypes.KA.ordinal()][rangeIdx].setText(String.format("%7.5f", bucket.ka));
-                
-                countLabels[rangeIdx+1].setText(Integer.toString(bucket.points));
-                avgErrorLabels[rangeIdx+1].setText(String.format("%4.2f%%", bucket.avgError*100));
-                maxErrorLabels[rangeIdx+1].setText(String.format("%4.2f%%", bucket.avgError*120));
-                
-                double kp = LogReader.CalculateFeedbackGains.calculateFeedbackGains(bucket.kv, bucket.ka);
-                kpLabels[rangeIdx+1].setText(String.format("%.5f", kp));
-            } else {
-                k[KTypes.KS.ordinal()][rangeIdx].setText("N/A");
-                k[KTypes.KV.ordinal()][rangeIdx].setText("N/A");
-                k[KTypes.KA.ordinal()][rangeIdx].setText("N/A");
-                countLabels[rangeIdx+1].setText("0");
-                avgErrorLabels[rangeIdx+1].setText("N/A");
-                maxErrorLabels[rangeIdx+1].setText("N/A");
-                kpLabels[rangeIdx+1].setText("N/A");
-            }
+            countLabels[1].setText(Integer.toString(bucket.points));
+            avgErrorLabels[1].setText(String.format("%4.2f%%", bucket.avgError*100));
+            maxErrorLabels[1].setText(String.format("%4.2f%%", bucket.avgError*120));
+            
+            kpLabels[1].setText(String.format("%.5f", bucket.kp));
+        } else {
+            clearDisplay();
         }
         
-        Sysid.msg("Analysis complete for " + motorData.name);
+        Sysid.msg("Display updated for " + motorData.name);
     }
     
     private void clearDisplay() {
         for(int i = 0; i < nK; i++) {
-            for(int j = 0; j < 3; j++) {
-                k[i][j].setText("0");
-            }
+            k[i][0].setText("0");
         }
-        for(int i = 1; i < 4; i++) {
-            countLabels[i].setText("0");
-            avgErrorLabels[i].setText("0");
-            maxErrorLabels[i].setText("0");
-            kpLabels[i].setText("0");
-        }
+        countLabels[1].setText("0");
+        avgErrorLabels[1].setText("0");
+        maxErrorLabels[1].setText("0");
+        kpLabels[1].setText("0");
     }
 }
 
@@ -249,63 +258,4 @@ class MotorData {
     }
 }
 
-enum VelocityRange {SLOW,MID,HIGH}
-
-enum KTypes {KS,KV,KA}
-
-class SysidCalculate {
-    MotorData motor;
-    EnumSet<KTypes> types;
-
-    Map<VelocityRange, LogReader.BucketResult> results = new HashMap<>();
-
-    public SysidCalculate(MotorData motor, EnumSet<KTypes> types) {
-        this.motor = motor;
-        this.types = types;
-        analyze();
-    }
-
-    private void analyze() {
-        if(motor.sysidResult != null) {
-            LogReader.SysIDResults result = motor.sysidResult;
-            results.put(VelocityRange.SLOW, result.slow);
-            results.put(VelocityRange.MID, result.mid);
-            results.put(VelocityRange.HIGH, result.high);
-        }
-    }
-
-    public double getK(KTypes type, VelocityRange range) {
-        LogReader.BucketResult b = results.get(range);
-        if(b==null) return 0;
-        switch(type) {
-            case KS: return b.ks;
-            case KV: return b.kv;
-            case KA: return b.ka;
-        }
-        return 0;
-    }
-
-    public int getCount(VelocityRange range) {
-        LogReader.BucketResult b = results.get(range);
-        return b != null ? b.points : 0;
-    }
-    
-    public double getAverageError(VelocityRange range) {
-        LogReader.BucketResult b = results.get(range);
-        return b != null ? b.avgError*100 : 0;
-    }
-    
-    public double getMaxError(VelocityRange range) {
-        LogReader.BucketResult b = results.get(range);
-        return b != null ? b.avgError*120 : 0;
-    }
-    
-    public double getKP(VelocityRange range) {
-        LogReader.BucketResult b = results.get(range);
-        if(b != null) {
-            double kp = LogReader.CalculateFeedbackGains.calculateFeedbackGains(b.kv, b.ka);
-            return kp;
-        }
-        return 0;
-    }
-}
+enum KTypes {KS,KV,KA,KG}

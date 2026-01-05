@@ -1,7 +1,5 @@
 package frc.demacia.utils.Log;
 
-import static frc.demacia.utils.constants.UtilsContants.*;
-
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -32,6 +30,9 @@ public class ConsoleAlert extends Alert{
   }
 
   public boolean isTimerOver() {
+    if (ConsoleConstants.CONSOLE_MESSEGE_TIME == 0) {
+      return false;
+    }
     return timer.hasElapsed(ConsoleConstants.CONSOLE_MESSEGE_TIME);
   }
 }

@@ -7,79 +7,78 @@ import com.ctre.phoenix6.StatusSignal;
 
 import frc.demacia.utils.Data;
 
-public class LogEntryBuilder<T> implements AutoCloseable{
+/**
+ * Fluent builder for creating log entries with various options.
+ */
+public class LogEntryBuilder<T> {
+
+    /**
+     * Enum representing LogLevel.
+     */
+    public static enum LogLevel { LOG_ONLY_NOT_IN_COMP, LOG_ONLY, LOG_AND_NT_NOT_IN_COMP, LOG_AND_NT} 
+
     private String name;
-    private int logLevel = 2;
-    private String metaData = "";
-    private double precision = 0.0;
-    private int skipCycles = 1;
+    private LogLevel logLevel = LogLevel.LOG_ONLY_NOT_IN_COMP;
+    private String metadata = "";
     private BiConsumer<T[], Long> consumer = null;
-
+    private boolean isSeparated = false;
     private Data<T> data;
-
-    private boolean built = false;
     
-    LogEntryBuilder(String name, StatusSignal<T> ... statusSignals) {
+    @SafeVarargs
+    LogEntryBuilder(String name, StatusSignal<T>... statusSignals) {
         this.name = name;
-        data = new Data<>(statusSignals);
+        this.data = new Data<>(statusSignals);
     }
     
-    LogEntryBuilder(String name, Supplier<T> ... suppliers) {
+    @SafeVarargs
+    LogEntryBuilder(String name, Supplier<T>... suppliers) {
         this.name = name;
-        data = new Data<>(suppliers);
+        this.data = new Data<>(suppliers);
     }
     
-    public LogEntryBuilder<T> logLevel(int level) {
+    public LogEntryBuilder<T> withLogLevel(LogLevel level) {
         this.logLevel = level;
         return this;
     }
     
-    public LogEntryBuilder<T> metaData(String metaData) {
-        this.metaData = metaData;
+    public LogEntryBuilder<T> withMetaData(String metaData) {
+        this.metadata = metaData;
+        return this;
+    }
+    
+    public LogEntryBuilder<T> withIsMotor() {
+        this.metadata = "motor";
+        return this;
+    }
+    
+    public LogEntryBuilder<T> withConsumer(BiConsumer<T[], Long> consumer) {
+        this.consumer = consumer;
+        this.isSeparated = true; 
         return this;
     }
 
-    
-    
-    public LogEntryBuilder<T> isMotor() {
-        this.metaData = "motor";
-        return this;
-    }
-    
-    public LogEntryBuilder<T> precision(double precision) {
-        this.precision = precision;
-        return this;
-    }
-    
-    public LogEntryBuilder<T> skipCycles(int cycles) {
-        this.skipCycles = cycles;
-        return this;
-    }
-    
-    public LogEntryBuilder<T> consumer(BiConsumer<T[], Long> consumer) {
-        this.consumer = consumer;
-        return this;
-    }
-    
-    public LogEntry2<T> build() {
-        built = true;
-        LogEntry2<T> entry = LogManager2.logManager.add(name, data, logLevel, metaData);
-        if (precision != 0.0) {
-            entry.setPrecision(precision);
+    public LogEntryBuilder<T> withIsSeparated(boolean isSeparated) {
+        if (this.consumer == null) {
+            this.isSeparated = isSeparated;
         }
-        if (skipCycles != 1) {
-            entry.setSkipCycles(skipCycles);
+        return this;
+    }
+    
+    public LogEntry<T> build() {
+        if (name == null || name.trim().isEmpty()) {
+            LogManager.log("Log entry name cannot be null or empty");
+            return null;
         }
+        if (logLevel == null) {
+            LogManager.log("Log level cannot be null");
+            return null;
+        }
+        
+        LogEntry<T> entry = LogManager.add(name, data, logLevel, metadata, isSeparated);
+        
         if (consumer != null) {
             entry.setConsumer(consumer);
         }
         return entry;
-    }
-    
-    @Override
-    public void close() {
-        if (!built) {
-            build();
-        }
     }
 }

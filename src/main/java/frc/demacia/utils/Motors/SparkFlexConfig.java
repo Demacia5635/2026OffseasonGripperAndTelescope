@@ -4,21 +4,22 @@ package frc.demacia.utils.Motors;
  * Class to hold all Spark motor configuration
  * Applicable to REV Spark Max/Flex
  *  */
-public class SparkConfig extends BaseMotorConfig<SparkConfig> {
+public class SparkFlexConfig extends BaseMotorConfig<SparkFlexConfig> {
+
+    // SparkMotorType motorType = SparkMotorType.SparkMax;
 
     /** 
      * Constructor
      * @param id - canbus ID
      * @param name - name of motor for logging
      */
-    public SparkConfig(int id, String name) {
+    public SparkFlexConfig(int id, String name) {
         super(id, name);
-        motorType = MotorControllerType.SparkMax;
+        motorClass = MotorControllerType.SparkFlex;
     }
 
-    public SparkConfig(int id, String name, SparkConfig config) {
+    public SparkFlexConfig(int id, String name, BaseMotorConfig<?> config) {
         this(id,name);
         copyBaseFields(config);
     }
-
 }
